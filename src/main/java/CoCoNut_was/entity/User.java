@@ -16,7 +16,7 @@ public class User{
     @Column(unique = true, nullable = false)
     private String identifier;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true, nullable = false)
