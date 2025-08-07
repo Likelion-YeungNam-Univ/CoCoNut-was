@@ -1,0 +1,29 @@
+package CoCoNut_was.dto;
+
+import CoCoNut_was.entity.User;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+public class UserResDto {
+    private String identifier;
+    private String name;
+    private String nickname;
+    private String role;
+
+    @Builder public UserResDto(String identifier, String name, String nickname, String role) {
+        this.identifier = identifier;
+        this.name = name;
+        this.nickname = nickname;
+        this.role = role;
+    }
+
+    public static UserResDto fromEntity(User user){
+        return UserResDto.builder()
+                .identifier(user.getIdentifier())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .role(user.getRole().toString()) // 일단 toString 처리
+                .build();
+    }
+}
