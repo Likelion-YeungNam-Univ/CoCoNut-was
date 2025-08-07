@@ -6,12 +6,9 @@ package CoCoNut_was.domains.user.controller;
 
 import CoCoNut_was.domains.user.dto.UserReqDto;
 import CoCoNut_was.domains.user.service.UserService;
-import CoCoNut_was.security.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,13 +18,11 @@ import java.util.Map;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final AuthenticationManager authenticationManager;
 
     // 1. 회원가입(회원추가)
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody UserReqDto dto){
-        return ResponseEntity.ok(userService.signUp(dto).getIdentifier());
+        return ResponseEntity.ok(userService.signUp(dto).getEmail());
     }
 
     // 2. 회원조회

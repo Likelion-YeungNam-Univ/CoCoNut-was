@@ -22,17 +22,17 @@ public class JwtUtil {
     private final long refreshValid = 1000L * 60 * 60 * 24 * 7; // 7일
 
     // 1. Access 토큰 발급
-    public String createAccessToken(String identifier) {
-        return generateToken(identifier, accessValid);
+    public String createAccessToken(String email) {
+        return generateToken(email, accessValid);
     }
     // 2. Refresh 토큰 발급
-    public String createRefreshToken(String identifier) {
-        return generateToken(identifier, refreshValid);
+    public String createRefreshToken(String email) {
+        return generateToken(email, refreshValid);
     }
 
-    private String generateToken(String identifier, long validTime) {
+    private String generateToken(String email, long validTime) {
         return Jwts.builder()
-                .subject(identifier)
+                .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + validTime))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
@@ -60,23 +60,23 @@ public class JwtUtil {
     }
 
     // 제대로 작동되는지는 테스트 필요
-    public String extractRefreshTokenFromCookie(HttpServletRequest request) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("refreshToken".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
+//    public String extractRefreshTokenFromCookie(HttpServletRequest request) {
+//        if (request.getCookies() != null) {
+//            for (Cookie cookie : request.getCookies()) {
+//                if ("refreshToken".equals(cookie.getName())) {
+//                    return cookie.getValue();
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String getIdentifierFromToken(String token) {
+    public String getEmailFromToken(String token) {
         Jws<Claims> jws = Jwts.parser()
                 .verifyWith((SecretKey) getSigningKey())   // 서명 검증 키 설정
                 .build()                       // JwtParser 생성

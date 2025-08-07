@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 public class UserResDto {
-    private String identifier;
+    private String email;
     private String name;
     private String nickname;
     private String role;
 
-    @Builder public UserResDto(String identifier, String name, String nickname, String role) {
-        this.identifier = identifier;
+    @Builder public UserResDto(String email, String name, String nickname, String role) {
+        this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.role = role;
@@ -20,7 +20,7 @@ public class UserResDto {
 
     public static UserResDto fromEntity(User user){
         return UserResDto.builder()
-                .identifier(user.getIdentifier())
+                .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .role(user.getRole().toString()) // 일단 toString 처리

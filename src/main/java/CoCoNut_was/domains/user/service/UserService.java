@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -28,8 +26,8 @@ public class UserService {
     // 1. 회원가입
     public User signUp(UserReqDto dto) {
         // 아이디 및 닉네임 중복확인 검증
-        if(existsByIdentifier(dto.getIdentifier()) || existByNickname(dto.getNickname()))
-            throw new IllegalArgumentException("아이디 또는 닉네임이 중복되었습니다.");
+        if(existsByEmail(dto.getEmail()) || existByNickname(dto.getNickname()))
+            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
 
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
@@ -37,8 +35,8 @@ public class UserService {
     }
 
     // 아이디 중복확인
-    public boolean existsByIdentifier(String identifier) {
-        return userRepository.existsByIdentifier(identifier);
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     // 닉네임 중복확인
@@ -47,18 +45,18 @@ public class UserService {
     }
 
     // 유저 상세조회
-    public UserResDto getUser(String identifier) {
-        User user = userRepository.findByIdentifier(identifier).orElseThrow(
-                () -> new IllegalArgumentException("아이디 : " + identifier + " 를 가진 유저가 존재하지 않습니다.")
+    public UserResDto getUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("이메일 : " + email + " 를 가진 유저가 존재하지 않습니다.")
         );
         return UserResDto.fromEntity(user);
     }
 
     // 유저 삭제
     @Transactional
-    public void deleteUser(String identifier) {
-        User user = userRepository.findByIdentifier(identifier).orElseThrow(
-                () -> new IllegalArgumentException("아이디 : " + identifier + " 는 유효하지 않습니다.")
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("이메일 : " + email + " 는 유효하지 않습니다.")
         );
         userRepository.delete(user);
     }
@@ -68,12 +66,12 @@ public class UserService {
     public String login(UserReqDto dto, HttpServletResponse res) {
         // 1. 인증
         UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(dto.getIdentifier(), dto.getPassword());
+                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
         authenticationManager.authenticate(token);
 
         // 2. 토큰 발급
-        String accessToken = jwtUtil.createAccessToken(dto.getIdentifier());
-        String refreshToken = jwtUtil.createRefreshToken(dto.getIdentifier());
+        String accessToken = jwtUtil.createAccessToken(dto.getEmail());
+        String refreshToken = jwtUtil.createRefreshToken(dto.getEmail());
 
         // 3. Refresh 토큰 보호
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)

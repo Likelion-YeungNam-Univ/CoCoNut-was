@@ -14,7 +14,7 @@ public class User{
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String identifier;
+    private String email;
 
     @Column(nullable = false)
     private String name;
@@ -30,8 +30,8 @@ public class User{
 
     // 임시 빌더
     @Builder
-    public User(String identifier, String name, String nickname, String password, Role role) {
-        this.identifier = identifier;
+    public User(String email, String name, String nickname, String password, Role role) {
+        this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
