@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -80,11 +79,38 @@ public class UserService {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(7 * 24 * 60 * 60) // 하루
+                .maxAge(7 * 24 * 60 * 60) // 일주일
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
+        // 3.A. Access 토큰 임시 할당
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(60 * 60) // 한시간
+                .build();
+        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+
         // 4. Access 토큰은 응답 바디나 헤더에 담기
         return accessToken;
+    }
+
+    // 로그아웃
+    @Transactional
+    public void logout(HttpServletResponse res){
+        ResponseCookie deleteRefreshCookie = ResponseCookie.from("refreshToken", "")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
+                .build();
+
+//        ResponseCookie deleteAccessCookie = ResponseCookie.from("accessToken", "")
+//                .path("/")
+//                .httpOnly(true)
+//                .maxAge(0)
+//                .build();
+
+        res.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString());
+//        res.addHeader(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString());
     }
 }

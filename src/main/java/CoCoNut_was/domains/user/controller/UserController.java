@@ -5,17 +5,13 @@ package CoCoNut_was.domains.user.controller;
  */
 
 import CoCoNut_was.domains.user.dto.UserReqDto;
-import CoCoNut_was.domains.user.dto.UserResDto;
-import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.service.UserService;
 import CoCoNut_was.security.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -51,6 +47,16 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserReqDto dto, HttpServletResponse res){
         return ResponseEntity.ok().body(Map.of("accessToken", userService.login(dto, res)));
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + userService.login(dto, res))
+//                .build();
+    }
+
+    // 5. 로그아웃 : 리프레쉬 토큰만 제거, 액세스 토큰은 프론트엔드에서 제거해줘야함
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse res) {
+        userService.logout(res);
+        return ResponseEntity.ok().build();
     }
 
 }
