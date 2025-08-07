@@ -12,12 +12,12 @@ public class UserReqDto {
     private String password;
     private String role;
 
-    public User toEntity() {
+    public User toEntity(String encodedPassword) {
         return User.builder()
                 .identifier(identifier)
                 .name(name)
                 .nickname(nickname)
-                .password(password)
+                .password(encodedPassword)
                 .role(Role.valueOf(role))
                 .build();
     }
