@@ -34,4 +34,11 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
+
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String user_id){
+        userService.deleteUser(user_id);
+        return ResponseEntity.ok("성공적으로 탈퇴하였습니다.");
+    }
+
 }

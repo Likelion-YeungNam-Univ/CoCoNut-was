@@ -7,6 +7,7 @@ import CoCoNut_was.domains.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +42,13 @@ public class UserService {
                 () -> new IllegalArgumentException("아이디 : " + identifier + " 를 가진 유저가 존재하지 않습니다.")
         );
         return UserResDto.fromEntity(user);
+    }
+
+    @Transactional
+    public void deleteUser(String identifier) {
+        User user = userRepository.findByIdentifier(identifier).orElseThrow(
+                () -> new IllegalArgumentException("아이디 : " + identifier + " 는 유효하지 않습니다.")
+        );
+        userRepository.delete(user);
     }
 }
