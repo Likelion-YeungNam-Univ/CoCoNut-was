@@ -1,7 +1,6 @@
-package CoCoNut_was.repository;
+package CoCoNut_was.domains.user.repository;
 
-import CoCoNut_was.dto.UserResDto;
-import CoCoNut_was.entity.User;
+import CoCoNut_was.domains.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

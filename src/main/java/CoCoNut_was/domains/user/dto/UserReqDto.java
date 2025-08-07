@@ -1,7 +1,7 @@
-package CoCoNut_was.dto;
+package CoCoNut_was.domains.user.dto;
 
-import CoCoNut_was.entity.Role;
-import CoCoNut_was.entity.User;
+import CoCoNut_was.domains.user.entity.Role;
+import CoCoNut_was.domains.user.entity.User;
 import lombok.Data;
 
 @Data

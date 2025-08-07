@@ -1,4 +1,4 @@
-package CoCoNut_was.entity;
+package CoCoNut_was.domains.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

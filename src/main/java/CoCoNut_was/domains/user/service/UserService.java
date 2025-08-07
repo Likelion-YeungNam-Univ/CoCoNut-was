@@ -1,11 +1,10 @@
-package CoCoNut_was.service;
+package CoCoNut_was.domains.user.service;
 
-import CoCoNut_was.dto.UserReqDto;
-import CoCoNut_was.dto.UserResDto;
-import CoCoNut_was.entity.User;
-import CoCoNut_was.repository.UserRepository;
+import CoCoNut_was.domains.user.dto.UserReqDto;
+import CoCoNut_was.domains.user.dto.UserResDto;
+import CoCoNut_was.domains.user.entity.User;
+import CoCoNut_was.domains.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
