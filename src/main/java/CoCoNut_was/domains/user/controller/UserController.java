@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody UserReqDto dto){
         User created = userService.signUp(dto); // 새로만들기
-        return ResponseEntity.ok().build(); // 생성 시 반환 미정
+        return ResponseEntity.ok(created.getIdentifier());
     }
 
 
@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity<?> getUser(@PathVariable String user_id){
         UserResDto userInfo = userService.getUser(user_id);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userInfo);
     }
 
 }

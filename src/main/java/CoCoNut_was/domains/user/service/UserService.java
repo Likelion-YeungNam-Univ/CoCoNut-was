@@ -5,21 +5,22 @@ import CoCoNut_was.domains.user.dto.UserResDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     // 1. 회원가입
     public User signUp(UserReqDto dto) {
         // 아이디 및 닉네임 중복확인 검증
-        if(!existsByIdentifier(dto.getIdentifier()) && !existByNickname(dto.getNickname()))
-            return null;
+        if(existsByIdentifier(dto.getIdentifier()) || existByNickname(dto.getNickname()))
+            throw new IllegalArgumentException("아이디 또는 닉네임이 중복되었습니다.");
 
-        User user = dto.toEntity();
+        User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
         return userRepository.save(user);
     }
