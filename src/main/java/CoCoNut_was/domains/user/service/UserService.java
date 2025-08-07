@@ -69,11 +69,16 @@ public class UserService {
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
         authenticationManager.authenticate(token);
 
-        // 2. 토큰 발급
-        String accessToken = jwtUtil.createAccessToken(dto.getEmail());
-        String refreshToken = jwtUtil.createRefreshToken(dto.getEmail());
+        // 2. 유저찾기
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
+                () -> new IllegalArgumentException("조회 결과 없습니다." + dto.getEmail())
+        );
 
-        // 3. Refresh 토큰 보호
+        // 3. 토큰 발급
+        String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail());
+        String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail());
+
+        // 4. Refresh 토큰 보호
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
@@ -81,15 +86,15 @@ public class UserService {
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        // 3.A. Access 토큰 임시 할당
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(60 * 60) // 한시간
-                .build();
-        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+//        // 5. Access 토큰 임시 할당
+//        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+//                .httpOnly(true)
+//                .path("/")
+//                .maxAge(60 * 60) // 한시간
+//                .build();
+//        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
 
-        // 4. Access 토큰은 응답 바디나 헤더에 담기
+        // 6. Access 토큰은 응답 바디나 헤더에 담기
         return accessToken;
     }
 

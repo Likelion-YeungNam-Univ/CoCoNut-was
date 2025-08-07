@@ -22,17 +22,27 @@ public class JwtUtil {
     private final long refreshValid = 1000L * 60 * 60 * 24 * 7; // 7일
 
     // 1. Access 토큰 발급
-    public String createAccessToken(String email) {
-        return generateToken(email, accessValid);
+    public String createAccessToken(Long id, String email) {
+        return generateToken(id, email, accessValid);
     }
     // 2. Refresh 토큰 발급
-    public String createRefreshToken(String email) {
-        return generateToken(email, refreshValid);
+    public String createRefreshToken(Long id, String email) {
+        return generateToken(id, email, refreshValid);
     }
 
-    private String generateToken(String email, long validTime) {
+//    private String generateToken(String email, long validTime) {
+//        return Jwts.builder()
+//                .subject(email)
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + validTime))
+//                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+//                .compact();
+//    }
+
+    private String generateToken(Long id, String email, long validTime) {
         return Jwts.builder()
-                .subject(email)
+                .subject(id.toString())
+                .claim("email", email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + validTime))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
@@ -82,7 +92,16 @@ public class JwtUtil {
                 .build()                       // JwtParser 생성
                 .parseClaimsJws(token);        // JWS 파싱 & 검증
 
-        return jws.getBody().getSubject();
+        return jws.getBody().get("email", String.class);
+    }
+
+    public Long getIdFromToken(String token) {
+        Jws<Claims> jws = Jwts.parser()
+                .verifyWith((SecretKey) getSigningKey())   // 서명 검증 키 설정
+                .build()                       // JwtParser 생성
+                .parseClaimsJws(token);        // JWS 파싱 & 검증
+
+        return Long.parseLong(jws.getBody().getSubject());
     }
 }
 
