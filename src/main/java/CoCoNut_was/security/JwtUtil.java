@@ -69,18 +69,6 @@ public class JwtUtil {
         return null;
     }
 
-    // 제대로 작동되는지는 테스트 필요
-//    public String extractRefreshTokenFromCookie(HttpServletRequest request) {
-//        if (request.getCookies() != null) {
-//            for (Cookie cookie : request.getCookies()) {
-//                if ("refreshToken".equals(cookie.getName())) {
-//                    return cookie.getValue();
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
     private Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);

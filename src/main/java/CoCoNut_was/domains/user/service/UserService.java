@@ -1,5 +1,6 @@
 package CoCoNut_was.domains.user.service;
 
+import CoCoNut_was.domains.user.dto.TokenResDto;
 import CoCoNut_was.domains.user.dto.UserReqDto;
 import CoCoNut_was.domains.user.dto.UserResDto;
 import CoCoNut_was.domains.user.entity.User;
@@ -45,25 +46,25 @@ public class UserService {
     }
 
     // 유저 상세조회
-    public UserResDto getUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("이메일 : " + email + " 를 가진 유저가 존재하지 않습니다.")
+    public UserResDto getUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
         );
         return UserResDto.fromEntity(user);
     }
 
     // 유저 삭제
     @Transactional
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("이메일 : " + email + " 는 유효하지 않습니다.")
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
         );
         userRepository.delete(user);
     }
 
     // 로그인
     @Transactional
-    public String login(UserReqDto dto, HttpServletResponse res) {
+    public TokenResDto login(UserReqDto dto, HttpServletResponse res) {
         // 1. 인증
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
@@ -94,8 +95,12 @@ public class UserService {
 //                .build();
 //        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
 
-        // 6. Access 토큰은 응답 바디나 헤더에 담기
-        return accessToken;
+        // 6. 기본 정보가 담긴 DTO 반환
+        return TokenResDto.builder()
+                .accessToken(accessToken)
+                .userId(user.getId())
+                .email(user.getEmail())
+                .build();
     }
 
     // 로그아웃
