@@ -34,9 +34,6 @@ public class Project {
     private int rewardAmount; // 공모전 상금
 
     @Column(nullable = false)
-    private String aiSuggestion; // ai 가 제안하는 설명
-
-    @Column(nullable = false)
     private String summary; // 공모전 한 줄 소개
 
     @Column(nullable = false)
