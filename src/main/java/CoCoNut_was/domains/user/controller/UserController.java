@@ -9,6 +9,7 @@ import CoCoNut_was.domains.user.dto.TokenResDto;
 import CoCoNut_was.domains.user.dto.CreateUserDto;
 import CoCoNut_was.domains.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class UserController {
 
     // 1. 회원가입(회원추가)
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody CreateUserDto dto){
+    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserDto dto){
         return ResponseEntity.ok(userService.signUp(dto).getEmail());
     }
 
@@ -40,7 +41,7 @@ public class UserController {
 
     // 4. 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserDto dto, HttpServletResponse res){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto dto, HttpServletResponse res){
         TokenResDto tokenResDto = userService.login(dto, res);
         return ResponseEntity.ok(tokenResDto);
     }
