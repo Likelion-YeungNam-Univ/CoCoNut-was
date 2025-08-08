@@ -5,7 +5,7 @@ import CoCoNut_was.domains.user.entity.User;
 import lombok.Data;
 
 @Data
-public class UserReqDto {
+public class CreateUserDto {
     private String email;
     private String name;
     private String nickname;
