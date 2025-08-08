@@ -1,0 +1,53 @@
+package CoCoNut_was.domains.project.entitiy;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@NoArgsConstructor
+@Data
+public class Project {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // 공모전 고유 키 값
+
+    @Column(nullable = false, length = 100)
+    private String title; // 공모전 제목
+
+    @Column(nullable = false, length = 10)
+    private String merchantName; // 가게명
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category; // 공모전 카테고리
+
+    @Column(nullable = false)
+    private String description; // 공모전 상세 설명
+
+    @Column(nullable = false, length = 10)
+    private String period; // 공모전 기간
+
+    @Column(nullable = false)
+    private int rewardAmount; // 공모전 상금
+
+    @Column(nullable = false)
+    private String aiSuggestion; // ai 가 제안하는 설명
+
+    @Column(nullable = false)
+    private String summary; // 공모전 한 줄 소개
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt; // 공모전 생성일자
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status; // 공모전 상태
+
+    @PrePersist
+    public void onCreate() { // 생성일자 자동 생성
+        this.createdAt = LocalDateTime.now();
+    }
+}
