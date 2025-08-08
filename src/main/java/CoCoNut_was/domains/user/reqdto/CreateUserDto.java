@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.user.dto;
+package CoCoNut_was.domains.user.reqdto;
 
 import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;

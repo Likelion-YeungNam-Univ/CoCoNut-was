@@ -1,9 +1,9 @@
 package CoCoNut_was.domains.user.service;
 
-import CoCoNut_was.domains.user.dto.LoginUserDto;
-import CoCoNut_was.domains.user.dto.TokenResDto;
-import CoCoNut_was.domains.user.dto.CreateUserDto;
-import CoCoNut_was.domains.user.dto.UserInfoDto;
+import CoCoNut_was.domains.user.reqdto.LoginUserDto;
+import CoCoNut_was.domains.user.resdto.TokenResDto;
+import CoCoNut_was.domains.user.reqdto.CreateUserDto;
+import CoCoNut_was.domains.user.resdto.UserInfoDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.exception.CustomException;
