@@ -5,6 +5,8 @@ import CoCoNut_was.domains.user.dto.UserReqDto;
 import CoCoNut_was.domains.user.dto.UserResDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import CoCoNut_was.security.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,12 @@ public class UserService {
     // 1. 회원가입
     public User signUp(UserReqDto dto) {
         // 아이디 및 닉네임 중복확인 검증
-        if(existsByEmail(dto.getEmail()) || existByNickname(dto.getNickname()))
-            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
+//        if(existsByEmail(dto.getEmail()) || existsByNickname(dto.getNickname()))
+//            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
+        if(existsByEmail(dto.getEmail()))
+            throw new CustomException(ErrorCode.EMAIL_ALREADY_EXIST);
+        if(existsByNickname(dto.getNickname()))
+            throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXIST);
 
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
@@ -41,14 +47,15 @@ public class UserService {
     }
 
     // 닉네임 중복확인
-    public boolean existByNickname(String nickname){
+    public boolean existsByNickname(String nickname){
         return userRepository.existsByNickname(nickname);
     }
 
     // 유저 상세조회
     public UserResDto getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         return UserResDto.fromEntity(user);
     }
@@ -57,7 +64,8 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         userRepository.delete(user);
     }
@@ -66,13 +74,18 @@ public class UserService {
     @Transactional
     public TokenResDto login(UserReqDto dto, HttpServletResponse res) {
         // 1. 인증
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
-        authenticationManager.authenticate(token);
+        try{
+            UsernamePasswordAuthenticationToken token =
+                    new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+            authenticationManager.authenticate(token);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
 
         // 2. 유저찾기
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("조회 결과 없습니다." + dto.getEmail())
+//                () -> new IllegalArgumentException("조회 결과 없습니다." + dto.getEmail())
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
         // 3. 토큰 발급
