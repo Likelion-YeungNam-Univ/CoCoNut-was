@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.user.dto;
+package CoCoNut_was.domains.user.resdto;
 
 import lombok.Builder;
 import lombok.Data;

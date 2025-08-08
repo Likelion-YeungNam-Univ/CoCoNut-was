@@ -4,15 +4,15 @@ package CoCoNut_was.domains.user.controller;
 회원가입(추가), 회원조회, 회원수정, 회원삭제, 로그인, 로그아웃을 다루는 컨트롤러
  */
 
-import CoCoNut_was.domains.user.dto.TokenResDto;
-import CoCoNut_was.domains.user.dto.UserReqDto;
+import CoCoNut_was.domains.user.reqdto.LoginUserDto;
+import CoCoNut_was.domains.user.resdto.TokenResDto;
+import CoCoNut_was.domains.user.reqdto.CreateUserDto;
 import CoCoNut_was.domains.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class UserController {
 
     // 1. 회원가입(회원추가)
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody UserReqDto dto){
+    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserDto dto){
         return ResponseEntity.ok(userService.signUp(dto).getEmail());
     }
 
@@ -41,7 +41,7 @@ public class UserController {
 
     // 4. 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserReqDto dto, HttpServletResponse res){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto dto, HttpServletResponse res){
         TokenResDto tokenResDto = userService.login(dto, res);
         return ResponseEntity.ok(tokenResDto);
     }

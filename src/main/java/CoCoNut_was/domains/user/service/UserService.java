@@ -1,8 +1,9 @@
 package CoCoNut_was.domains.user.service;
 
-import CoCoNut_was.domains.user.dto.TokenResDto;
-import CoCoNut_was.domains.user.dto.UserReqDto;
-import CoCoNut_was.domains.user.dto.UserResDto;
+import CoCoNut_was.domains.user.reqdto.LoginUserDto;
+import CoCoNut_was.domains.user.resdto.TokenResDto;
+import CoCoNut_was.domains.user.reqdto.CreateUserDto;
+import CoCoNut_was.domains.user.resdto.UserInfoDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.exception.CustomException;
@@ -27,7 +28,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     // 1. 회원가입
-    public User signUp(UserReqDto dto) {
+    public User signUp(CreateUserDto dto) {
         // 아이디 및 닉네임 중복확인 검증
 //        if(existsByEmail(dto.getEmail()) || existsByNickname(dto.getNickname()))
 //            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
@@ -52,12 +53,12 @@ public class UserService {
     }
 
     // 유저 상세조회
-    public UserResDto getUser(Long id) {
+    public UserInfoDto getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
 //                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        return UserResDto.fromEntity(user);
+        return UserInfoDto.fromEntity(user);
     }
 
     // 유저 삭제
@@ -72,7 +73,7 @@ public class UserService {
 
     // 로그인
     @Transactional
-    public TokenResDto login(UserReqDto dto, HttpServletResponse res) {
+    public TokenResDto login(LoginUserDto dto, HttpServletResponse res) {
         // 1. 인증
         try{
             UsernamePasswordAuthenticationToken token =
@@ -84,7 +85,6 @@ public class UserService {
 
         // 2. 유저찾기
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
-//                () -> new IllegalArgumentException("조회 결과 없습니다." + dto.getEmail())
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
