@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.project.entitiy;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,5 +52,20 @@ public class Project {
     @PrePersist
     public void onCreate() { // 생성일자 자동 생성
         this.createdAt = LocalDateTime.now();
+    }
+
+    @Builder
+    public Project(String title, String merchantName, Category category, String description,
+                   String period, int rewardAmount, String summary, LocalDateTime createdAt,
+                   Status status) {
+        this.title = title;
+        this.merchantName = merchantName;
+        this.category = category;
+        this.description = description;
+        this.period = period;
+        this.rewardAmount = rewardAmount;
+        this.summary = summary;
+        this.createdAt = createdAt;
+        this.status = status;
     }
 }
