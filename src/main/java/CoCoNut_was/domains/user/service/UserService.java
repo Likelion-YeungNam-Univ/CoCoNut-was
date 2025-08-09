@@ -28,7 +28,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     // 1. 회원가입
-    public User signUp(CreateUserDto dto) {
+    public void signUp(CreateUserDto dto) {
         // 아이디 및 닉네임 중복확인 검증
 //        if(existsByEmail(dto.getEmail()) || existsByNickname(dto.getNickname()))
 //            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
@@ -38,8 +38,7 @@ public class UserService {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXIST);
 
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
-
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     // 아이디 중복확인
