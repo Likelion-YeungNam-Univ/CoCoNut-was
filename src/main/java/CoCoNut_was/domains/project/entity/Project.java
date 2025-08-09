@@ -86,20 +86,4 @@ public class Project {
         this.createdAt = createdAt;
         this.status = status;
     }
-
-    @Builder
-    public Project(String title, String merchantName, Category category, String description,
-                   String period, int rewardAmount, String summary, LocalDateTime createdAt,
-                   Status status) {
-        this.title = title;
-        this.merchantName = merchantName;
-        this.category = category;
-        this.description = description;
-        this.period = period;
-        this.rewardAmount = rewardAmount;
-        this.summary = summary;
-        this.createdAt = createdAt;
-        this.status = status;
-    }
-
 }
