@@ -1,6 +1,6 @@
 package CoCoNut_was.domains.submission.entity;
 
-import CoCoNut_was.domains.project.entitiy.Project;
+import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
