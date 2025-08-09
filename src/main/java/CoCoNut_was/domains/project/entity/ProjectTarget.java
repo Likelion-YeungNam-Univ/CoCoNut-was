@@ -1,15 +1,15 @@
-package CoCoNut_was.domains.project.entitiy;
+package CoCoNut_was.domains.project.entity;
 
 import jakarta.persistence.*;
 
 @Entity
-public class ProjectColor {
+public class ProjectTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectColorId;
+    private Long projectTargetId;
 
-    @Column(nullable = false)
-    private String color; // 색상
+    @Column(nullable = false, length = 10)
+    private String target; // 타겟
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)

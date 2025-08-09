@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.entitiy;
+package CoCoNut_was.domains.project.entity;
 
 import jakarta.persistence.*;
 
