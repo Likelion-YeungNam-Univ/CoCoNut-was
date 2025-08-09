@@ -2,12 +2,12 @@ package CoCoNut_was.domains.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

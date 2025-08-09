@@ -1,14 +1,14 @@
 package CoCoNut_was.domains.project.entitiy;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
