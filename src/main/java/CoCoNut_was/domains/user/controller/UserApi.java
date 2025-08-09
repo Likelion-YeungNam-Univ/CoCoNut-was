@@ -82,12 +82,12 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "403", description = "중복으로 인한 회원가입 실패",
+            @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(name = "이메일 중복", value = """
                                     {
-                                        "status" : 403,
-                                        "message" : "액세스 토큰 인증 실패"
+                                        "status" : 401,
+                                        "message" : "액세스 토큰 인증이 필요합니다."
                                     }
                                     """),
                     })) //임시로 작성

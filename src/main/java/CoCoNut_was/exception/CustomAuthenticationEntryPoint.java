@@ -21,7 +21,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        ErrorDto errorDto = new ErrorDto(HttpStatus.UNAUTHORIZED.value(), "인증이 필요합니다.");
+        ErrorDto errorDto = new ErrorDto(HttpStatus.UNAUTHORIZED.value(), "액세스 토큰 인증이 필요합니다.");
 
         ObjectMapper objectMapper = new ObjectMapper();
         response.getWriter().write(objectMapper.writeValueAsString(errorDto));
