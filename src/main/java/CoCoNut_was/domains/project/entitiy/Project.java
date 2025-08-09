@@ -2,13 +2,14 @@ package CoCoNut_was.domains.project.entitiy;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,10 @@ public class Project {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category; // 공모전 카테고리
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BusinessType businessType; // 공모전 업종
 
     @Column(nullable = false)
     private String description; // 공모전 상세 설명
