@@ -1,10 +1,12 @@
 package CoCoNut_was.domains.submission.controller;
 
+import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.service.SubmissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -12,10 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public class SubmissionController {
     private final SubmissionService submissionService;
 
-
     // 1. 제출물 등록
     @PostMapping("/projects/{project_id}/submissions")
-    public ResponseEntity<?> submit(@PathVariable Long project_id){ // 제출할 dto도 보내야함
+    public ResponseEntity<?> submit(
+            @PathVariable Long project_id,
+            @RequestPart("submitDto") @Valid SubmitDto dto,
+            @RequestPart("image") MultipartFile image
+    ){
+        submissionService.submit(project_id, dto, image);
         return ResponseEntity.ok().build();
     }
 

@@ -30,6 +30,7 @@ public class SubmitDto {
 
     public Submission toEntity(Project project, User user){
         return Submission.builder()
+                .title(this.title)
                 .description(this.description)
                 .imageUrl(this.imageUrl)
                 .submittedAt(LocalDate.parse(this.submittedAt))
