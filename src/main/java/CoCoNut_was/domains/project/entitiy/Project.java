@@ -3,7 +3,6 @@ package CoCoNut_was.domains.project.entitiy;
 import CoCoNut_was.domains.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
