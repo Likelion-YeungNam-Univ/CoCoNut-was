@@ -1,7 +1,5 @@
 package CoCoNut_was.domains.project.dto;
 
-import CoCoNut_was.domains.project.entitiy.Project;
-
 import java.util.List;
 
 public class ProjectRequestDto {
