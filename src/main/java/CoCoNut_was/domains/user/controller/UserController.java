@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class UserController implements UserApi {
     private final UserService userService;
 
     // 1. 회원가입(회원추가)
+    @Override
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserDto dto){
-        return ResponseEntity.ok(userService.signUp(dto).getEmail());
+        userService.signUp(dto);
+        return ResponseEntity.ok().build();
     }
 
     // 2. 회원조회
