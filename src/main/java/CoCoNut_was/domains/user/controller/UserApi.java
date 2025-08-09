@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "User API", description = "유저 관련 API")
@@ -55,6 +57,44 @@ public interface UserApi {
     ResponseEntity<?> signUp(
             @Parameter(description = "회원가입 정보")
             @Valid @RequestBody CreateUserDto dto
+    );
+
+
+    @Operation(summary = "회원 상세조회", description = "조회 시도")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "email": "<email>",
+                                        "name": "<name>",
+                                        "nickname": "<nickname>",
+                                        "role": "ROLE_USER | ROLE_BUSINESS"
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "403", description = "중복으로 인한 회원가입 실패",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "이메일 중복", value = """
+                                    {
+                                        "status" : 403,
+                                        "message" : "액세스 토큰 인증 실패"
+                                    }
+                                    """),
+                    })) //임시로 작성
+    })
+    ResponseEntity<?> getUser(
+            @Parameter(description = "유저 고유 ID")
+            @PathVariable Long user_id
     );
 
 
