@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.entitiy;
+package CoCoNut_was.domains.project.entity;
 
 public enum Status {
     IN_PROGRESS, // 진행중

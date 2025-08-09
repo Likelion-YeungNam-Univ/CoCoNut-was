@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.entitiy;
+package CoCoNut_was.domains.project.entity;
 
 public enum BusinessType {
     FOOD_BEVERAGE, // 식당, 카페, 베이커리, 주점 등

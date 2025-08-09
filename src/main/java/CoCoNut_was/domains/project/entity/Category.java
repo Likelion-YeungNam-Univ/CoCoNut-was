@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.entitiy;
+package CoCoNut_was.domains.project.entity;
 
 public enum Category {
     PLANNING_IDEA, // 기획, 아이디어
