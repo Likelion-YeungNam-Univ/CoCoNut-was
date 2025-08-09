@@ -11,6 +11,9 @@ import java.time.LocalDate;
 @Data
 public class SubmitDto {
 
+    @NotBlank(message = "작품제목은 필수 입력입니다.")
+    private String title;
+
     private String description;
 
     private String imageUrl;
