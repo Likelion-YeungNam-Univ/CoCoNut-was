@@ -27,6 +27,7 @@ public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
     private final List<String> styles;
     private final List<String> targets;
 
+    
     public static ProjectDetailResponseDto fromEntity(Project project) {
         return ProjectDetailResponseDto.builder()
                 .projectId(project.getId())

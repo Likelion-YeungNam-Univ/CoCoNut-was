@@ -24,6 +24,7 @@ public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
     private final String summary;
     private final Status status;
 
+
     public static ProjectListResponseDto fromEntity(Project project) {
         return ProjectListResponseDto.builder()
                 .projectId(project.getId())

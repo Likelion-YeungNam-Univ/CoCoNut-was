@@ -39,6 +39,7 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
                 .description(this.description)
                 .rewardAmount(this.rewardAmount)
                 .summary(this.summary)
+                .deadline(deadline)
                 .build();
     }
 }
