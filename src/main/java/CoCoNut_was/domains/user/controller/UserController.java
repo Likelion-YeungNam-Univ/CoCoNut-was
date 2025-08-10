@@ -29,16 +29,18 @@ public class UserController implements UserApi {
     }
 
     // 2. 회원조회
+    @Override
     @GetMapping("/{user_id}")
     public ResponseEntity<?> getUser(@PathVariable Long user_id){
         return ResponseEntity.ok(userService.getUser(user_id));
     }
 
     // 3. 회원탈퇴(삭제)
+    @Override
     @DeleteMapping("/{user_id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long user_id){
         userService.deleteUser(user_id);
-        return ResponseEntity.ok("성공적으로 탈퇴하였습니다.");
+        return ResponseEntity.ok().build();
     }
 
     // 4. 로그인

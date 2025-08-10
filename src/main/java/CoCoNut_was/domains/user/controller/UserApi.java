@@ -98,4 +98,32 @@ public interface UserApi {
     );
 
 
+    @Operation(summary = "회원탈퇴(삭제)", description = "탈퇴(삭제) 시도")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "삭제 성공"),
+            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "이메일 중복", value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "액세스 토큰 인증이 필요합니다."
+                                    }
+                                    """),
+                    })) //임시로 작성
+    })
+    ResponseEntity<?> deleteUser(
+            @Parameter(description = "유저 고유 ID")
+            @PathVariable Long user_id
+    );
+
+
 }
