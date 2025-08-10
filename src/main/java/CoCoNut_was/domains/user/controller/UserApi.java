@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,12 +91,12 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
                                         "status" : 401,
-                                        "message" : "액세스 토큰 인증이 필요합니다."
+                                        "message" : "액세스 토큰이 유효하지 않습니다."
                                     }
                                     """),
                     }))
@@ -122,10 +121,10 @@ public interface UserApi {
                     })),
             @ApiResponse(responseCode = "401", description = "인증 실패",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "액세스 토큰 없음", value = """
+                            @ExampleObject(name = "액세스 토큰 없음 / 만료", value = """
                                     {
                                         "status" : 401,
-                                        "message" : "액세스 토큰 인증이 필요합니다."
+                                        "message" : "액세스 토큰이 유효하지 않습니다."
                                     }
                                     """),
                             @ExampleObject(name = "비밀번호 불일치", value = """
@@ -148,9 +147,9 @@ public interface UserApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "accessToken": "<accessToken>",
-                                        "userId": <userID>,
-                                        "email": "<email>"
+                                        "accessToken" : "<accessToken>",
+                                        "userId" : "<userId>",
+                                        "email" : "<email>"
                                     }
                                     """)
                     })),
@@ -169,5 +168,21 @@ public interface UserApi {
             @Valid @RequestBody LoginUserDto dto,
             HttpServletResponse res
     );
+
+
+    @Operation(summary = "로그아웃", description = "로그아웃 시도")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "액세스 토큰이 유효하지 않습니다."
+                                    }
+                                    """),
+                    }))
+    })
+    ResponseEntity<?> logout(HttpServletResponse res);
 
 }

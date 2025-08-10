@@ -51,7 +51,8 @@ public class UserController implements UserApi {
         return ResponseEntity.ok(tokenResDto);
     }
 
-    // 5. 로그아웃 : 리프레쉬 토큰만 제거, 액세스 토큰은 프론트엔드에서 제거해줘야함
+    // 5. 로그아웃 : 단순 토큰인증, 액세스 토큰은 프론트엔드에서 제거해줘야함
+    @Override
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse res) {
         userService.logout(res);
