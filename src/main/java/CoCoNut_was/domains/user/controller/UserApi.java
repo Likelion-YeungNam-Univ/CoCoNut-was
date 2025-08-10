@@ -100,7 +100,7 @@ public interface UserApi {
                                         "message" : "액세스 토큰 인증이 필요합니다."
                                     }
                                     """),
-                    })) //임시로 작성
+                    }))
     })
     ResponseEntity<?> getUser(
             @Parameter(description = "유저 고유 ID")
@@ -120,15 +120,21 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
+            @ApiResponse(responseCode = "401", description = "인증 실패",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
+                            @ExampleObject(name = "액세스 토큰 없음", value = """
                                     {
                                         "status" : 401,
                                         "message" : "액세스 토큰 인증이 필요합니다."
                                     }
                                     """),
-                    })) //임시로 작성
+                            @ExampleObject(name = "비밀번호 불일치", value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "비밀번호가 일치하지 않습니다."
+                                    }
+                                    """)
+                    }))
     })
     ResponseEntity<?> deleteUser(
             @Parameter(description = "유저 고유 ID")
@@ -156,7 +162,7 @@ public interface UserApi {
                                         "message": "해당 유저를 찾을 수 없습니다."
                                     }
                                     """)
-                    }))// 비밀번호가 틀렸다는 예외 추가 예정
+                    }))
     })
     ResponseEntity<?> login(
             @Parameter(description = "로그인 정보(이메일, 비밀번호)")
