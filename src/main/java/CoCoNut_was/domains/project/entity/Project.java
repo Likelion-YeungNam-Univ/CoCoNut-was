@@ -52,7 +52,7 @@ public class Project {
     private LocalDateTime createdAt; // 공모전 생성일자
 
     @Column(nullable = false)
-    private LocalDateTime deadLine; // 공모전 마감일자
+    private LocalDateTime deadline; // 공모전 마감일자
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -87,7 +87,7 @@ public class Project {
         this.rewardAmount = rewardAmount;
         this.summary = summary;
         this.createdAt = createdAt;
-        this.deadLine = deadLine;
+        this.deadline = deadline;
         this.status = status;
     }
 }
