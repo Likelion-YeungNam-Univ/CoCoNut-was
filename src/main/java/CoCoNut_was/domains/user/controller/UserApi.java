@@ -84,7 +84,7 @@ public interface UserApi {
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "이메일 중복", value = """
+                            @ExampleObject(value = """
                                     {
                                         "status" : 401,
                                         "message" : "액세스 토큰 인증이 필요합니다."
@@ -112,7 +112,7 @@ public interface UserApi {
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "이메일 중복", value = """
+                            @ExampleObject(value = """
                                     {
                                         "status" : 401,
                                         "message" : "액세스 토큰 인증이 필요합니다."
