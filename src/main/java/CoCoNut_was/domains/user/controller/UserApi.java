@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.user.controller;
 
 import CoCoNut_was.domains.user.reqdto.CreateUserDto;
+import CoCoNut_was.domains.user.reqdto.LoginUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +75,14 @@ public interface UserApi {
                                     }
                                     """)
                     })),
+            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "필드 누락", value = """
+                                    {
+                                        "<field>" : "<field>는 필수 입력입니다."
+                                    }
+                                    """)
+                    })),
             @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
@@ -90,7 +100,7 @@ public interface UserApi {
                                         "message" : "액세스 토큰 인증이 필요합니다."
                                     }
                                     """),
-                    })) //임시로 작성
+                    }))
     })
     ResponseEntity<?> getUser(
             @Parameter(description = "유저 고유 ID")
@@ -110,20 +120,54 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "401", description = "액세스 토큰을 기입하지 않음",
+            @ApiResponse(responseCode = "401", description = "인증 실패",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
+                            @ExampleObject(name = "액세스 토큰 없음", value = """
                                     {
                                         "status" : 401,
                                         "message" : "액세스 토큰 인증이 필요합니다."
                                     }
                                     """),
-                    })) //임시로 작성
+                            @ExampleObject(name = "비밀번호 불일치", value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "비밀번호가 일치하지 않습니다."
+                                    }
+                                    """)
+                    }))
     })
     ResponseEntity<?> deleteUser(
             @Parameter(description = "유저 고유 ID")
             @PathVariable Long user_id
     );
 
+
+    @Operation(summary = "로그인", description = "로그인 시도")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그인 성공",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "accessToken": "<accessToken>",
+                                        "userId": <userID>,
+                                        "email": "<email>"
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> login(
+            @Parameter(description = "로그인 정보(이메일, 비밀번호)")
+            @Valid @RequestBody LoginUserDto dto,
+            HttpServletResponse res
+    );
 
 }

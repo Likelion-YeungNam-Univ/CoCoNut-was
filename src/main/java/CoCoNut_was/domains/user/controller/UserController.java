@@ -44,6 +44,7 @@ public class UserController implements UserApi {
     }
 
     // 4. 로그인
+    @Override
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto dto, HttpServletResponse res){
         TokenResDto tokenResDto = userService.login(dto, res);

@@ -73,7 +73,16 @@ public class UserService {
     // 로그인
     @Transactional
     public TokenResDto login(LoginUserDto dto, HttpServletResponse res) {
-        // 1. 인증
+        // 1. 유저찾기
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        // 2. 비밀번호 검증
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword()))
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
+
+        // 3. 인증
         try{
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
@@ -82,16 +91,11 @@ public class UserService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        // 2. 유저찾기
-        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        // 3. 토큰 발급
+        // 4. 토큰 발급
         String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail());
         String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail());
 
-        // 4. Refresh 토큰 보호
+        // 5. Refresh 토큰 보호
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
@@ -99,7 +103,7 @@ public class UserService {
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-//        // 5. Access 토큰 임시 할당
+//        // . Access 토큰 임시 할당
 //        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
 //                .httpOnly(true)
 //                .path("/")
