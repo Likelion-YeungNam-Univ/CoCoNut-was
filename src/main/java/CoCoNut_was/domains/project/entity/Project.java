@@ -76,7 +76,7 @@ public class Project {
     @Builder
     public Project(User user, String title, String merchantName, Category category,
                    BusinessType businessType, String description, String period, int rewardAmount,
-                   String summary, LocalDateTime createdAt, LocalDateTime deadLine, Status status) {
+                   String summary, LocalDateTime createdAt, LocalDateTime deadline, Status status) {
         this.user = user;
         this.title = title;
         this.merchantName = merchantName;
