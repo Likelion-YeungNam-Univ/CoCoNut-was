@@ -1,8 +1,10 @@
 package CoCoNut_was.domains.project.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class ProjectTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
