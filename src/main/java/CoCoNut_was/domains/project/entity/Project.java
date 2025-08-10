@@ -73,7 +73,7 @@ public class Project {
     @Builder
     public Project(User user, String title, String merchantName, Category category,
                    BusinessType businessType, String description, int rewardAmount,
-                   String summary, LocalDateTime createdAt, LocalDateTime deadline, Status status) {
+                   String summary, LocalDateTime deadline) {
         this.user = user;
         this.title = title;
         this.merchantName = merchantName;
@@ -82,8 +82,6 @@ public class Project {
         this.description = description;
         this.rewardAmount = rewardAmount;
         this.summary = summary;
-        this.createdAt = createdAt;
         this.deadline = deadline;
-        this.status = status;
     }
 }
