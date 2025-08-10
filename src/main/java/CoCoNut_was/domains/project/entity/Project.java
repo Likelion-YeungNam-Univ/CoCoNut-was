@@ -39,9 +39,6 @@ public class Project {
     @Column(nullable = false)
     private String description; // 공모전 상세 설명
 
-    @Column(nullable = false, length = 10)
-    private String period; // 공모전 기간
-
     @Column(nullable = false)
     private int rewardAmount; // 공모전 상금
 
@@ -75,7 +72,7 @@ public class Project {
 
     @Builder
     public Project(User user, String title, String merchantName, Category category,
-                   BusinessType businessType, String description, String period, int rewardAmount,
+                   BusinessType businessType, String description, int rewardAmount,
                    String summary, LocalDateTime createdAt, LocalDateTime deadline, Status status) {
         this.user = user;
         this.title = title;
@@ -83,7 +80,6 @@ public class Project {
         this.category = category;
         this.businessType = businessType;
         this.description = description;
-        this.period = period;
         this.rewardAmount = rewardAmount;
         this.summary = summary;
         this.createdAt = createdAt;
