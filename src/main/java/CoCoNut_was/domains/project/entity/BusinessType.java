@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BusinessType {
-    FOOD_BEVERAGE("식당 / 카페 / 베이커리 / 주점 등"),
-    RETAIL_COMMERCE("의류 / 온라인 쇼핑물 등"),
-    BEAUTY_HEALTH("미용실 / 네일샵 /  헬스장 / 필라테스 등"),
-    EDUCATION("학원, 스터디카페, 공방 등"),
-    MEDICAL("병원 / 의원 / 약국 등"),
-    CULTURE_LEISURE("PC방, 보드게임카페, 전시 / 공연 등"),
-    PROFESSIONAL_SERVICE("인쇄소 / 컨설팅 / 세무/법률 등"),
-    ACCOMMODATION("펜션 / 게스트하우스 / 모텔 등"),
+    FOOD_BEVERAGE("식당 / 카페 / 주점"),
+    RETAIL_COMMERCE("의류 / 쇼핑물"),
+    BEAUTY_HEALTH("뷰티 / 헬스"),
+    EDUCATION("교육 / 학원"),
+    MEDICAL("병원 / 약국"),
+    CULTURE_LEISURE("문화 / 여가"),
+    PROFESSIONAL_SERVICE("서비스 / 전문직"),
+    ACCOMMODATION("숙박 / 관광"),
     ETC("기타");
 
     private final String description;
