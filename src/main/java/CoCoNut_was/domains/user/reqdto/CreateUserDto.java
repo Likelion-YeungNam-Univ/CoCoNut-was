@@ -29,7 +29,7 @@ public class CreateUserDto {
     @NotBlank(message = "비밀번호는 필수 입력입니다.")
     private String password;
 
-    @Schema(description = "역할", example = "ROLE_USER | ROLE_BUSINESS")
+    @Schema(description = "역할", example = "ROLE_USER") // 혹은 ROLE_BUSINESS
     @NotBlank(message = "역할 지정은 필수 사항입니다.")
     private String role;
 
