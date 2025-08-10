@@ -147,9 +147,9 @@ public interface UserApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "accessToken": "<accessToken>",
-                                        "userId": <userID>,
-                                        "email": "<email>"
+                                        "accessToken" : "<accessToken>",
+                                        "userId" : "<userId>",
+                                        "email" : "<email>"
                                     }
                                     """)
                     })),
