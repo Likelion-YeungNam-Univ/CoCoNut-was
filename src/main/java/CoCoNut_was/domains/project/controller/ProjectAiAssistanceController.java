@@ -2,6 +2,7 @@ package CoCoNut_was.domains.project.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectAiAssistanceDto;
 import CoCoNut_was.domains.project.service.ProjectAiAssistanceService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,18 +22,12 @@ public class ProjectAiAssistanceController {
     @PostMapping("/assist")
     public ResponseEntity<?> getAssistanceForProject(
             @RequestBody Map<String, String> userReq
-    ) {
-        try {
-            String userPrompt = userReq.get("prompt");
-            if (userPrompt == null || userPrompt.isBlank()) {
-                return ResponseEntity.badRequest().body("프롬프트 내용이 없습니다.");
-            }
+    ) throws JsonProcessingException {
+        String userPrompt = userReq.get("prompt");
+        if (userPrompt == null || userPrompt.isBlank())
+            return ResponseEntity.badRequest().body("프롬프트 내용이 없습니다.");
 
-            ProjectAiAssistanceDto result = projectAiAssistanceService.getAssistance(userPrompt);
-            return ResponseEntity.ok(result);
-
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("AI 어시스턴트 처리 중 오류가 발생했습니다: " + e.getMessage());
-        }
+        ProjectAiAssistanceDto result = projectAiAssistanceService.getAssistance(userPrompt);
+        return ResponseEntity.ok(result);
     }
 }
