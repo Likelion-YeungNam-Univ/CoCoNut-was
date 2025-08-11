@@ -137,4 +137,11 @@ public class UserService {
         res.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString());
 //        res.addHeader(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString());
     }
+
+    // 이메일을 통한 유저조회
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
 }
