@@ -20,7 +20,7 @@ public class ProjectController {
     private final UserService userService;
 
     // 공모전 생성
-    @PostMapping("/{project_id}")
+    @PostMapping
     public ResponseEntity<?> createProject(
             @RequestBody ProjectRequestDto dto,
             @AuthenticationPrincipal UserDetails userDetails) {
