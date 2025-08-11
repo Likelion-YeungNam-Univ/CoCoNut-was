@@ -18,6 +18,9 @@ public class Submission {
     private Long id;
 
     @Column
+    private String title;
+
+    @Column
     private String description;
 
     @Column
@@ -34,7 +37,8 @@ public class Submission {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Builder public Submission(String description, String imageUrl, LocalDate submittedAt, Project project, User user) {
+    @Builder public Submission(String title, String description, String imageUrl, LocalDate submittedAt, Project project, User user) {
+        this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
         this.submittedAt = submittedAt;
