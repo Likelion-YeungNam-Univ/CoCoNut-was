@@ -1,8 +1,12 @@
 package CoCoNut_was.domains.project.service;
 
+import CoCoNut_was.domains.submission.resdto.SubmissionAiAssistanceDto;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import CoCoNut_was.openai.OpenAiReqDto;
 import CoCoNut_was.openai.OpenAiResDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import CoCoNut_was.domains.project.dto.ProjectAiAssistanceDto;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +36,10 @@ public class ProjectAiAssistanceService {
                 "  \"period\": \"(공모전 난이도와 종류를 고려하여 적절한 공모 기간을 일 단위 숫자로만 추천)\",\n" +
                 "  \"summary\": \"(공모전 내용을 한 문장으로 요약)\"\n" +
                 "}\n" +
-                "만약 사용자의 입력이 부적절하거나 정보가 부족하여 추천이 불가능할 경우, 'error' 필드를 포함한 JSON으로 응답해주세요.\n" +
-                "{\"error\": \"(오류 사유)\"}";
+                "만약 사용자의 입력이 부적절하거나 정보가 부족하여 추천이 불가능할 경우, 'error' 필드를 포함한 JSON으로 응답해주세요. JSON을 제외한 모든 형태에 반환은 금지입니다 명심하세요.\n" +
+                "{\n" +
+                "  \"error\": \"(오류 사유)\"\n" +
+                "}\n";
 
         // 2. 메시지 리스트 생성 및 프롬프트 추가
         List<OpenAiReqDto.Message> messages = new ArrayList<>();
@@ -62,7 +68,11 @@ public class ProjectAiAssistanceService {
 
         String jsonResponse = res.getBody().getChoices().get(0).getMessage().getContent();
 
-        // 7. JSON 응답을 DTO로 파싱
-        return objectMapper.readValue(jsonResponse, ProjectAiAssistanceDto.class);
+        // 7. JSON 응답을 DTO로 파싱, 에러 필드 확인하기
+        JsonNode responseNode = objectMapper.readTree(jsonResponse);
+        if (responseNode.has("error"))
+            throw new CustomException(ErrorCode.AI_GENERATION_FAILED);
+        else
+            return objectMapper.readValue(jsonResponse, ProjectAiAssistanceDto.class);
     }
 }

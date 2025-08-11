@@ -1,9 +1,12 @@
 package CoCoNut_was.domains.submission.service;
 
 import CoCoNut_was.domains.submission.resdto.SubmissionAiAssistanceDto;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import CoCoNut_was.openai.OpenAiReqDto;
 import CoCoNut_was.openai.OpenAiResDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,10 +30,12 @@ public class SubmissionAiAssistanceService {
         // 1. 시스템 메시지 (AI 역할 및 응답 형식 지정)
         String systemPrompt = "당신은 공모전에 대한 제출물 기획 전문가입니다. 사용자가 제공하는 공모전 제출물에 관한 정보를 바탕으로 공모전 제출 글을 써주세요., 반드시 아래와 같은 JSON 형식으로만 응답해야 합니다. 다른 설명은 절대 추가하지 마세요.\n" +
                 "{\n" +
-                "  \"description\": \"(사용자의 설명을 바탕으로 공모전 상세 설명을 200자 내외로 재생성)\",\n" +
+                "  \"description\": \"(사용자의 설명을 바탕으로 공모전 상세 설명을 200자 내외로 재생성)\"\n" +
                 "}\n" +
-                "만약 사용자의 입력이 부적절하거나 정보가 부족하여 추천이 불가능할 경우, 'error' 필드를 포함한 JSON으로 응답해주세요.\n" +
-                "{\"error\": \"(오류 사유)\"}";
+                "만약 사용자의 입력이 부적절하거나 정보가 부족하여 설명이 불가할 경우, 'error' 필드를 포함한 JSON으로 응답해주세요. JSON을 제외한 모든 형태에 반환은 금지입니다 명심하세요.\n" +
+                "{\n" +
+                "  \"error\": \"(오류 사유)\"\n" +
+                "}\n";
 
         // 2. 메시지 리스트 생성 및 프롬프트 추가
         List<OpenAiReqDto.Message> messages = new ArrayList<>();
@@ -59,8 +64,12 @@ public class SubmissionAiAssistanceService {
 
         String jsonResponse = res.getBody().getChoices().get(0).getMessage().getContent();
 
-        // 7. JSON 응답을 DTO로 파싱
-        return objectMapper.readValue(jsonResponse, SubmissionAiAssistanceDto.class);
+        // 7. JSON 응답을 DTO로 파싱, 에러 필드 확인하기
+        JsonNode responseNode = objectMapper.readTree(jsonResponse);
+        if (responseNode.has("error"))
+            throw new CustomException(ErrorCode.AI_GENERATION_FAILED);
+        else
+            return objectMapper.readValue(jsonResponse, SubmissionAiAssistanceDto.class);
     }
 
 }
