@@ -31,12 +31,14 @@ public class ProjectService {
     private final ProjectTargetRepository projectTargetRepository;
 
     @Transactional
-    public void createProject(ProjectRequestDto projectRequestDto, User user) { // 공모전 생성
+    public Long createProject(ProjectRequestDto projectRequestDto, User user) { // 공모전 생성
         Project project = projectRequestDto.toEntity(user);
         Project saveProject = projectRepository.save(project);
 
         saveProjectDetails(projectRequestDto.getColors(), projectRequestDto.getStyles(),
                             projectRequestDto.getTargets(), saveProject);
+
+        return saveProject.getId();
     }
 
     public List<ProjectListResponseDto> findAllProjects() { // 공모전 목록 조회
