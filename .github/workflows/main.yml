@@ -5,63 +5,44 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  # 1. 빌드 작업: 프로젝트를 빌드하고 JAR 파일을 Artifact로 저장합니다.
   build:
     runs-on: ubuntu-latest
-    
     outputs:
       jar_path: ${{ steps.get_jar_path.outputs.path }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'corretto'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
-      - name: Build with Gradle
-        run: ./gradlew build -x test
-
-      # 빌드된 JAR 파일의 경로를 찾아서 변수로 저장합니다.
+      - run: chmod +x ./gradlew
+      - name: Build without Test
+        run: ./gradlew build -x test --no-daemon
+        env:
+          GRADLE_OPTS: -Xmx2048m
       - name: Get JAR file path
         id: get_jar_path
         run: |
           JAR_PATH=$(find build/libs -name "*.jar")
           echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
-
-      # 빌드된 JAR 파일을 'app-jar'라는 이름의 Artifact로 업로드합니다.
-      - name: Upload JAR
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: app-jar
           path: ${{ steps.get_jar_path.outputs.path }}
 
-  # 2. 배포 작업: 빌드 작업이 성공적으로 끝나면 실행됩니다.
   deploy:
-    needs: build # 'build' 작업에 의존합니다.
+    needs: build
     runs-on: ubuntu-latest
-
     steps:
-      # 'build' 작업에서 업로드한 Artifact를 다운로드합니다.
-      - name: Download JAR
-        uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: app-jar
-
-      # 다운로드한 JAR 파일의 로컬 경로를 가져옵니다. (scp-action을 위해)
       - name: Get JAR file path
         id: get_jar_path
         run: |
           JAR_PATH=$(find . -name "*.jar")
           echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
-
-      # SCP를 사용하여 EC2 서버로 JAR 파일을 복사합니다.
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
@@ -69,9 +50,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: ${{ steps.get_jar_path.outputs.path }}
-          target: "/home/ubuntu/CoCoNut-was" # JAR 파일을 저장할 서버 경로
-
-      # SSH를 사용하여 EC2 서버에서 배포 스크립트를 실행합니다.
+          target: "/home/ubuntu/CoCoNut-was"
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -80,14 +59,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/CoCoNut-was
-            
-            # 기존에 실행 중인 Java 프로세스를 종료합니다.
             pgrep -f '.jar' | xargs -r kill -9
-            
-            # 디렉토리에서 가장 최근에 수정된 JAR 파일의 이름을 찾습니다.
             JAR_NAME=$(ls -t *.jar | head -n 1)
-            
-            # 환경변수를 설정하고 새 버전의 서버를 실행합니다.
             DB_URL="${{ secrets.DB_URL }}" \
             DB_USERNAME="${{ secrets.DB_USERNAME }}" \
             DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
