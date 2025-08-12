@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3 #
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -19,24 +19,26 @@ jobs:
           distribution: 'corretto'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew # 3. gradlew 파일에 실행 권한을 부여합니다.
+        run: chmod +x ./gradlew
 
       - name: Build with Gradle
         env:
-          GRADLE_OPTS: -Xmx2048m # Gradle이 사용하는 최대 메모리를 2GB로 제한합니다.
-        run: ./gradlew build -x test # 4. Gradle로 프로젝트를 빌드합니다. (테스트는 제외)
+          GRADLE_OPTS: -Xmx2048m # Gradle이 사용하는 최대 메모리를 2GB로 제한
+        run: ./gradlew build -x test --no-daemon # Daemon을 사용하지 않아 메모리 추가 절약
 
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@master # 5. appleboy의 ssh-action을 사용해 EC2에 접속합니다.
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }} # GitHub Secrets에서 EC2 IP 주소를 가져옵니다.
-          username: ${{ secrets.EC2_USERNAME }} # GitHub Secrets에서 EC2 사용자 이름을 가져옵니다.
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }} # GitHub Secrets에서 SSH 개인 키를 가져옵니다.
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/CoCoNut-was
             
+            # 실행 중인 Java 프로세스가 있으면 종료합니다.
             pgrep -f '.jar' | xargs -r kill -9
             
+            # 모든 환경변수를 주입하여 새 버전의 서버를 실행합니다.
             DB_URL="${{ secrets.DB_URL }}" \
             DB_USERNAME="${{ secrets.DB_USERNAME }}" \
             DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
