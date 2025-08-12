@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,7 @@ public class UserController implements UserApi {
 //        return ResponseEntity.ok(userService.getUser(user_id));
 //    }
 
-    // 2. 마이페이지(자신 조회)
+    // 2. 내 정보 조회(마이페이지)
     @GetMapping
     public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok(userService.me(userDetails));
@@ -50,14 +49,12 @@ public class UserController implements UserApi {
 
     // 3. 회원탈퇴(삭제)
     @DeleteMapping
-    public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal UserDetails userDetails) { // (1)
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
         userService.deleteUser(userDetails);
-        return ResponseEntity.ok("회원탈퇴가 성공적으로 처리되었습니다.");
+        return ResponseEntity.ok().build();
     }
 
     // 4. 로그인
-    @Override
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto dto, HttpServletResponse res){
         TokenResDto tokenResDto = userService.login(dto, res);
@@ -65,7 +62,6 @@ public class UserController implements UserApi {
     }
 
     // 5. 로그아웃 : 단순 토큰인증, 액세스 토큰은 프론트엔드에서 제거해줘야함
-    @Override
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse res) {
         userService.logout(res);
