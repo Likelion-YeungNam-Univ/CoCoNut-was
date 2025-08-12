@@ -1,72 +1,48 @@
-# .github/workflows/main.yml
-
 name: CoCoNut-was CI/CD with GitHub Actions
 
 on:
   push:
     branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     outputs:
       jar_path: ${{ steps.get_jar_path.outputs.path }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'corretto'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
-      - name: Build with Gradle
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            ./gradlew build --no-daemon
-          else
-            ./gradlew build -x test --no-daemon
-          fi
-        env: # Gradle 빌드에 사용할 환경 변수 설정
-          GRADLE_OPTS: -Xmx2048m # 최대 힙 메모리를 2GB로 제한
-
+      - run: chmod +x ./gradlew
+      - name: Build without Test
+        run: ./gradlew build -x test --no-daemon
+        env:
+          GRADLE_OPTS: -Xmx2048m
       - name: Get JAR file path
         id: get_jar_path
         run: |
           JAR_PATH=$(find build/libs -name "*.jar")
           echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
-
-      - name: Upload JAR
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: app-jar
           path: ${{ steps.get_jar_path.outputs.path }}
 
   deploy:
-    if: github.event_name == 'push' && needs.build.result == 'success'
     needs: build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download JAR
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: app-jar
-
       - name: Get JAR file path
         id: get_jar_path
         run: |
           JAR_PATH=$(find . -name "*.jar")
           echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
-
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
@@ -75,7 +51,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: ${{ steps.get_jar_path.outputs.path }}
           target: "/home/ubuntu/CoCoNut-was"
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
