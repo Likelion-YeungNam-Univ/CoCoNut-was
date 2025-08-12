@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -61,7 +63,7 @@ public interface UserApi {
     );
 
 
-    @Operation(summary = "회원 상세조회", description = "조회 시도")
+    @Operation(summary = "내 정보 조회", description = "조회 시도")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
                     content = @Content(mediaType = "application/json", examples = {
@@ -74,70 +76,38 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "필드 누락", value = """
-                                    {
-                                        "<field>" : "<field>는 필수 입력입니다."
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "status": 404,
-                                        "message": "해당 유저를 찾을 수 없습니다."
-                                    }
-                                    """)
-                    })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
                                         "status" : 401,
-                                        "message" : "액세스 토큰이 유효하지 않습니다."
+                                        "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """),
                     }))
     })
-    ResponseEntity<?> getUser(
-            @Parameter(description = "유저 고유 ID")
-            @PathVariable Long user_id
+    ResponseEntity<?> me(
+            @Parameter(description = "JWT 토큰기반 유저 조회")
+            @AuthenticationPrincipal UserDetails userDetails
     );
 
 
     @Operation(summary = "회원탈퇴(삭제)", description = "탈퇴(삭제) 시도")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+            @ApiResponse(responseCode = "401", description = "인증 실패",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "status": 404,
-                                        "message": "해당 유저를 찾을 수 없습니다."
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "401", description = "인증 실패",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "액세스 토큰 없음 / 만료", value = """
-                                    {
                                         "status" : 401,
-                                        "message" : "액세스 토큰이 유효하지 않습니다."
-                                    }
-                                    """),
-                            @ExampleObject(name = "비밀번호 불일치", value = """
-                                    {
-                                        "status" : 401,
-                                        "message" : "비밀번호가 일치하지 않습니다."
+                                        "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """)
                     }))
     })
     ResponseEntity<?> deleteUser(
-            @Parameter(description = "유저 고유 ID")
-            @PathVariable Long user_id
+            @Parameter(description = "JWT 토큰기반 유저 탈퇴")
+            @AuthenticationPrincipal UserDetails userDetails
     );
 
 
@@ -153,12 +123,21 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+            @ApiResponse(responseCode = "404", description = "이메일이 존재하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
                                         "status": 404,
                                         "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "비밀번호 불일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "비밀번호가 일치하지 않습니다."
                                     }
                                     """)
                     }))
@@ -178,7 +157,7 @@ public interface UserApi {
                             @ExampleObject(value = """
                                     {
                                         "status" : 401,
-                                        "message" : "액세스 토큰이 유효하지 않습니다."
+                                        "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """),
                     }))

@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +30,7 @@ public class UserService {
 
     // 1. 회원가입
     public void signUp(CreateUserDto dto) {
-        // 아이디 및 닉네임 중복확인 검증
-//        if(existsByEmail(dto.getEmail()) || existsByNickname(dto.getNickname()))
-//            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
+
         if(existsByEmail(dto.getEmail()))
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXIST);
         if(existsByNickname(dto.getNickname()))
@@ -51,10 +50,17 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    // 유저 상세조회
-    public UserInfoDto getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+    // 유저 상세조회 임시 폐기
+//    public UserInfoDto getUser(Long id) {
+//        User user = userRepository.findById(id).orElseThrow(
+//                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+//        );
+//        return UserInfoDto.fromEntity(user);
+//    }
+
+    // 마이페이지 상세 조회
+    public UserInfoDto me(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         return UserInfoDto.fromEntity(user);
@@ -62,9 +68,8 @@ public class UserService {
 
     // 유저 삭제
     @Transactional
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+    public void deleteUser(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         userRepository.delete(user);
@@ -103,14 +108,6 @@ public class UserService {
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-//        // . Access 토큰 임시 할당
-//        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
-//                .httpOnly(true)
-//                .path("/")
-//                .maxAge(60 * 60) // 한시간
-//                .build();
-//        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
-
         // 6. 기본 정보가 담긴 DTO 반환
         return TokenResDto.builder()
                 .accessToken(accessToken)
@@ -128,14 +125,7 @@ public class UserService {
                 .maxAge(0)
                 .build();
 
-//        ResponseCookie deleteAccessCookie = ResponseCookie.from("accessToken", "")
-//                .path("/")
-//                .httpOnly(true)
-//                .maxAge(0)
-//                .build();
-
         res.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString());
-//        res.addHeader(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString());
     }
 
     // 이메일을 통한 유저조회
@@ -144,4 +134,5 @@ public class UserService {
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
     }
+
 }

@@ -1,9 +1,5 @@
 package CoCoNut_was.domains.user.controller;
 
-/*
-회원가입(추가), 회원조회, 회원수정, 회원삭제, 로그인, 로그아웃을 다루는 컨트롤러
- */
-
 import CoCoNut_was.domains.user.reqdto.LoginUserDto;
 import CoCoNut_was.domains.user.resdto.TokenResDto;
 import CoCoNut_was.domains.user.reqdto.CreateUserDto;
@@ -12,9 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,23 +31,26 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().build();
     }
 
-    // 2. 회원조회
-    @Override
-    @GetMapping("/{user_id}")
-    public ResponseEntity<?> getUser(@PathVariable Long user_id){
-        return ResponseEntity.ok(userService.getUser(user_id));
+//    // 2. 회원조회 (관리자) 임시 폐기
+//    @GetMapping("/{user_id}")
+//    public ResponseEntity<?> getUser(@PathVariable Long user_id){
+//        return ResponseEntity.ok(userService.getUser(user_id));
+//    }
+
+    // 2. 내 정보 조회(마이페이지)
+    @GetMapping
+    public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(userService.me(userDetails));
     }
 
     // 3. 회원탈퇴(삭제)
-    @Override
-    @DeleteMapping("/{user_id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long user_id){
-        userService.deleteUser(user_id);
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
+        userService.deleteUser(userDetails);
         return ResponseEntity.ok().build();
     }
 
     // 4. 로그인
-    @Override
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDto dto, HttpServletResponse res){
         TokenResDto tokenResDto = userService.login(dto, res);
@@ -58,7 +58,6 @@ public class UserController implements UserApi {
     }
 
     // 5. 로그아웃 : 단순 토큰인증, 액세스 토큰은 프론트엔드에서 제거해줘야함
-    @Override
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse res) {
         userService.logout(res);
