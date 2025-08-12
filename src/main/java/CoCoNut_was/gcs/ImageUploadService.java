@@ -1,6 +1,8 @@
 package CoCoNut_was.gcs;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,5 +41,20 @@ public class ImageUploadService {
 
         // 3. 업로드된 이미지의 공개 URL을 만들어 반환합니다.
         return "https://storage.googleapis.com/" + bucketName + "/" + fileName;
+    }
+
+    // 👇 이 테스트 메소드를 추가해주세요.
+    public void testGcsConnection() {
+        try {
+            Page<Bucket> buckets = storage.list();
+            System.out.println("✅ Google Cloud Storage 연결 성공!");
+            System.out.println("버킷 목록:");
+            for (Bucket bucket : buckets.iterateAll()) {
+                System.out.println(" -> " + bucket.getName());
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Google Cloud Storage 연결 실패!");
+            e.printStackTrace();
+        }
     }
 }
