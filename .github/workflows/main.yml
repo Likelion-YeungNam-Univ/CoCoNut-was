@@ -1,4 +1,4 @@
-name: CoCoNut-was CI/CD with GitHub Actions
+name: CoCoNut-was CI/CD
 
 on:
   push:
@@ -8,22 +8,18 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # 24.04 간헐 137 회피[3]
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'corretto'
-
       - run: chmod +x ./gradlew
-
-      - name: Build bootJar
+      - name: Build bootJar (executable only)
         env:
           GRADLE_OPTS: -Xmx2048m
         run: ./gradlew clean bootJar -x test --no-daemon
-
       - name: Upload artifact (boot jar only)
         uses: actions/upload-artifact@v4
         with:
@@ -33,7 +29,7 @@ jobs:
   deploy:
     needs: build
     if: github.event_name == 'push' && needs.build.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # 동일하게 22.04[3]
     steps:
       - name: Download artifact to dist
         uses: actions/download-artifact@v4
@@ -42,30 +38,33 @@ jobs:
           path: dist
 
       - name: Copy JAR to EC2
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v0.1.7  # 버전 고정[9]
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: "dist/*.jar"
+          source: "dist/*-SNAPSHOT.jar"
           target: "/home/ubuntu/CoCoNut-was"
 
-      - name: Deploy to EC2 using set-env.sh
-        uses: appleboy/ssh-action@v1.2.2
+      - name: Deploy to EC2 (retry to dodge 137)
+        uses: nick-fields/retry@v3  # 재시도 액션[7][10][13][16]
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            set -euo pipefail
-            cd /home/ubuntu/CoCoNut-was
-            # 기존 앱 종료
-            pgrep -f '\.jar' | xargs -r kill -9
-            # 환경변수 로드
-            source /home/ubuntu/CoCoNut-was/set-env.sh
-            # 최신 JAR 선택
-            JAR_NAME=$(ls -t *-SNAPSHOT.jar | head -n 1)
-            # 서비스 실행
-            nohup java -jar "$JAR_NAME" >/dev/null 2>&1 &
-            sleep 2
-            pgrep -f "$JAR_NAME" >/dev/null
+          timeout_minutes: 10
+          max_attempts: 3
+          command: |
+            bash -lc '
+              set -euo pipefail
+              ssh -o StrictHostKeyChecking=no -i <(printf "%s" "${{ secrets.EC2_SSH_PRIVATE_KEY }}") ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << "EOF"
+              set -euo pipefail
+              cd /home/ubuntu/CoCoNut-was
+              # 환경변수 로드 (여기에 DB_URL/SECRET_KEY/GOOGLE_APPLICATION_CREDENTIALS 다 있음)
+              source /home/ubuntu/CoCoNut-was/set-env.sh
+              # 기존 프로세스 종료
+              pgrep -f "\.jar" | xargs -r kill -9
+              # 최신 부트 JAR 선택
+              JAR_NAME=$(ls -t *-SNAPSHOT.jar | head -n 1)
+              nohup java -jar "$JAR_NAME" >/dev/null 2>&1 &
+              sleep 2
+              pgrep -f "$JAR_NAME" >/dev/null
+              EOF
+            '
