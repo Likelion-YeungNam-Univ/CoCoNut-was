@@ -123,15 +123,18 @@ public interface UserApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "401", description = "인증 실패",
+            @ApiResponse(responseCode = "404", description = "이메일이 존재하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "액세스 토큰 없음 / 만료", value = """
+                            @ExampleObject(value = """
                                     {
-                                        "status" : 401,
-                                        "message" : "토큰이 없거나 만료되었습니다."
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
                                     }
-                                    """),
-                            @ExampleObject(name = "비밀번호 불일치", value = """
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "비밀번호 불일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
                                     {
                                         "status" : 401,
                                         "message" : "비밀번호가 일치하지 않습니다."
@@ -154,7 +157,7 @@ public interface UserApi {
                             @ExampleObject(value = """
                                     {
                                         "status" : 401,
-                                        "message" : "액세스 토큰이 유효하지 않습니다."
+                                        "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """),
                     }))
