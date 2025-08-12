@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,11 +44,11 @@ public class UserController implements UserApi {
     }
 
     // 3. 회원탈퇴(삭제)
-    @Override
-    @DeleteMapping("/{user_id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long user_id){
-        userService.deleteUser(user_id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(
+            @AuthenticationPrincipal UserDetails userDetails) { // (1)
+        userService.deleteUser(userDetails);
+        return ResponseEntity.ok("회원탈퇴가 성공적으로 처리되었습니다.");
     }
 
     // 4. 로그인

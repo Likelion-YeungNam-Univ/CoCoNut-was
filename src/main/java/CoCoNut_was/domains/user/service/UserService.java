@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,9 +63,9 @@ public class UserService {
 
     // 유저 삭제
     @Transactional
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+    public void deleteUser(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+    //                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         userRepository.delete(user);
