@@ -1,6 +1,12 @@
 package CoCoNut_was.domains.project.dto;
 
-import CoCoNut_was.domains.project.entity.*;
+import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.project.entity.Category;
+import CoCoNut_was.domains.project.entity.BusinessType;
+import CoCoNut_was.domains.project.entity.Status;
+import CoCoNut_was.domains.project.entity.ProjectColor;
+import CoCoNut_was.domains.project.entity.ProjectStyle;
+import CoCoNut_was.domains.project.entity.ProjectTarget;
 import lombok.Builder;
 import lombok.Getter;
 

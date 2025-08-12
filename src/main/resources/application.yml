@@ -19,3 +19,7 @@ spring:
 
 jwt:
   secret-key: ${SECRET_KEY}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
