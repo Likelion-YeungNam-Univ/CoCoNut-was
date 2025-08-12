@@ -22,7 +22,7 @@ jobs:
         run: chmod +x ./gradlew # 3. gradlew 파일에 실행 권한을 부여합니다.
 
       - name: Build with Gradle
-        env: 
+        env:
           GRADLE_OPTS: -Xmx2048m # Gradle이 사용하는 최대 메모리를 2GB로 제한합니다.
         run: ./gradlew build -x test # 4. Gradle로 프로젝트를 빌드합니다. (테스트는 제외)
 
