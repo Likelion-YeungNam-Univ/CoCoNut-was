@@ -30,9 +30,7 @@ public class UserService {
 
     // 1. 회원가입
     public void signUp(CreateUserDto dto) {
-        // 아이디 및 닉네임 중복확인 검증
-//        if(existsByEmail(dto.getEmail()) || existsByNickname(dto.getNickname()))
-//            throw new IllegalArgumentException("이메일 또는 닉네임이 중복되었습니다.");
+
         if(existsByEmail(dto.getEmail()))
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXIST);
         if(existsByNickname(dto.getNickname()))
@@ -110,14 +108,6 @@ public class UserService {
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-//        // . Access 토큰 임시 할당
-//        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
-//                .httpOnly(true)
-//                .path("/")
-//                .maxAge(60 * 60) // 한시간
-//                .build();
-//        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
-
         // 6. 기본 정보가 담긴 DTO 반환
         return TokenResDto.builder()
                 .accessToken(accessToken)
@@ -135,14 +125,7 @@ public class UserService {
                 .maxAge(0)
                 .build();
 
-//        ResponseCookie deleteAccessCookie = ResponseCookie.from("accessToken", "")
-//                .path("/")
-//                .httpOnly(true)
-//                .maxAge(0)
-//                .build();
-
         res.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString());
-//        res.addHeader(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString());
     }
 
     // 이메일을 통한 유저조회

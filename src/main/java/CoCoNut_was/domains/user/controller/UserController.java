@@ -1,9 +1,5 @@
 package CoCoNut_was.domains.user.controller;
 
-/*
-회원가입(추가), 회원조회, 회원수정, 회원삭제, 로그인, 로그아웃을 다루는 컨트롤러
- */
-
 import CoCoNut_was.domains.user.reqdto.LoginUserDto;
 import CoCoNut_was.domains.user.resdto.TokenResDto;
 import CoCoNut_was.domains.user.reqdto.CreateUserDto;
