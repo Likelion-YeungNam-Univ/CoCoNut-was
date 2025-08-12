@@ -3,12 +3,12 @@ name: CoCoNut-was CI/CD with GitHub Actions
 on:
   push:
     branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      jar_path: ${{ steps.get_jar_path.outputs.path }}
 
     steps:
       - uses: actions/checkout@v3
@@ -17,40 +17,38 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
       - run: chmod +x ./gradlew
-      - name: Build without Test
+      - name: Build with Gradle
         run: ./gradlew build -x test --no-daemon
         env:
           GRADLE_OPTS: -Xmx2048m
-      - name: Get JAR file path
-        id: get_jar_path
-        run: |
-          JAR_PATH=$(find build/libs -name "*.jar")
-          echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
-      - uses: actions/upload-artifact@v4
+
+      # 'Get JAR file path' 단계를 삭제하고, Upload 단계에서 직접 경로를 지정합니다.
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: ${{ steps.get_jar_path.outputs.path }}
+          path: build/libs/*.jar # *.jar 와일드카드로 직접 파일을 찾습니다.
 
   deploy:
+    if: github.event_name == 'push' && needs.build.result == 'success'
     needs: build
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download JAR
+        uses: actions/download-artifact@v4
         with:
           name: app-jar
-      - name: Get JAR file path
-        id: get_jar_path
-        run: |
-          JAR_PATH=$(find . -name "*.jar")
-          echo "path=${JAR_PATH}" >> $GITHUB_OUTPUT
+
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: ${{ steps.get_jar_path.outputs.path }}
+          source: "*.jar" # 다운로드된 폴더에서 .jar 파일을 찾아 복사합니다.
           target: "/home/ubuntu/CoCoNut-was"
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
