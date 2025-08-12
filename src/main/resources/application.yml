@@ -18,6 +18,9 @@ spring:
 
   cloud:
     gcp:
+      project-id: coconut-was
+      storage:
+        bucket-name: coconut_bucket
       credentials:
         location: file:${GOOGLE_APPLICATION_CREDENTIALS}
 
