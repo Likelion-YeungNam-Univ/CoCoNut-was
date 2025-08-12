@@ -59,53 +59,53 @@ public interface UserApi {
             @Parameter(description = "회원가입 정보")
             @Valid @RequestBody CreateUserDto dto
     );
-
-
-    @Operation(summary = "회원 상세조회", description = "조회 시도")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "조회 성공",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "email": "<email>",
-                                        "name": "<name>",
-                                        "nickname": "<nickname>",
-                                        "role": "ROLE_USER | ROLE_BUSINESS"
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "필드 누락", value = """
-                                    {
-                                        "<field>" : "<field>는 필수 입력입니다."
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "status": 404,
-                                        "message": "해당 유저를 찾을 수 없습니다."
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "status" : 401,
-                                        "message" : "액세스 토큰이 유효하지 않습니다."
-                                    }
-                                    """),
-                    }))
-    })
-    ResponseEntity<?> getUser(
-            @Parameter(description = "유저 고유 ID")
-            @PathVariable Long user_id
-    );
-
+//
+//
+//    @Operation(summary = "회원 상세조회", description = "조회 시도")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "조회 성공",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(value = """
+//                                    {
+//                                        "email": "<email>",
+//                                        "name": "<name>",
+//                                        "nickname": "<nickname>",
+//                                        "role": "ROLE_USER | ROLE_BUSINESS"
+//                                    }
+//                                    """)
+//                    })),
+//            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(name = "필드 누락", value = """
+//                                    {
+//                                        "<field>" : "<field>는 필수 입력입니다."
+//                                    }
+//                                    """)
+//                    })),
+//            @ApiResponse(responseCode = "404", description = "ID가 존재하지 않음",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(value = """
+//                                    {
+//                                        "status": 404,
+//                                        "message": "해당 유저를 찾을 수 없습니다."
+//                                    }
+//                                    """)
+//                    })),
+//            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(value = """
+//                                    {
+//                                        "status" : 401,
+//                                        "message" : "액세스 토큰이 유효하지 않습니다."
+//                                    }
+//                                    """),
+//                    }))
+//    })
+//    ResponseEntity<?> getUser(
+//            @Parameter(description = "유저 고유 ID")
+//            @PathVariable Long user_id
+//    );
+//
 
 //    @Operation(summary = "회원탈퇴(삭제)", description = "탈퇴(삭제) 시도")
 //    @ApiResponses({

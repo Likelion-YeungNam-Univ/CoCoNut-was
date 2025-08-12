@@ -52,10 +52,17 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    // 유저 상세조회
-    public UserInfoDto getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
+    // 유저 상세조회 임시 폐기
+//    public UserInfoDto getUser(Long id) {
+//        User user = userRepository.findById(id).orElseThrow(
+//                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+//        );
+//        return UserInfoDto.fromEntity(user);
+//    }
+
+    // 마이페이지 상세 조회
+    public UserInfoDto me(UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         return UserInfoDto.fromEntity(user);
@@ -65,7 +72,6 @@ public class UserService {
     @Transactional
     public void deleteUser(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
-    //                () -> new IllegalArgumentException("DB id : " + id + " 를 가진 유저가 존재하지 않습니다.")
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         userRepository.delete(user);
@@ -145,4 +151,5 @@ public class UserService {
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
     }
+
 }

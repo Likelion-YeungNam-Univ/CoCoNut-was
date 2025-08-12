@@ -36,11 +36,16 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().build();
     }
 
-    // 2. 회원조회
-    @Override
-    @GetMapping("/{user_id}")
-    public ResponseEntity<?> getUser(@PathVariable Long user_id){
-        return ResponseEntity.ok(userService.getUser(user_id));
+//    // 2. 회원조회 (관리자) 임시 폐기
+//    @GetMapping("/{user_id}")
+//    public ResponseEntity<?> getUser(@PathVariable Long user_id){
+//        return ResponseEntity.ok(userService.getUser(user_id));
+//    }
+
+    // 2. 마이페이지(자신 조회)
+    @GetMapping
+    public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(userService.me(userDetails));
     }
 
     // 3. 회원탈퇴(삭제)
