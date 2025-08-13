@@ -31,7 +31,7 @@ public class SubmissionController {
             @RequestPart("image") MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-            submissionService.submit(project_id, dto, image);
+            submissionService.submit(project_id, dto, image, userDetails);
             return ResponseEntity.ok().build();
         }
 
