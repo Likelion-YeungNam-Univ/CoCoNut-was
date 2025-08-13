@@ -5,6 +5,7 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.exception.CustomException;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SubmissionService {
@@ -25,6 +29,7 @@ public class SubmissionService {
     private final ImageUploadService imageUploadService;
     private final SubmissionRepository submissionRepository;
 
+    // 공모전 작품 제출
     @Transactional
     public void submit(Long projectId, SubmitDto dto, MultipartFile image, UserDetails userDetails) {
         // 1. 사용자 확인
@@ -55,5 +60,22 @@ public class SubmissionService {
 
     }
 
+    // 공모전 작품 조회(로그인 X)
+    public List<SubmissionResDto> getSubmissions(Long projectId) {
+        // 1. 프로젝트 존재 확인
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
 
+        // 2. 제출물 불러오기
+        List<Submission> submissions = submissionRepository.findByProject(project);
+        List<SubmissionResDto> dtos = new ArrayList<>();
+
+        // 3. dto로 모두 변환
+        for(Submission submission : submissions) {
+            dtos.add(SubmissionResDto.fromEntity(submission));
+        }
+
+        return dtos;
+    }
 }
