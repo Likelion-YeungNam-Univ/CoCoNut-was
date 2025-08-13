@@ -20,6 +20,8 @@ public enum ErrorCode {
 
 
     // 공모전 제출물 관련
+    SUBMISSION_NOT_FOUND(404, "해당 작품은 존재하지 않습니다."),
+    SUBMISSION_USER_NOT_MATCHED(403, "작품의 유저정보와 로그인 정보가 일치하지 않습니다."),
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다.");
 
 
