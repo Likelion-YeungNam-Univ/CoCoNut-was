@@ -24,6 +24,11 @@ spring:
       credentials:
         location: file:${GOOGLE_APPLICATION_CREDENTIALS}
 
+  servlet:
+    multipart:
+      max-file-size: 10MB       # 개별 파일의 최대 크기를 10MB로 설정
+      max-request-size: 10MB    # 한 번의 요청에 포함된 모든 파일의 총 크기를 10MB로 설정
+
 
 jwt:
   secret-key: ${SECRET_KEY}
