@@ -1,15 +1,20 @@
 package CoCoNut_was.domains.submission.controller;
 
+import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.service.SubmissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,9 +25,15 @@ public class SubmissionController {
 
     // 1. 제출물 등록
     @PostMapping("/projects/{project_id}/submissions")
-    public ResponseEntity<?> submit(@PathVariable Long project_id){ // 제출할 dto도 보내야함
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<?> submit(
+            @PathVariable Long project_id,
+            @RequestPart("info") SubmitDto dto,
+            @RequestPart("image") MultipartFile image,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+            submissionService.submit(project_id, dto, image);
+            return ResponseEntity.ok().build();
+        }
 
     // 2. 제출물 목록 조회(한 공모전에 대한 모든 제출물 조회)
     @GetMapping("/projects/{project_id}/submissions")
