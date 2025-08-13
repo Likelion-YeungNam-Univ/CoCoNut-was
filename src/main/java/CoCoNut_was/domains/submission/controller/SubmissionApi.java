@@ -3,6 +3,7 @@ package CoCoNut_was.domains.submission.controller;
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -45,8 +46,11 @@ public interface SubmissionApi {
                     }))
     })
     ResponseEntity<?> submit(
+            @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id,
+            @Parameter(description = "작품 정보")
             @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
+            @Parameter(description = "작품 대표 사진")
             @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     );
@@ -95,7 +99,10 @@ public interface SubmissionApi {
                                     """)
                     }))
     })
-    ResponseEntity<?> getSubmissions(@PathVariable Long project_id);
+    ResponseEntity<?> getSubmissions(
+            @Parameter(description = "프로젝트 고유 ID")
+            @PathVariable Long project_id
+    );
 
 
     @Operation(summary = "작품 수정", description = "작품 수정 시도")
@@ -121,8 +128,11 @@ public interface SubmissionApi {
                     }))
     })
     ResponseEntity<?> updateSubmission(
+            @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long submission_id,
+            @Parameter(description = "작품 수정 정보")
             @RequestBody SubmitDto dto,
+            @Parameter(description = "토큰 기반 유저 정보")
             @AuthenticationPrincipal UserDetails userDetails
     );
 }
