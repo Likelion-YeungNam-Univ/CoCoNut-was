@@ -16,8 +16,8 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-//        configuration.addAllowedOriginPattern("*"); // 모든 출처 허용
-         configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://example.com", "https://example.com")); // 특정 도메인만 허용
+        configuration.addAllowedOriginPattern("*"); // 모든 출처 허용
+//         configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://example.com", "https://example.com")); // 특정 도메인만 허용
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
         configuration.setAllowedHeaders(List.of("*")); // 모든 요청 헤더 허용
