@@ -5,6 +5,7 @@ import CoCoNut_was.domains.project.entity.Category;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -33,17 +34,17 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
     @NotNull(message = "공모전 업종은 필수 선택입니다.")
     private BusinessType businessType;
 
-    @Schema(description = "공모전 제목", example = "경산시 로컬 카페 '코코넛' 로고 디자인 의뢰")
+    @Schema(description = "공모전 설명", example = "안녕하세요! 경산시에 새로 오픈하는 '코코넛 카페'입니다. " +
+            "따뜻하고 아늑한 분위기를 잘 살릴 수 있는 로고 디자인을 찾고 있습니다. 코코넛과 커피 원두를 모티브로 한 디자인을 선호합니다. 자유롭게 제안해주세요!")
     @NotBlank(message = "공모전 제목은 필수 입력입니다.")
     private String description;
 
-    @Schema(description = "공모전 설명", example = "안녕하세요! 경산시에 새로 오픈하는 '코코넛 카페'입니다. " +
-            "따뜻하고 아늑한 분위기를 잘 살릴 수 있는 로고 디자인을 찾고 있습니다. 코코넛과 커피 원두를 모티브로 한 디자인을 선호합니다. 자유롭게 제안해주세요!")
-    @NotBlank(message = "공모전 설명은 필수 입력입니다.")
+    @Schema(description = "공모 기간(일)", example = "30")
+    @Min(value = 1, message = "공모 기간은 최소 1일 이상이어야 합니다.")
     private int durationDays;
 
     @Schema(description = "공모전 상금", example = "500000")
-    @NotBlank(message = "공모전 상금은 필수 입력입니다.")
+    @Min(value = 0, message = "상금은 0원 이상이어야 합니다.")
     private int rewardAmount;
 
     @Schema(description = "공모전 한 줄 소개", example = "경산시 신규 오픈 '코코넛 카페'의 새 얼굴을 만들어주세요!")
