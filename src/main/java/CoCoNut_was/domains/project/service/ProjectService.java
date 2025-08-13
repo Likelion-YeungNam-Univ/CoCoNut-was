@@ -54,6 +54,13 @@ public class ProjectService {
         return ProjectDetailResponseDto.fromEntity(project);
     }
 
+    public void deleteProjectById(Long projectId) { // 공모전 삭제
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+        projectRepository.delete(project);
+    }
+
     private void saveProjectDetails(List<String> colors, List<String> styles, List<String> targets, Project project) {
         // 색상 저장
         if (colors != null && !colors.isEmpty()) {
