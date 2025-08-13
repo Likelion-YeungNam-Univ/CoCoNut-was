@@ -22,8 +22,8 @@ public enum ErrorCode {
     // 공모전 제출물 관련
     SUBMISSION_NOT_FOUND(404, "해당 작품은 존재하지 않습니다."),
     SUBMISSION_USER_NOT_MATCHED(403, "작품의 유저정보와 로그인 정보가 일치하지 않습니다."),
-    REQUIRED_SUBMISSION_INFO(400, "작품 필수 제출물이 누락되었습니다."),
-    INVALID_MULTIPART_FORM(400, "작품의 멀티파트 제출 형식이 잘못되었거나, 요청 본문이 비어있습니다."),
+    REQUIRED_SUBMISSION_INFO(400, "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, " +
+            "VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."),
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다.");
 
 

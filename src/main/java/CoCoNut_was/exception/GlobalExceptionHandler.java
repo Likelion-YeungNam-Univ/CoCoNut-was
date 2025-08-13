@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MultipartException.class)
     protected ResponseEntity<?> handleMultipartException(MultipartException e) {
         log.error("MultipartException", e);
-        ErrorDto errorDto = new ErrorDto(ErrorCode.INVALID_MULTIPART_FORM.getStatus(), ErrorCode.INVALID_MULTIPART_FORM.getMessage());
+        ErrorDto errorDto = new ErrorDto(ErrorCode.REQUIRED_SUBMISSION_INFO.getStatus(), ErrorCode.REQUIRED_SUBMISSION_INFO.getMessage());
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
