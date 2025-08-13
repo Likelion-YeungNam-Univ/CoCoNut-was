@@ -48,7 +48,7 @@ public class SubmissionService {
         }
 
         // 4. Submission 엔티티 생성
-        Submission submission = dto.toEntity(project, user);
+        Submission submission = dto.toEntity(project, user, imageUrl);
 
         // 5. 저장
         submissionRepository.save(submission);
