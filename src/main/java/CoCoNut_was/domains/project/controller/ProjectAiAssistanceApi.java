@@ -25,7 +25,12 @@ public interface ProjectAiAssistanceApi {
                             schema = @Schema(implementation = ProjectAiAssistanceDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "프롬프트 누락", value = "프롬프트 내용이 없습니다."),
+                            @ExampleObject(name = "프롬프트 내용 없음" , value = """
+                                    {
+                                        "status": 400,
+                                        "message": "프롬프트 내용이 없습니다. 제대로 입력해주세요."
+                                    }
+                                    """),
                             @ExampleObject(name = "AI 생성 실패", value = """
                                     {
                                         "status": 400,

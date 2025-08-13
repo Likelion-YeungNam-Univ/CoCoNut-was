@@ -2,6 +2,8 @@ package CoCoNut_was.domains.submission.controller;
 
 import CoCoNut_was.domains.submission.resdto.SubmissionAiAssistanceDto;
 import CoCoNut_was.domains.submission.service.SubmissionAiAssistanceService;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class SubmissionAiAssistanceController implements SubmissionAiAssistanceA
     ) throws JsonProcessingException {
         String userPrompt = userReq.get("prompt");
         if (userPrompt == null || userPrompt.isBlank())
-            return ResponseEntity.badRequest().body("프롬프트 내용이 없습니다.");
+            throw new CustomException(ErrorCode.PROMPT_IS_BLANK);
 
         SubmissionAiAssistanceDto result = submissionService.getAssistance(userPrompt);
         return ResponseEntity.ok(result);
