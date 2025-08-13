@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +47,14 @@ public class SubmissionController {
 
     // 3. 제출물 수정
     @PutMapping("/submissions/{submission_id}")
-    public ResponseEntity<?> updateSubmission(@PathVariable Long submission_id){ // 수정할 dto도 보내야함
+    public ResponseEntity<?> updateSubmission(
+            @PathVariable Long submission_id,
+            @RequestBody SubmitDto dto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        submissionService.updateSubmission(submission_id, dto, userDetails);
         return ResponseEntity.ok().build();
     }
+
+    // 4. 제출물 삭제 (미정)
 }
