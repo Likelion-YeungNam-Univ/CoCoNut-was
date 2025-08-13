@@ -1,8 +1,8 @@
 package CoCoNut_was.domains.submission.controller;
 
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
 import CoCoNut_was.domains.submission.service.SubmissionService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +40,8 @@ public class SubmissionController {
     // 2. 제출물 목록 조회(한 공모전에 대한 모든 제출물 조회)
     @GetMapping("/projects/{project_id}/submissions")
     public ResponseEntity<?> getSubmissions(@PathVariable Long project_id){
-        return ResponseEntity.ok().build();
+        List<SubmissionResDto> submissions = submissionService.getSubmissions(project_id);
+        return ResponseEntity.ok().body(submissions);
     }
 
     // 3. 제출물 수정
