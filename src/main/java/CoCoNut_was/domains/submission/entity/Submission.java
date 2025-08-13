@@ -12,11 +12,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Submission {
     @Id
