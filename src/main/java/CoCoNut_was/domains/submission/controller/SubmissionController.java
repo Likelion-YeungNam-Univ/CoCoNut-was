@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class SubmissionController {
+public class SubmissionController implements SubmissionApi {
     private final SubmissionService submissionService;
 
 

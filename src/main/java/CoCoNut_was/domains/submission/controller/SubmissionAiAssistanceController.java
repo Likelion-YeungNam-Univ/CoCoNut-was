@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/submissions")
-public class SubmissionAiAssistanceController {
+public class SubmissionAiAssistanceController implements SubmissionAiAssistanceApi {
 
     private final SubmissionAiAssistanceService submissionService;
 
