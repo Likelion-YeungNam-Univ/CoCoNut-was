@@ -1,13 +1,18 @@
 package CoCoNut_was.domains.submission.controller;
 
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
+import CoCoNut_was.exception.ErrorDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +54,49 @@ public interface SubmissionApi {
     );
 
 
-
+    @Operation(summary = "작품 목록 조회", description = "특정 공모전에 대한 모든 작품을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SubmissionResDto.class)),
+                            examples = @ExampleObject(
+                                    name = "조회 성공 예시",
+                                    value = """
+                            [
+                                {
+                                    "title": "초콜릿 카페 메뉴판",
+                                    "description": "저희는 초콜릿을 직접 재배하여 판매합니다!",
+                                    "imageUrl": "https://storage.googleapis.com/coconut_bucket/chocolate_menu.jpeg"
+                                },
+                                {
+                                    "title": "여름 시즌 특별 음료 포스터",
+                                    "description": "시원한 여름을 위한 스페셜 에이드 출시!",
+                                    "imageUrl": "https://storage.googleapis.com/coconut_bucket/summer_ade_poster.png"
+                                }
+                            ]
+                            """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """)
+                    }))
+    })
     ResponseEntity<?> getSubmissions(@PathVariable Long project_id);
 
 
