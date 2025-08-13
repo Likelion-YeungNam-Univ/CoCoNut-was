@@ -78,4 +78,30 @@ public class SubmissionService {
 
         return dtos;
     }
+
+    // 공모전 작품 수정
+    @Transactional
+    public void updateSubmission(Long submissionId, SubmitDto dto, UserDetails userDetails) {
+        // 1. 사용자 확인
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        // 2. 해당 제출물이 존재하는지
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(
+                () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
+        );
+
+        // 3. 제출물의 소유자와 일치하는지
+        if(!submission.getUser().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.SUBMISSION_USER_NOT_MATCHED);
+
+
+        if(dto.getTitle() != null && !dto.getTitle().isBlank())
+            submission.setTitle(dto.getTitle());
+        if(dto.getDescription() != null && !dto.getDescription().isBlank())
+            submission.setDescription(dto.getDescription());
+
+        submissionRepository.save(submission);
+    }
 }
