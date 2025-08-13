@@ -6,6 +6,7 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,11 +26,11 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
     private String merchantName;
 
     @Schema(description = "공모전 카테고리", example = "BRANDING_LOGO")
-    @NotBlank(message = "카테고리는 필수 선택입니다.")
+    @NotNull(message = "카테고리는 필수 선택입니다.")
     private Category category;
 
     @Schema(description = "공모전 업종 ", example = "FOOD_BEVERAGE")
-    @NotBlank(message = "공모전 업종은 필수 선택입니다.")
+    @NotNull(message = "공모전 업종은 필수 선택입니다.")
     private BusinessType businessType;
 
     @Schema(description = "공모전 제목", example = "경산시 로컬 카페 '코코넛' 로고 디자인 의뢰")
