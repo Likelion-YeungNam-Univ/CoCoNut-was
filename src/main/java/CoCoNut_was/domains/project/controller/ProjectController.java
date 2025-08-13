@@ -41,4 +41,11 @@ public class ProjectController {
     public ResponseEntity<?> findProjectById(@PathVariable Long project_id) {
         return ResponseEntity.ok(projectService.findProjectById(project_id));
     }
+
+    // 공모전 삭제
+    @DeleteMapping("{project_id}")
+    public ResponseEntity<?> deleteProject(@PathVariable Long project_id) {
+        projectService.deleteProjectById(project_id);
+        return ResponseEntity.ok().build();
+    }
 }
