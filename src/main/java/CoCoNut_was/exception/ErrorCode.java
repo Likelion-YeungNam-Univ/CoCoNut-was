@@ -20,7 +20,7 @@ public enum ErrorCode {
 
 
     // 공모전 제출물 관련
-    IMAGE_UPLOAD_FAILED(400, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다.");
+    IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다.");
 
 
 
