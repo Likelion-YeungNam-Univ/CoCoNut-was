@@ -16,7 +16,14 @@ public enum ErrorCode {
 
     // 공모전 관련
     PROJECT_NOT_FOUND(404, "해당 공모전을 찾을 수 없습니다."),
-    AI_GENERATION_FAILED(400, "AI Assistance 응답 생성에 실패하였습니다. 입력한 정보가 정확한지 확인해주세요");
+    AI_GENERATION_FAILED(400, "AI Assistance 응답 생성에 실패하였습니다. 입력한 정보가 정확한지 확인해주세요"),
+
+
+    // 공모전 제출물 관련
+    IMAGE_UPLOAD_FAILED(400, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다.");
+
+
+
     private final int status;
     private final String message;
 }
