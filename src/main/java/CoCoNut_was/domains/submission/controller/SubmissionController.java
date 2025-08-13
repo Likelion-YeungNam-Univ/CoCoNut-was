@@ -3,6 +3,7 @@ package CoCoNut_was.domains.submission.controller;
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
 import CoCoNut_was.domains.submission.service.SubmissionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class SubmissionController {
+public class SubmissionController implements SubmissionApi {
     private final SubmissionService submissionService;
 
 
@@ -30,8 +31,8 @@ public class SubmissionController {
     @PostMapping("/projects/{project_id}/submissions")
     public ResponseEntity<?> submit(
             @PathVariable Long project_id,
-            @RequestPart("info") SubmitDto dto,
-            @RequestPart("image") MultipartFile image,
+            @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     ){
             submissionService.submit(project_id, dto, image, userDetails);
@@ -56,5 +57,4 @@ public class SubmissionController {
         return ResponseEntity.ok().build();
     }
 
-    // 4. 제출물 삭제 (미정)
 }

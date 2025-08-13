@@ -1,7 +1,10 @@
 package CoCoNut_was.domains.project.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectAiAssistanceDto;
+import CoCoNut_was.domains.project.dto.ProjectPromptDto;
 import CoCoNut_was.domains.project.service.ProjectAiAssistanceService;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +25,11 @@ public class ProjectAiAssistanceController implements ProjectAiAssistanceApi {
     @Override
     @PostMapping("/assist")
     public ResponseEntity<?> getAssistanceForProject(
-            @RequestBody Map<String, String> userReq
+            @RequestBody ProjectPromptDto userReq
     ) throws JsonProcessingException {
-        String userPrompt = userReq.get("prompt");
+        String userPrompt = userReq.getPrompt();
         if (userPrompt == null || userPrompt.isBlank())
-            return ResponseEntity.badRequest().body("프롬프트 내용이 없습니다.");
+            throw new CustomException(ErrorCode.PROMPT_IS_BLANK);
 
         ProjectAiAssistanceDto result = projectAiAssistanceService.getAssistance(userPrompt);
         return ResponseEntity.ok(result);
