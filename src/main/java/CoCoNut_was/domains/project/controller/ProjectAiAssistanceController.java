@@ -15,10 +15,11 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/projects")
-public class ProjectAiAssistanceController {
+public class ProjectAiAssistanceController implements ProjectAiAssistanceApi {
 
     private final ProjectAiAssistanceService projectAiAssistanceService;
 
+    @Override
     @PostMapping("/assist")
     public ResponseEntity<?> getAssistanceForProject(
             @RequestBody Map<String, String> userReq

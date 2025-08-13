@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/enums")
-public class EnumController {
+public class EnumController implements EnumApi{
+    @Override
     @GetMapping("/categories")
     public ResponseEntity<?> getCategories() { // 카테고리 조회
         List<EnumResponseDto> categories = Arrays.stream(Category.values())
@@ -22,6 +23,7 @@ public class EnumController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(categories);
     }
+    @Override
     @GetMapping("/businessTypes")
     public ResponseEntity<?> getBusinessType() { // 업종 조회
         List<EnumResponseDto> businessTypes = Arrays.stream(BusinessType.values())

@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/projects")
-public class ProjectController {
+public class ProjectController implements ProjectApi {
     private final ProjectService projectService;
     private final UserService userService;
 
     // 공모전 생성
+    @Override
     @PostMapping
     public ResponseEntity<?> createProject(
             @RequestBody ProjectRequestDto dto,
@@ -31,18 +32,21 @@ public class ProjectController {
     }
 
     // 공모전 목록 조회 (모든 공모전)
+    @Override
     @GetMapping
     public ResponseEntity<?> findAllProjects() {
         return ResponseEntity.ok(projectService.findAllProjects());
     }
 
     // 공모전 상세 조회
+    @Override
     @GetMapping("{project_id}")
     public ResponseEntity<?> findProjectById(@PathVariable Long project_id) {
         return ResponseEntity.ok(projectService.findProjectById(project_id));
     }
 
     // 공모전 삭제
+    @Override
     @DeleteMapping("{project_id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long project_id) {
         projectService.deleteProjectById(project_id);
