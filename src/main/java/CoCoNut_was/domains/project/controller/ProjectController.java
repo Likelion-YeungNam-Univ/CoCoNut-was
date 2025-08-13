@@ -6,14 +6,10 @@ import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +28,17 @@ public class ProjectController {
         Long projectId = projectService.createProject(dto, currentUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectId);
+    }
+
+    // 공모전 목록 조회 (모든 공모전)
+    @GetMapping
+    public ResponseEntity<?> findAllProjects() {
+        return ResponseEntity.ok(projectService.findAllProjects());
+    }
+
+    // 공모전 상세 조회
+    @GetMapping("{project_id}")
+    public ResponseEntity<?> findProjectById(@PathVariable Long project_id) {
+        return ResponseEntity.ok(projectService.findProjectById(project_id));
     }
 }
