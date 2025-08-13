@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
     // 일반 예외처리
     @ExceptionHandler
     protected ResponseEntity<?> customServerException(Exception e){
+        log.error("INTERNAL_SERVER_ERROR", e);
         ErrorDto errorDto = new ErrorDto(ErrorCode.INTERNAL_SERVER_ERROR.getStatus(), ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
