@@ -18,21 +18,17 @@ public class SubmitDto {
 
     private String imageUrl;
 
-    @NotBlank(message = "제출일자는 필수 입력입니다.")
-    private String submittedAt;
-    // "2002-08-03" 형식의 문자열이 입력되어야함
+    // 제출 일자는 그냥 LocalDate.now()를 쓰면 되지 않을까 라는 생각입니다.
 
-    @NotBlank(message = "대상 프로젝트는 필수 사항입니다.")
-    private Long projectId;
-
-    @NotBlank(message = "유저 지정은 필수 사항입니다.")
-    private Long userId;
+//    @NotBlank(message = "제출일자는 필수 입력입니다.")
+//    private String submittedAt;
+//    // "2002-08-03" 형식의 문자열이 입력되어야함
 
     public Submission toEntity(Project project, User user){
         return Submission.builder()
                 .description(this.description)
                 .imageUrl(this.imageUrl)
-                .submittedAt(LocalDate.parse(this.submittedAt))
+                .submittedAt(LocalDate.now())
                 .project(project)
                 .user(user)
                 .build();
