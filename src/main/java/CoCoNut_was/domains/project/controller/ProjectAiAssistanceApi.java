@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.project.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectAiAssistanceDto;
+import CoCoNut_was.domains.project.dto.ProjectPromptDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Map;
 
 @Tag(name = "Project AI Assistance API", description = "AI를 이용한 공모전 생성 지원 API")
 public interface ProjectAiAssistanceApi {
@@ -55,6 +55,6 @@ public interface ProjectAiAssistanceApi {
                                 "prompt": "대학생들을 타겟으로 하는 카페 로고 디자인 공모전을 열고 싶어"
                             }
                             """))
-            @RequestBody Map<String, String> userReq
+            @RequestBody ProjectPromptDto userReq
     ) throws JsonProcessingException;
 }
