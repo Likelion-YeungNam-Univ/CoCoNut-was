@@ -57,5 +57,4 @@ public class SubmissionController implements SubmissionApi {
         return ResponseEntity.ok().build();
     }
 
-    // 4. 제출물 삭제 (미정)
 }

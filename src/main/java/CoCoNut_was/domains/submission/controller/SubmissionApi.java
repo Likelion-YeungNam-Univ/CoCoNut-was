@@ -2,7 +2,6 @@ package CoCoNut_was.domains.submission.controller;
 
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
-import CoCoNut_was.exception.ErrorDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -100,7 +98,28 @@ public interface SubmissionApi {
     ResponseEntity<?> getSubmissions(@PathVariable Long project_id);
 
 
-
+    @Operation(summary = "작품 수정", description = "작품 수정 시도")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "403", description = "로그인 정보와 작성자 정보 불일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 403,
+                                        "message": "작품의 유저정보와 로그인 정보가 일치하지 않습니다."
+                                    }
+                                    """),
+                    }))
+    })
     ResponseEntity<?> updateSubmission(
             @PathVariable Long submission_id,
             @RequestBody SubmitDto dto,
