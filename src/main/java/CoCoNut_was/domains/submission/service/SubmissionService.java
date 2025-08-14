@@ -45,8 +45,11 @@ public class SubmissionService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
+        // 3. 프로젝트 중복 참여 검사(접속 전 자격 검증을 했다면 일어나지 않을 예외, 방지용으로 추가)
+        if(submissionRepository.existsByUser(user))
+            throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
 
-        // 3. 이미지 업로드
+        // 4. 이미지 업로드
         String imageUrl = null;
         try{
             if(image != null && !image.isEmpty())
@@ -55,10 +58,10 @@ public class SubmissionService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
         }
 
-        // 4. Submission 엔티티 생성
+        // 5. Submission 엔티티 생성
         Submission submission = dto.toEntity(project, user, imageUrl);
 
-        // 5. 저장
+        // 6. 저장
         submissionRepository.save(submission);
 
     }
