@@ -6,6 +6,7 @@ import lombok.Getter;
 public class ProjectAiAssistanceDto {
     private String description;
     private String rewardAmount;
-    private String period;
+    private String createdAt;
+    private String deadline;
     private String summary;
 }
