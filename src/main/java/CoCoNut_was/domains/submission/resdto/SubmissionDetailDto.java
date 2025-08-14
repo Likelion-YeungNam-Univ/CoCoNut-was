@@ -1,5 +1,12 @@
 package CoCoNut_was.domains.submission.resdto;
 
+import CoCoNut_was.domains.submission.entity.Submission;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class SubmissionDetailDto {
 
     // 작품명
@@ -20,4 +27,23 @@ public class SubmissionDetailDto {
     // 작성자(제출팀 대표자)
     private String writer;
 
+    @Builder public SubmissionDetailDto(String title, String description, String relatedUrl, String imageUrl, String submittedAt, String writer) {
+        this.title = title;
+        this.description = description;
+        this.relatedUrl = relatedUrl;
+        this.imageUrl = imageUrl;
+        this.submittedAt = submittedAt;
+        this.writer = writer;
+    }
+
+    public static SubmissionDetailDto fromEntity(Submission submission) {
+        return SubmissionDetailDto.builder()
+                .title(submission.getTitle())
+                .description(submission.getDescription())
+                .relatedUrl(submission.getRelatedUrl())
+                .imageUrl(submission.getImageUrl())
+                .submittedAt(submission.getSubmittedAt().toString())
+                .writer(submission.getUser().getNickname())
+                .build();
+    }
 }
