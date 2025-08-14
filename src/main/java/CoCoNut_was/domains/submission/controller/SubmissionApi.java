@@ -31,6 +31,11 @@ public interface SubmissionApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(name = "작품 정보에 대한 누락 발생", value = """
                                     {
+                                        "title": "작품제목은 필수 입력입니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "작품 제목 누락", value = """
+                                    {
                                         "status": 400,
                                         "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
                                     }
