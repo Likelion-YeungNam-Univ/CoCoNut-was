@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,7 +49,9 @@ public interface SubmissionApi {
     ResponseEntity<?> submit(
             @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id,
-            @Parameter(description = "작품 정보")
+            @Parameter(description = "작품 정보 (JSON 형식)",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SubmitDto.class)))
             @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
             @Parameter(description = "작품 대표 사진")
             @RequestPart(value = "image", required = false) MultipartFile image,
