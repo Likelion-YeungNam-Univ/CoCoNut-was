@@ -68,7 +68,7 @@ public class SubmissionService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        // 2. 제출물 불러오기
+        // 2. 작품 불러오기
         List<Submission> submissions = submissionRepository.findByProject(project);
         List<SubmissionListDto> dtos = new ArrayList<>();
 
@@ -81,6 +81,14 @@ public class SubmissionService {
     }
 
     public SubmissionDetailDto getSubmissionDetails(Long submissionId, UserDetails userDetails) {
+        // 1. 사용자 존재 확인
+
+        // 2. 작품 존재 확인
+
+        // 3. dto로 변환
+
+        return null;
+
     }
 
     // 공모전 작품 수정
