@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/sign-up").permitAll()
                         .requestMatchers("/api/v1/users/login").permitAll()
+                        .requestMatchers("/api/v1/users/check-email").permitAll()
+                        .requestMatchers("/api/v1/users/check-nickname").permitAll()
                         .requestMatchers("/api/v1/enums/businessTypes").permitAll()
                         .requestMatchers("/api/v1/enums/categories").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects").permitAll() // 공모전 목록 조회

@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "User API", description = "유저 관련 API")
 public interface UserApi {
@@ -164,4 +165,41 @@ public interface UserApi {
     })
     ResponseEntity<?> logout(HttpServletResponse res);
 
+
+    @Operation(summary = "이메일 중복 확인", description = "사용 가능한 이메일인지 확인합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "사용 가능한 이메일"),
+            @ApiResponse(responseCode = "409", description = "이미 사용 중인 이메일",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                {
+                                    "status" : 409,
+                                    "message" : "해당 이메일은 이미 존재합니다."
+                                }
+                                """)
+                    }))
+    })
+    ResponseEntity<?> checkEmail(
+            @Parameter(description = "확인할 이메일", required = true, example = "likelion13@gmail.com")
+            @RequestParam String email
+    );
+
+
+    @Operation(summary = "닉네임 중복 확인", description = "사용 가능한 닉네임인지 확인합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "사용 가능한 닉네임"),
+            @ApiResponse(responseCode = "409", description = "이미 사용 중인 닉네임",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                {
+                                    "status" : 409,
+                                    "message" : "해당 닉네임은 이미 존재합니다."
+                                }
+                                """)
+                    }))
+    })
+    ResponseEntity<?> checkNickname(
+            @Parameter(description = "확인할 닉네임", required = true, example = "코코넛")
+            @RequestParam String nickname
+    );
 }
