@@ -5,7 +5,8 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
-import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionDetailDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionListDto;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.exception.CustomException;
@@ -60,23 +61,39 @@ public class SubmissionService {
 
     }
 
-    // 공모전 작품 조회(로그인 X)
-    public List<SubmissionResDto> getSubmissions(Long projectId) {
+    // 공모전 작품 목록 조회
+    public List<SubmissionListDto> getSubmissions(Long projectId) {
         // 1. 프로젝트 존재 확인
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        // 2. 제출물 불러오기
+        // 2. 작품 불러오기
         List<Submission> submissions = submissionRepository.findByProject(project);
-        List<SubmissionResDto> dtos = new ArrayList<>();
+        List<SubmissionListDto> dtos = new ArrayList<>();
 
         // 3. dto로 모두 변환
         for(Submission submission : submissions) {
-            dtos.add(SubmissionResDto.fromEntity(submission));
+            dtos.add(SubmissionListDto.fromEntity(submission));
         }
 
         return dtos;
+    }
+
+    public SubmissionDetailDto getSubmissionDetails(Long submissionId, UserDetails userDetails) {
+        // 1. 사용자 존재 확인 (같은 유저 아니어도 됨
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        // 2. 작품 존재 확인
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(
+                () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
+        );
+
+        // 3. dto로 변환후 반환
+        return SubmissionDetailDto.fromEntity(submission);
+
     }
 
     // 공모전 작품 수정
