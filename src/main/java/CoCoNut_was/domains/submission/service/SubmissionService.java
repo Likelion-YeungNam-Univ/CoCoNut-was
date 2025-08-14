@@ -61,7 +61,7 @@ public class SubmissionService {
 
     }
 
-    // 공모전 작품 조회(로그인 X)
+    // 공모전 작품 목록 조회
     public List<SubmissionListDto> getSubmissions(Long projectId) {
         // 1. 프로젝트 존재 확인
         Project project = projectRepository.findById(projectId).orElseThrow(
