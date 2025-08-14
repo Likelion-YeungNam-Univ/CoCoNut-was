@@ -39,6 +39,12 @@ public interface SubmissionApi {
                                         "status": 400,
                                         "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
                                     }
+                                    """),
+                            @ExampleObject(name = "중복 지원 방지", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
+                                    }
                                     """)
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
