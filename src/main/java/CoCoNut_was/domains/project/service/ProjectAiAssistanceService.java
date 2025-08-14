@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,19 @@ public class ProjectAiAssistanceService {
 
     public ProjectAiAssistanceDto getAssistance(String userPrompt) throws JsonProcessingException {
         // 1. 시스템 메시지 (AI 역할 및 응답 형식 지정)
-        String systemPrompt = "당신은 공모전 기획 전문가입니다. 사용자가 제공하는 정보를 바탕으로 공모전 상세 내용을 추천하고, 반드시 아래와 같은 JSON 형식으로만 응답해야 합니다. 다른 설명은 절대 추가하지 마세요.\n" +
+        String systemPrompt = "당신은 공모전 기획 전문가입니다. 사용자가 제공하는 정보와 '오늘 날짜'를 바탕으로 공모전 상세 내용을 추천하고, 반드시 아래와 같은 'yyyy-MM-dd' 형식의 날짜를 포함한 JSON으로만 응답해야 합니다. 다른 설명은 절대 추가하지 마세요.\n" +
                 "{\n" +
                 "  \"description\": \"(사용자의 설명을 바탕으로 공모전 상세 설명을 200자 내외로 재생성)\",\n" +
                 "  \"rewardAmount\": \"(공모전 난이도와 요구사항을 고려하여 적절한 상금을 숫자로만 추천)\",\n" +
-                "  \"period\": \"(공모전 난이도와 종류를 고려하여 적절한 공모 기간을 일 단위 숫자로만 추천)\",\n" +
+                "  \"createdAt\": \"(사용자가 알려준 '오늘 날짜'를 'yyyy-MM-dd' 형식으로 그대로 사용)\",\n" +
+                "  \"deadline\": \"('오늘 날짜'에 공모전 종류에 맞는 적절한 기간(예: 30일, 45일)을 더해 'yyyy-MM-dd' 형식으로 계산)\",\n" +
                 "  \"summary\": \"(공모전 내용을 한 문장으로 요약)\"\n" +
                 "}\n" +
+                "오늘 날짜는" + LocalDate.now() + "입니다. createdAt, deadline에 대한 정보 입력에 실수하지 마세요." +
                 "만약 사용자의 입력이 부적절하거나 정보가 부족하여 추천이 불가능할 경우, 'error' 필드를 포함한 JSON으로 응답해주세요. JSON을 제외한 모든 형태에 반환은 금지입니다 명심하세요.\n" +
                 "{\n" +
                 "  \"error\": \"(오류 사유)\"\n" +
                 "}\n";
-
         // 2. 메시지 리스트 생성 및 프롬프트 추가
         List<OpenAiReqDto.Message> messages = new ArrayList<>();
         messages.add(new OpenAiReqDto.Message("system", systemPrompt));
