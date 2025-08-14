@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,11 @@ public interface SubmissionApi {
             @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(name = "작품 정보에 대한 누락 발생", value = """
+                                    {
+                                        "title": "작품제목은 필수 입력입니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "작품 제목 누락", value = """
                                     {
                                         "status": 400,
                                         "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
@@ -48,7 +54,9 @@ public interface SubmissionApi {
     ResponseEntity<?> submit(
             @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id,
-            @Parameter(description = "작품 정보")
+            @Parameter(description = "작품 정보 (JSON 형식)",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SubmitDto.class)))
             @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
             @Parameter(description = "작품 대표 사진")
             @RequestPart(value = "image", required = false) MultipartFile image,

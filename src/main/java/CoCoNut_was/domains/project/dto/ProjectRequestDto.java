@@ -36,7 +36,7 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
 
     @Schema(description = "공모전 설명", example = "안녕하세요! 경산시에 새로 오픈하는 '코코넛 카페'입니다. " +
             "따뜻하고 아늑한 분위기를 잘 살릴 수 있는 로고 디자인을 찾고 있습니다. 코코넛과 커피 원두를 모티브로 한 디자인을 선호합니다. 자유롭게 제안해주세요!")
-    @NotBlank(message = "공모전 제목은 필수 입력입니다.")
+    @NotBlank(message = "공모전 설명은 필수 입력입니다.")
     private String description;
 
     @Schema(description = "공모 기간(일)", example = "30")

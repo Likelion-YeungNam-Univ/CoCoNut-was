@@ -5,6 +5,7 @@ import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
 import CoCoNut_was.domains.submission.service.SubmissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +29,7 @@ public class SubmissionController implements SubmissionApi {
 
 
     // 1. 제출물 등록
-    @PostMapping("/projects/{project_id}/submissions")
+    @PostMapping(value = "/projects/{project_id}/submissions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> submit(
             @PathVariable Long project_id,
             @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
