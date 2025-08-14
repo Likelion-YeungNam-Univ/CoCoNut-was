@@ -196,7 +196,51 @@ public interface SubmissionApi {
             @PathVariable Long submission_id,
             @Parameter(description = "작품 수정 정보")
             @RequestBody SubmitDto dto,
-            @Parameter(description = "토큰 기반 유저 정보")
+            @AuthenticationPrincipal UserDetails userDetails
+    );
+
+
+
+    @Operation(summary = "작품 제출 자격검증", description = "사용자가 이미 공모전에 작품을 제출했거나, 공모전 주인이 자신의 공모전에 참여해버리는 오류를 막기 위한 API입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "자격 있음"),
+            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "공모전 주인이 자신의 공모전에 신청하는 오류", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "공모전 주인이 자신의 공모전에 지원할 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "중복 지원 방지", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> checkSubmitValidation(
+            @Parameter(description = "작품 고유 ID")
+            @PathVariable Long project_id,
             @AuthenticationPrincipal UserDetails userDetails
     );
 }
