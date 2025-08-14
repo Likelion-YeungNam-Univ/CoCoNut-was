@@ -84,12 +84,10 @@ public interface SubmissionApi {
                             [
                                 {
                                     "title": "초콜릿 카페 메뉴판",
-                                    "description": "저희는 초콜릿을 직접 재배하여 판매합니다!",
                                     "imageUrl": "https://storage.googleapis.com/coconut_bucket/chocolate_menu.jpeg"
                                 },
                                 {
                                     "title": "여름 시즌 특별 음료 포스터",
-                                    "description": "시원한 여름을 위한 스페셜 에이드 출시!",
                                     "imageUrl": "https://storage.googleapis.com/coconut_bucket/summer_ade_poster.png"
                                 }
                             ]
@@ -106,15 +104,15 @@ public interface SubmissionApi {
                                     }
                                     """)
                     })),
-            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "status" : 401,
-                                        "message" : "토큰이 없거나 만료되었습니다."
-                                    }
-                                    """)
-                    }))
+//            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(value = """
+//                                    {
+//                                        "status" : 401,
+//                                        "message" : "토큰이 없거나 만료되었습니다."
+//                                    }
+//                                    """)
+//                    }))
     })
     ResponseEntity<?> getSubmissions(
             @Parameter(description = "프로젝트 고유 ID")
