@@ -100,15 +100,23 @@ public class UserService {
         String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail());
         String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail());
 
-        // 5. Refresh 토큰 보호
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+        // 5. Refresh 토큰 헤더 붙이기
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
                 .maxAge(7 * 24 * 60 * 60) // 일주일
                 .build();
-        res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        res.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        // 6. 기본 정보가 담긴 DTO 반환
+        // 6. Access 토큰 헤더 붙이기
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(2 * 60 * 60) // 두시간
+                .build();
+        res.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+
+        // 7. 기본 정보가 담긴 DTO 반환
         return TokenResDto.builder()
                 .accessToken(accessToken)
                 .userId(user.getId())
@@ -124,8 +132,15 @@ public class UserService {
                 .httpOnly(true)
                 .maxAge(0)
                 .build();
-
         res.addHeader(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString());
+
+        ResponseCookie deleteAccessCookie = ResponseCookie.from("accessToken", "")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(0)
+                .build();
+        res.addHeader(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString());
+
     }
 
     // 이메일을 통한 유저조회
