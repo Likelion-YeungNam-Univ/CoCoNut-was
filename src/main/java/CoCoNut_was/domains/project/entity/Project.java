@@ -1,5 +1,6 @@
 package CoCoNut_was.domains.project.entity;
 
+import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -75,6 +76,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectTarget> projectTargets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Submission> submissions = new ArrayList<>();
 
     @PrePersist
     public void onCreate() { // 생성일자 자동 생성
