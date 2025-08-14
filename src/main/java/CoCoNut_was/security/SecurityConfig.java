@@ -54,7 +54,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/enums/businessTypes").permitAll()
                         .requestMatchers("/api/v1/enums/categories").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/projects").permitAll() // 공모전 목록 조회
-                        .requestMatchers(HttpMethod.GET, "/api/v1/projects/**").permitAll() // 공모전 상세 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/projects/{project_id}").permitAll() // 공모전 상세 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/projects/{project_id}/submissions").permitAll()
                         .requestMatchers("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/webjars/**", "/error").permitAll()
                         .anyRequest().authenticated()
