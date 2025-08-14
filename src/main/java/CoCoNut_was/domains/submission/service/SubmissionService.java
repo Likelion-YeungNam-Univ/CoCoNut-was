@@ -13,6 +13,7 @@ import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
 import CoCoNut_was.gcs.ImageUploadService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SubmissionService {
@@ -120,5 +122,28 @@ public class SubmissionService {
             submission.setDescription(dto.getDescription());
 
         submissionRepository.save(submission);
+    }
+
+    public void checkSubmitValidation(Long projectId, UserDetails userDetails) {
+        // 0. 공모전 및 유저의 유효성 여부 검사
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        // 1. 공모전 주인이 자기 자신의 공모전에 지원하는 경우
+        if(project.getUser().getId().equals(user.getId()))
+            throw new CustomException(ErrorCode.BUSINESS_NOT_ALLOW_SELF_SUBMISSION);
+
+
+        // 2. 이미 해당 공모전에 지원한경우
+        if(submissionRepository.existsByUser(user))
+            throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
+
+
+        // 해당 예외들을 모두 통과하면 지원자격이 있는 것
     }
 }
