@@ -12,10 +12,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "SubmissionAiAssistance API", description = "공모전 작품설명 작성 도우미 AI API")
+@Tag(name = "SubmissionAiAssistance API", description = "AI를 이용한 작품설명 작성 지원 API")
 public interface SubmissionAiAssistanceApi {
 
-    @Operation(summary = "작품설명 프롬프트", description = "작품설명 프롬프트 입력 시도")
+    @Operation(summary = "AI 작품 설명작성 지원", description = "사용자가 입력한 프롬프트를 기반으로 AI가 작품의 상세설명에 대해서 깔끔하게 작성해줍니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "AI 응답 성공",
                     content = @Content(mediaType = "application/json", examples = {
