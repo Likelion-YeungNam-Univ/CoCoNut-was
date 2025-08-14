@@ -29,12 +29,12 @@ public interface SubmissionApi {
             @ApiResponse(responseCode = "200", description = "제출성공"),
             @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "작품 정보에 대한 누락 발생", value = """
+                            @ExampleObject(name = "작품제목 누락", value = """
                                     {
                                         "title": "작품제목은 필수 입력입니다."
                                     }
                                     """),
-                            @ExampleObject(name = "작품 제목 누락", value = """
+                            @ExampleObject(name = "KEY 누락(소스코드 문제)", value = """
                                     {
                                         "status": 400,
                                         "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
@@ -49,6 +49,15 @@ public interface SubmissionApi {
                                         "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
                     }))
     })
     ResponseEntity<?> submit(
