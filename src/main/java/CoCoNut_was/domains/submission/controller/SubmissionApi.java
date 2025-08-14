@@ -140,10 +140,19 @@ public interface SubmissionApi {
                                         "message": "작품의 유저정보와 로그인 정보가 일치하지 않습니다."
                                     }
                                     """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 작품을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 작품은 존재하지 않습니다."
+                                    }
+                                    """)
                     }))
     })
     ResponseEntity<?> updateSubmission(
-            @Parameter(description = "프로젝트 고유 ID")
+            @Parameter(description = "작품 고유 ID")
             @PathVariable Long submission_id,
             @Parameter(description = "작품 수정 정보")
             @RequestBody SubmitDto dto,
