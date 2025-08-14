@@ -81,13 +81,18 @@ public class SubmissionService {
     }
 
     public SubmissionDetailDto getSubmissionDetails(Long submissionId, UserDetails userDetails) {
-        // 1. 사용자 존재 확인
+        // 1. 사용자 존재 확인 (같은 유저 아니어도 됨
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
 
         // 2. 작품 존재 확인
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(
+                () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
+        );
 
-        // 3. dto로 변환
-
-        return null;
+        // 3. dto로 변환후 반환
+        return SubmissionDetailDto.fromEntity(submission);
 
     }
 
