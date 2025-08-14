@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SubmissionResDto {
+public class SubmissionListDto {
     private String title;
     private String description;
     private String imageUrl;
 
-    @Builder public SubmissionResDto(String title, String description, String imageUrl) {
+    @Builder public SubmissionListDto(String title, String description, String imageUrl) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
     }
 
-    public static SubmissionResDto fromEntity(Submission submission) {
-        return SubmissionResDto.builder()
+    public static SubmissionListDto fromEntity(Submission submission) {
+        return SubmissionListDto.builder()
                 .title(submission.getTitle())
                 .description(submission.getDescription())
                 .imageUrl(submission.getImageUrl())

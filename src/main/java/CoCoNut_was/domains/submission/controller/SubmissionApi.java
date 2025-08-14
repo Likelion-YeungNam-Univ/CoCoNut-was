@@ -1,7 +1,7 @@
 package CoCoNut_was.domains.submission.controller;
 
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
-import CoCoNut_was.domains.submission.resdto.SubmissionResDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionListDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -68,7 +68,7 @@ public interface SubmissionApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = SubmissionResDto.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = SubmissionListDto.class)),
                             examples = @ExampleObject(
                                     name = "조회 성공 예시",
                                     value = """
