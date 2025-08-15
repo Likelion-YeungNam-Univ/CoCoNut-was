@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,6 +129,8 @@ public class SubmissionService {
             submission.setTitle(dto.getTitle());
         if(dto.getDescription() != null && !dto.getDescription().isBlank())
             submission.setDescription(dto.getDescription());
+
+        submission.setSubmittedAt(LocalDate.now());
 
         submissionRepository.save(submission);
     }
