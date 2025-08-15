@@ -45,6 +45,12 @@ public interface SubmissionApi {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
+                                    """),
+                            @ExampleObject(name = "소상공인 계정이 공모전에 참여하려는 경우", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
+                                    }
                                     """)
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
@@ -212,10 +218,10 @@ public interface SubmissionApi {
             @ApiResponse(responseCode = "200", description = "자격 있음"),
             @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "공모전 주인이 자신의 공모전에 신청하는 오류", value = """
+                            @ExampleObject(name = "소상공인 계정이 공모전에 참여하려는 경우", value = """
                                     {
                                         "status": 400,
-                                        "message": "공모전 주인이 자신의 공모전에 지원할 수 없습니다."
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """),
                             @ExampleObject(name = "중복 지원 방지", value = """

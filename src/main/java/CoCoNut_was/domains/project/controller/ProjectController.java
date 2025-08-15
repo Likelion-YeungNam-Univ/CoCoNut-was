@@ -2,8 +2,11 @@ package CoCoNut_was.domains.project.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectRequestDto;
 import CoCoNut_was.domains.project.service.ProjectService;
+import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.service.UserService;
+import CoCoNut_was.exception.CustomException;
+import CoCoNut_was.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,8 @@ public class ProjectController implements ProjectApi {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         User currentUser = userService.findUserByEmail(userDetails.getUsername());
+        if(currentUser.getRole() != Role.ROLE_BUSINESS)
+            throw new CustomException(ErrorCode.WRITE_ROLE_NOT_MATCHED);
         Long projectId = projectService.createProject(dto, currentUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectId);
