@@ -36,7 +36,7 @@ jobs:
           distribution: temurin
           java-version: ${{ secrets.JAVA_VERSION }}
 
-      # 3. Gradle 캐시 설정 (빌드 시간 단축!)
+      # 3. Gradle 캐시 설정
       # 의존성 라이브러리와 Gradle 실행 파일을 캐싱하여 반복 다운로드를 방지합니다.
       - name: Cache Gradle packages
         uses: actions/cache@v4
