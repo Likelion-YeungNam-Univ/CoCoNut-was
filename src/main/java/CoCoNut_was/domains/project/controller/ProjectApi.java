@@ -32,6 +32,12 @@ public interface ProjectApi {
                                         "title" : "제목은 필수 입력입니다."
                                     }
                                     """),
+                            @ExampleObject(name = "참가자 계정이 공모전 글을 작성하려고 하는 경우", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
+                                    }
+                                    """)
                     })),
             @ApiResponse(responseCode = "401", description = "인증 실패 (토큰 없음 또는 만료)",
                     content = @Content(mediaType = "application/json", examples = {
