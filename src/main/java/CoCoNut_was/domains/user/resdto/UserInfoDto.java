@@ -6,12 +6,14 @@ import lombok.Data;
 
 @Data
 public class UserInfoDto {
+    private Long user_id;
     private String email;
     private String name;
     private String nickname;
     private String role;
 
-    @Builder public UserInfoDto(String email, String name, String nickname, String role) {
+    @Builder public UserInfoDto(Long user_id, String email, String name, String nickname, String role) {
+        this.user_id = user_id;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
@@ -20,6 +22,7 @@ public class UserInfoDto {
 
     public static UserInfoDto fromEntity(User user){
         return UserInfoDto.builder()
+                .user_id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
