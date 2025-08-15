@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "User API", description = "유저 관련 API")
 public interface UserApi {
 
-    @Operation(summary = "회원가입", description = "회원가입 시도")
+    @Operation(summary = "회원가입", description = "서비스를 이용하기 위한 회원가입 입니다. role은 ROLE_USER, ROLE_BUSINESS 둘중 하나만 가능합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
@@ -64,12 +64,13 @@ public interface UserApi {
     );
 
 
-    @Operation(summary = "내 정보 조회", description = "조회 시도")
+    @Operation(summary = "내 정보 조회", description = "자신의 정보를 조회하는 기능입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
+                                        "user_id": "<user_id>",
                                         "email": "<email>",
                                         "name": "<name>",
                                         "nickname": "<nickname>",
@@ -93,7 +94,7 @@ public interface UserApi {
     );
 
 
-    @Operation(summary = "회원탈퇴(삭제)", description = "탈퇴(삭제) 시도")
+    @Operation(summary = "회원탈퇴(삭제)", description = "회원탈퇴를 하는 기능입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패",
@@ -112,7 +113,7 @@ public interface UserApi {
     );
 
 
-    @Operation(summary = "로그인", description = "로그인 시도")
+    @Operation(summary = "로그인", description = "로그인을 하는 기능이며, 여기서 나온 토큰으로 서비스에서 유저 정보를 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "로그인 성공",
                     content = @Content(mediaType = "application/json", examples = {
@@ -163,7 +164,7 @@ public interface UserApi {
     );
 
 
-    @Operation(summary = "로그아웃", description = "로그아웃 시도")
+    @Operation(summary = "로그아웃", description = "로그아웃을 하는 기능입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
