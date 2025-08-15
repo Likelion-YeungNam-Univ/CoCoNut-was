@@ -2,14 +2,20 @@ name: Deploy on develop merge
 
 on:
   pull_request:
-    branches: [ develop ]
-    types: [ closed ]
+    branches: [develop]
+    types: [closed]
+  push:
+    branches:
+      - fix/cd
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
+    if: >
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+      || (github.event_name == 'push' && github.ref == 'refs/heads/fix/cd')
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,12 +25,18 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ secrets.JAVA_VERSION }}
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Grant gradlew permission
         run: chmod +x gradlew
 
       - name: Build bootJar
-        run: ./gradlew clean bootJar -x test
+        run: ./gradlew clean bootJar -x test --no-daemon
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.caching=true -Dorg.gradle.daemon=false"
 
       - name: List build outputs
         run: ls -l build/libs || true
@@ -42,12 +54,11 @@ jobs:
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
             "mkdir -p ${{ secrets.APP_DIR }}/build/libs"
 
-      - name: Upload JAR to EC2
+      - name: Compress and Upload JAR to EC2 with rsync
         run: |
-          scp -v -i ~/.ssh/id_rsa \
-            -o StrictHostKeyChecking=no \
-            -o ConnectTimeout=20 \
-            build/libs/*-SNAPSHOT.jar \
+          gzip -f build/libs/*-SNAPSHOT.jar
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            build/libs/*-SNAPSHOT.jar.gz \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.APP_DIR }}/build/libs/
 
       - name: Restart app on EC2
@@ -57,3 +68,11 @@ jobs:
             -o ConnectTimeout=15 \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
             "cd ${{ secrets.APP_DIR }} && ./run.sh"
+
+      - name: Verify remote status
+        continue-on-error: true
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            "ps -ef | grep java | grep -v grep || true; \
+             ss -lntp | grep ':8080' || true; \
+             tail -n 100 ${{ secrets.APP_DIR }}/app.out || true"
