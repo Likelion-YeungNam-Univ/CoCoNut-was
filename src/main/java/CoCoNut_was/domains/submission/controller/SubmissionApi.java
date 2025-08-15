@@ -148,8 +148,8 @@ public interface SubmissionApi {
                                         "userId": 1,
                                         "title": "초콜릿 카페",
                                         "description": "저희는 초콜릿을 직접 재배하여 판매합니다!",
-                                        "relatedUrl": https://github.com/java_spring_lover/chocolate_farmer,
-                                        "imageUrl": https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg,
+                                        "relatedUrl": "https://github.com/java_spring_lover/chocolate_farmer",
+                                        "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg",
                                         "submittedAt": "2025-08-15",
                                         "writer": "자바칩프라푸치노"
                                     }
