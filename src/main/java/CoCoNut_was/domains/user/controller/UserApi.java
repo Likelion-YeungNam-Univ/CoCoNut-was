@@ -70,7 +70,7 @@ public interface UserApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "user_id": "<user_id>",
+                                        "user_id": 1,
                                         "email": "<email>",
                                         "name": "<name>",
                                         "nickname": "<nickname>",
