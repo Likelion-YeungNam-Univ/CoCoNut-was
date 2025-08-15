@@ -17,7 +17,7 @@ jobs:
   deploy:
     # 실행 조건: PR이 merge되었거나, 또는 push된 브랜치가 fix/cd일 경우에만 실행
     if: github.event.pull_request.merged == true || github.ref == 'refs/heads/fix/cd'
-    
+
     # 실행 환경: 최신 우분투
     runs-on: ubuntu-latest
 
@@ -65,4 +65,19 @@ jobs:
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
       # 7. 압축 후 rsync로 JAR 파일 업로드 (업로드 시간 단축!)
-      # scp 대신 압
+      # scp 대신 압축(gzip)과 증분 전송이 가능한 rsync를 사용해 속도를 개선합니다.
+      - name: Compress and Upload JAR to EC2 with rsync
+        run: |
+          gzip -f build/libs/*-SNAPSHOT.jar
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            build/libs/*-SNAPSHOT.jar.gz \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.APP_DIR }}/build/libs/
+
+      # 8. EC2에서 애플리케이션 재시작
+      - name: Restart app on EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=15 \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            "cd ${{ secrets.APP_DIR }} && ./run.sh"
