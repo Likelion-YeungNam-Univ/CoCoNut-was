@@ -95,10 +95,16 @@ public interface SubmissionApi {
                                     value = """
                             [
                                 {
+                                    "submissionId": 123,
+                                    "projectId": 12,
+                                    "userId": 1,
                                     "title": "초콜릿 카페 메뉴판",
                                     "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
                                 },
                                 {
+                                    "submissionId": 124,
+                                    "projectId": 12,
+                                    "userId": 2,
                                     "title": "여름 시즌 특별 음료 포스터",
                                     "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
                                 }
@@ -137,12 +143,15 @@ public interface SubmissionApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                      "title": "아기사자 디자인 브런치 카페 메뉴판",
-                                      "description": "아기사자의 그림이 그려져있고, 아이들이 좋아할만한 캐릭터 디자인을 채택하였습니다.",
-                                      "relatedUrl": "https://피그마주소.com",
-                                      "imageUrl": "https://storage.googleapis.com/example/123123.jpeg",
-                                      "submittedAt": "2025-08-14",
-                                      "writer": "열정있는 아기사자"
+                                        "submissionId": 123,
+                                        "projectId": 12,
+                                        "userId": 1,
+                                        "title": "초콜릿 카페",
+                                        "description": "저희는 초콜릿을 직접 재배하여 판매합니다!",
+                                        "relatedUrl": https://github.com/java_spring_lover/chocolate_farmer,
+                                        "imageUrl": https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg,
+                                        "submittedAt": "2025-08-15",
+                                        "writer": "자바칩프라푸치노"
                                     }
                                     """)
                     })),
