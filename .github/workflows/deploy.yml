@@ -1,23 +1,28 @@
 # 워크플로우 이름
 name: Deploy on develop merge
 
-# develop 브랜치로 Pull Request가 merge되면 자동 실행
+# 워크플로우 실행 조건 정의
 on:
+  # 1. (실제 배포) develop 브랜치로 Pull Request가 merge되면 자동 실행
   pull_request:
     branches: [ develop ]
     types: [ closed ]
 
+  # 2. (테스트용) fix/cd 브랜치에 코드를 push하면 자동 실행
   push:
     branches:
       - fix/cd
 
-
 jobs:
   deploy:
-    # PR이 merge된 경우에만 실행
-    if: github.event.pull_request.merged == true
+    # 실행 조건: PR이 merge되었거나, 또는 push된 브랜치가 fix/cd일 경우에만 실행
+    if: github.event.pull_request.merged == true || github.ref == 'refs/heads/fix/cd'
+    
+    # 실행 환경: 최신 우분투
     runs-on: ubuntu-latest
-    timeout-minutes: 20 # 최대 실행 시간 20분 제한
+
+    # 최대 실행 시간 20분 제한
+    timeout-minutes: 20
 
     steps:
       # 1. 코드 체크아웃
@@ -31,7 +36,8 @@ jobs:
           distribution: temurin
           java-version: ${{ secrets.JAVA_VERSION }}
 
-      # 3. Gradle 캐시 설정 (빌드 시간 단축)
+      # 3. Gradle 캐시 설정 (빌드 시간 단축!)
+      # 의존성 라이브러리와 Gradle 실행 파일을 캐싱하여 반복 다운로드를 방지합니다.
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -54,23 +60,9 @@ jobs:
       - name: Prepare SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      # 7. 압축 후 rsync로 JAR 파일 업로드 (업로드 시간 단축)
-      - name: Compress and Upload JAR to EC2 with rsync
-        run: |
-          gzip -f build/libs/*-SNAPSHOT.jar
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-            build/libs/*-SNAPSHOT.jar.gz \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.APP_DIR }}/build/libs/
-
-      # 8. EC2에서 애플리케이션 재시작
-      - name: Restart app on EC2
-        run: |
-          ssh -i ~/.ssh/id_rsa \
-            -o StrictHostKeyChecking=no \
-            -o ConnectTimeout:15 \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-            "cd ${{ secrets.APP_DIR }} && ./run.sh"
+      # 7. 압축 후 rsync로 JAR 파일 업로드 (업로드 시간 단축!)
+      # scp 대신 압
