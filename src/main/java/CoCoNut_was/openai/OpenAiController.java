@@ -21,7 +21,7 @@ public class OpenAiController {
     public ResponseEntity<?> chat(
             @RequestBody Map<String,String> userReq
     ) throws JsonProcessingException {
-        OpenAiReqDto aiReq = new OpenAiReqDto("gpt-4.1-mini", new ArrayList<>());
+        OpenAiReqDto aiReq = new OpenAiReqDto("gpt-5-mini", new ArrayList<>());
 
         String userMsg = userReq.get("message");
         aiReq.getMessages().add(new OpenAiReqDto.Message("user", userMsg));
