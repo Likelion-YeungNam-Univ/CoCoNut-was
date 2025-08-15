@@ -8,16 +8,30 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SubmissionListDto {
+
+    private Long submissionId;
+
+    private Long projectId;
+
+    private Long userId;
+
     private String title;
+
     private String imageUrl;
 
-    @Builder public SubmissionListDto(String title, String imageUrl) {
+    @Builder public SubmissionListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl) {
+        this.submissionId = submissionId;
+        this.projectId = projectId;
+        this.userId = userId;
         this.title = title;
         this.imageUrl = imageUrl;
     }
 
     public static SubmissionListDto fromEntity(Submission submission) {
         return SubmissionListDto.builder()
+                .submissionId(submission.getId())
+                .projectId(submission.getProject().getId())
+                .userId(submission.getUser().getId())
                 .title(submission.getTitle())
                 .imageUrl(submission.getImageUrl())
                 .build();
