@@ -52,7 +52,7 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x gradlew
 
-      # 5. 프로젝트 빌드 (테스트 제외)
+      # 5. 프로젝트 빌드
       - name: Build bootJar
         run: ./gradlew clean bootJar -x test
 
