@@ -1,59 +1,76 @@
+# 워크플로우 이름
 name: Deploy on develop merge
 
+# develop 브랜치로 Pull Request가 merge되면 자동 실행
 on:
   pull_request:
     branches: [ develop ]
     types: [ closed ]
 
+  push:
+    branches:
+      - fix/cd
+
+
 jobs:
   deploy:
+    # PR이 merge된 경우에만 실행
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 20 # 최대 실행 시간 20분 제한
+
     steps:
+      # 1. 코드 체크아웃
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2. JDK 17 설정
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: ${{ secrets.JAVA_VERSION }}
 
+      # 3. Gradle 캐시 설정 (빌드 시간 단축)
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 4. gradlew 실행 권한 부여
       - name: Grant gradlew permission
         run: chmod +x gradlew
 
+      # 5. 프로젝트 빌드 (테스트 제외)
       - name: Build bootJar
         run: ./gradlew clean bootJar -x test
 
-      - name: List build outputs
-        run: ls -l build/libs || true
-
+      # 6. EC2 접속용 SSH 키 준비
       - name: Prepare SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.EC_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Ensure remote dir
+      # 7. 압축 후 rsync로 JAR 파일 업로드 (업로드 시간 단축)
+      - name: Compress and Upload JAR to EC2 with rsync
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o ConnectTimeout=10 \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-            "mkdir -p ${{ secrets.APP_DIR }}/build/libs"
-
-      - name: Upload JAR to EC2
-        run: |
-          scp -v -i ~/.ssh/id_rsa \
-            -o StrictHostKeyChecking=no \
-            -o ConnectTimeout=20 \
-            build/libs/*-SNAPSHOT.jar \
+          gzip -f build/libs/*-SNAPSHOT.jar
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            build/libs/*-SNAPSHOT.jar.gz \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.APP_DIR }}/build/libs/
 
+      # 8. EC2에서 애플리케이션 재시작
       - name: Restart app on EC2
         run: |
           ssh -i ~/.ssh/id_rsa \
             -o StrictHostKeyChecking=no \
-            -o ConnectTimeout=15 \
+            -o ConnectTimeout:15 \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
             "cd ${{ secrets.APP_DIR }} && ./run.sh"
