@@ -25,7 +25,7 @@ public class SubmissionController implements SubmissionApi {
     private final SubmissionService submissionService;
 
 
-    // 1. 제출물 등록
+    // 1. 작품 등록
     @PostMapping(value = "/projects/{project_id}/submissions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> submit(
             @PathVariable Long project_id,
@@ -37,13 +37,13 @@ public class SubmissionController implements SubmissionApi {
             return ResponseEntity.ok().build();
         }
 
-    // 2. 제출물 목록 조회(한 공모전에 대한 모든 제출물 조회)
+    // 2. 작품 목록 조회(한 공모전에 대한 모든 제출물 조회)
     @GetMapping("/projects/{project_id}/submissions")
     public ResponseEntity<?> getSubmissions(@PathVariable Long project_id){
         return ResponseEntity.ok().body(submissionService.getSubmissions(project_id));
     }
 
-    // 3. 제출물 단일 상세조회
+    // 3. 작품 단일 상세조회
     @GetMapping("/submissions/{submission_id}")
     public ResponseEntity<?> getSubmissionById(
             @PathVariable Long submission_id,
@@ -52,7 +52,7 @@ public class SubmissionController implements SubmissionApi {
         return ResponseEntity.ok().body(submissionService.getSubmissionDetails(submission_id, userDetails));
     }
 
-    // 4. 제출물 수정
+    // 4. 작품 수정
     @PutMapping("/submissions/{submission_id}")
     public ResponseEntity<?> updateSubmission(
             @PathVariable Long submission_id,
@@ -60,6 +60,17 @@ public class SubmissionController implements SubmissionApi {
             @AuthenticationPrincipal UserDetails userDetails
     ){
         submissionService.updateSubmission(submission_id, dto, userDetails);
+        return ResponseEntity.ok().build();
+    }
+
+
+    // 5. 작품 제출 자격확인
+    @GetMapping("/projects/{project_id}/submissions/valid")
+    public ResponseEntity<?> checkSubmitValidation(
+            @PathVariable Long project_id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        submissionService.checkSubmitValidation(project_id, userDetails);
         return ResponseEntity.ok().build();
     }
 

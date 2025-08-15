@@ -21,23 +21,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "Submission API", description = "공모전 작품 API")
+@Tag(name = "Submission API", description = "작품 관련 API")
 public interface SubmissionApi {
 
-    @Operation(summary = "작품 제출", description = "작품 제출 시도")
+    @Operation(summary = "작품 제출", description = "특정 공모전에 대한 작품을 제출합니다")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "제출성공"),
             @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "작품 정보에 대한 누락 발생", value = """
+                            @ExampleObject(name = "작품제목 누락", value = """
                                     {
                                         "title": "작품제목은 필수 입력입니다."
                                     }
                                     """),
-                            @ExampleObject(name = "작품 제목 누락", value = """
+                            @ExampleObject(name = "KEY 누락(소스코드 문제)", value = """
                                     {
                                         "status": 400,
                                         "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
+                                    }
+                                    """),
+                            @ExampleObject(name = "중복 지원 방지", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
                                     """)
                     })),
@@ -49,6 +55,15 @@ public interface SubmissionApi {
                                         "message" : "토큰이 없거나 만료되었습니다."
                                     }
                                     """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
                     }))
     })
     ResponseEntity<?> submit(
@@ -75,13 +90,11 @@ public interface SubmissionApi {
                             [
                                 {
                                     "title": "초콜릿 카페 메뉴판",
-                                    "description": "저희는 초콜릿을 직접 재배하여 판매합니다!",
-                                    "imageUrl": "https://storage.googleapis.com/coconut_bucket/chocolate_menu.jpeg"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
                                 },
                                 {
                                     "title": "여름 시즌 특별 음료 포스터",
-                                    "description": "시원한 여름을 위한 스페셜 에이드 출시!",
-                                    "imageUrl": "https://storage.googleapis.com/coconut_bucket/summer_ade_poster.png"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
                                 }
                             ]
                             """
@@ -97,6 +110,36 @@ public interface SubmissionApi {
                                     }
                                     """)
                     })),
+//            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+//                    content = @Content(mediaType = "application/json", examples = {
+//                            @ExampleObject(value = """
+//                                    {
+//                                        "status" : 401,
+//                                        "message" : "토큰이 없거나 만료되었습니다."
+//                                    }
+//                                    """)
+//                    }))
+    })
+    ResponseEntity<?> getSubmissions(
+            @Parameter(description = "프로젝트 고유 ID")
+            @PathVariable Long project_id
+    );
+
+    @Operation(summary = "작품 상세 조회", description = "특정 작품에 대한 상세 정보를 가져옵니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                      "title": "아기사자 디자인 브런치 카페 메뉴판",
+                                      "description": "아기사자의 그림이 그려져있고, 아이들이 좋아할만한 캐릭터 디자인을 채택하였습니다.",
+                                      "relatedUrl": "https://피그마주소.com",
+                                      "imageUrl": "https://storage.googleapis.com/example/123123.jpeg",
+                                      "submittedAt": "2025-08-14",
+                                      "writer": "열정있는 아기사자"
+                                    }
+                                    """)
+                    })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
@@ -104,12 +147,22 @@ public interface SubmissionApi {
                                         "status" : 401,
                                         "message" : "토큰이 없거나 만료되었습니다."
                                     }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 작품을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                      "status": 404,
+                                      "message": "해당 작품은 존재하지 않습니다."
+                                    }
                                     """)
                     }))
     })
-    ResponseEntity<?> getSubmissions(
-            @Parameter(description = "프로젝트 고유 ID")
-            @PathVariable Long project_id
+    ResponseEntity<?> getSubmissionById(
+            @Parameter(description = "작품 고유 ID")
+            @PathVariable Long submission_id,
+            @AuthenticationPrincipal UserDetails userDetails
     );
 
 
@@ -133,14 +186,67 @@ public interface SubmissionApi {
                                         "message": "작품의 유저정보와 로그인 정보가 일치하지 않습니다."
                                     }
                                     """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 작품을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 작품은 존재하지 않습니다."
+                                    }
+                                    """)
                     }))
     })
     ResponseEntity<?> updateSubmission(
-            @Parameter(description = "프로젝트 고유 ID")
+            @Parameter(description = "작품 고유 ID")
             @PathVariable Long submission_id,
             @Parameter(description = "작품 수정 정보")
             @RequestBody SubmitDto dto,
-            @Parameter(description = "토큰 기반 유저 정보")
+            @AuthenticationPrincipal UserDetails userDetails
+    );
+
+
+
+    @Operation(summary = "작품 제출 자격검증", description = "사용자가 이미 공모전에 작품을 제출했거나, 공모전 주인이 자신의 공모전에 참여해버리는 오류를 막기 위한 API입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "자격 있음"),
+            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "공모전 주인이 자신의 공모전에 신청하는 오류", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "공모전 주인이 자신의 공모전에 지원할 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "중복 지원 방지", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> checkSubmitValidation(
+            @Parameter(description = "작품 고유 ID")
+            @PathVariable Long project_id,
             @AuthenticationPrincipal UserDetails userDetails
     );
 }

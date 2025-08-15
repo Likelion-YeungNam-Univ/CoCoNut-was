@@ -133,6 +133,19 @@ public interface UserApi {
                                     }
                                     """)
                     })),
+            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "필드 누락", value = """
+                                    {
+                                        "<field>" : "<field>는 필수 입력입니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "이메일 형식 비일치", value = """
+                                    {
+                                        "email": "이메일 형식을 맞춰주세요."
+                                    }
+                                    """)
+                    })),
             @ApiResponse(responseCode = "401", description = "비밀번호 불일치",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
