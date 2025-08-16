@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +30,17 @@ public class VoteController {
     }
 
 
-    // 2. 투표 결과 전체 조회
+    // 2. 한 작품에 대한 투표 개수
+    @GetMapping("/submission/{submission_id}")
+    public ResponseEntity<?> voteCount(
+            @PathVariable Long project_id,
+            @PathVariable Long submission_id
+    ){
+        return ResponseEntity.ok().body(voteService.voteCount(project_id, submission_id));
+    }
 
 
-    // 3. 한 작품에 대한 투표 개수
+    // 3. 투표 결과 전체 조회
 
 
     // 4. 투표 삭제 (이거 필요할까요)
