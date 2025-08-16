@@ -19,7 +19,7 @@ public class VoteController {
 
 
     // 1. 투표 등록
-    @PostMapping("/submission/{submission_id}")
+    @PostMapping("/submissions/{submission_id}")
     public ResponseEntity<?> vote(
             @PathVariable Long submission_id,
             @AuthenticationPrincipal UserDetails userDetails
@@ -29,8 +29,8 @@ public class VoteController {
     }
 
 
-    // 2. 한 작품에 대한 투표 개수
-    @GetMapping("/submission/{submission_id}")
+    // 2. 한 작품에 대한 투표 개수(DB확인에 적합한 것 같음)
+    @GetMapping("/submissions/{submission_id}")
     public ResponseEntity<?> voteCount(
             @PathVariable Long submission_id
     ){
@@ -38,7 +38,13 @@ public class VoteController {
     }
 
 
-    // 3. 투표 결과 전체 조회
+    // 3. 투표 결과 전체 조회(이름, 이미지가 모두 포함된 정보)
+    @GetMapping("/projects/{project_id}")
+    public ResponseEntity<?> voteResult(
+            @PathVariable Long project_id
+    ){
+        return ResponseEntity.ok().body(voteService.voteResult(project_id));
+    }
 
 
     // 4. 투표 삭제 (이거 필요할까요)

@@ -80,7 +80,7 @@ public class SubmissionService {
         );
 
         // 2. 작품 불러오기
-        List<Submission> submissions = submissionRepository.findByProject(project);
+        List<Submission> submissions = submissionRepository.findByProjectId(project.getId());
         List<SubmissionListDto> dtos = new ArrayList<>();
 
         // 3. dto로 모두 변환
