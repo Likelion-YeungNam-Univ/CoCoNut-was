@@ -8,6 +8,7 @@ import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.domains.vote.entity.Vote;
 import CoCoNut_was.domains.vote.repository.VoteRepository;
+import CoCoNut_was.domains.vote.resdto.VoteCountDto;
 import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,25 @@ public class VoteService {
 
         // 5. 투표 처리
         voteRepository.save(Vote.builder().user(user).submission(submission).build());
+    }
+
+    public VoteCountDto voteCount(Long projectId, Long submissionId) {
+        // 1. 프로젝트 존재 확인
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        // 2. 작품 존재 확인
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(
+                () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
+        );
+
+        Long count = voteRepository.countBySubmissionId(submissionId);
+
+        return VoteCountDto.builder()
+                .projectId(projectId)
+                .submissionId(submissionId)
+                .voteCount(count)
+                .build();
     }
 }

@@ -11,4 +11,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     // 특정 유저, 특정 프로젝트에 대한 투표기록이 존재하는가를 표현할때 쓰는 JPA 메소드
     boolean existsByUserAndSubmission_Project(User user, Project project);
+
+    Long countBySubmissionId(Long submissionId);
 }
