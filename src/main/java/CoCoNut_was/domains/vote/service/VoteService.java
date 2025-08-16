@@ -26,7 +26,6 @@ public class VoteService {
 
     @Transactional
     public void vote(
-            Long projectId,
             Long submissionId,
             UserDetails userDetails
     ){
@@ -35,25 +34,20 @@ public class VoteService {
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
-        // 2. 프로젝트 존재 확인
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        // 3. 작품 존재 확인
+        // 2. 작품 존재 확인
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
         );
 
 
-        // 4. 투표 가능한 사람인지
-        // 4-1. 해당 프로젝트에 투표한 이력이 있는 사람인지
-        if (voteRepository.existsByUserAndSubmission_Project(user, project))
+        // 3. 투표 가능한 사람인지
+        // 3-1. 해당 프로젝트에 투표한 이력이 있는 사람인지
+        if (voteRepository.existsByUserAndSubmission_Project(user, submission.getProject()))
             throw new CustomException(ErrorCode.INVALID_DUPLICATE_VOTE);
 
 
-        // 4-2. 공모전을 만든 소상공인은 투표할 수 없음
-        if (user.equals(project.getUser()))
+        // 3-2. 공모전을 만든 소상공인은 투표할 수 없음
+        if (user.equals(submission.getProject().getUser()))
             throw new CustomException(ErrorCode.INVALID_OWN_PROJECT_VOTE);
 
 
@@ -66,13 +60,8 @@ public class VoteService {
         voteRepository.save(Vote.builder().user(user).submission(submission).build());
     }
 
-    public VoteCountDto voteCount(Long projectId, Long submissionId) {
-        // 1. 프로젝트 존재 확인
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
-        );
-
-        // 2. 작품 존재 확인
+    public VoteCountDto voteCount(Long submissionId) {
+        // 작품 존재 확인
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
         );
@@ -80,7 +69,7 @@ public class VoteService {
         Long count = voteRepository.countBySubmissionId(submissionId);
 
         return VoteCountDto.builder()
-                .projectId(projectId)
+                .projectId(submission.getProject().getId())
                 .submissionId(submissionId)
                 .voteCount(count)
                 .build();

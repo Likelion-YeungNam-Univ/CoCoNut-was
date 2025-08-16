@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/votes/projects/{project_id}")
+@RequestMapping("/api/v1/votes")
 public class VoteController {
     private final VoteService voteService;
 
@@ -21,11 +21,10 @@ public class VoteController {
     // 1. 투표 등록
     @PostMapping("/submission/{submission_id}")
     public ResponseEntity<?> vote(
-            @PathVariable Long project_id,
             @PathVariable Long submission_id,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        voteService.vote(project_id, submission_id, userDetails);
+        voteService.vote(submission_id, userDetails);
         return ResponseEntity.ok().build();
     }
 
@@ -33,10 +32,9 @@ public class VoteController {
     // 2. 한 작품에 대한 투표 개수
     @GetMapping("/submission/{submission_id}")
     public ResponseEntity<?> voteCount(
-            @PathVariable Long project_id,
             @PathVariable Long submission_id
     ){
-        return ResponseEntity.ok().body(voteService.voteCount(project_id, submission_id));
+        return ResponseEntity.ok().body(voteService.voteCount(submission_id));
     }
 
 
