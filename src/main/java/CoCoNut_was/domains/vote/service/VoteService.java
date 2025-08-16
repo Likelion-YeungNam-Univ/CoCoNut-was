@@ -6,6 +6,7 @@ import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
+import CoCoNut_was.domains.vote.entity.Vote;
 import CoCoNut_was.domains.vote.repository.VoteRepository;
 import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
@@ -59,7 +60,8 @@ public class VoteService {
         if (user.equals(submission.getUser()))
             throw new CustomException(ErrorCode.INVALID_SELF_VOTE);
 
-        
+
         // 5. 투표 처리
+        voteRepository.save(Vote.builder().user(user).submission(submission).build());
     }
 }
