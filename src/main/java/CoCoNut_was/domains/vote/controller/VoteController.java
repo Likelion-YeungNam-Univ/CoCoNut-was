@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/projects/{project_id}/votes")
+@RequestMapping("/api/v1/votes/projects/{project_id}")
 public class VoteController {
     private final VoteService voteService;
 
 
     // 1. 투표 등록
-    @PostMapping("{submission_id}")
+    @PostMapping("/submission/{submission_id}")
     public ResponseEntity<?> vote(
             @PathVariable Long project_id,
             @PathVariable Long submission_id,
