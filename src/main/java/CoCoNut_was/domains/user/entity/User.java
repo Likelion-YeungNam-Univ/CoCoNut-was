@@ -2,6 +2,7 @@ package CoCoNut_was.domains.user.entity;
 
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.submission.entity.Submission;
+import CoCoNut_was.domains.vote.entity.Vote;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +45,9 @@ public class User{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Submission> submissions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes = new ArrayList<>();
 
     // 임시 빌더
     @Builder
