@@ -9,12 +9,18 @@ import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.domains.vote.entity.Vote;
 import CoCoNut_was.domains.vote.repository.VoteRepository;
 import CoCoNut_was.domains.vote.resdto.VoteCountDto;
+import CoCoNut_was.domains.vote.resdto.VoteResultDto;
 import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +79,26 @@ public class VoteService {
                 .submissionId(submissionId)
                 .voteCount(count)
                 .build();
+    }
+
+    public List<VoteResultDto> voteResult(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        List<Submission> submissions = submissionRepository.findByProjectId(project.getId());
+        List<VoteResultDto> results = new ArrayList<>();
+
+        for (Submission submission : submissions) {
+            results.add(VoteResultDto.builder()
+                            .submissionId(submission.getId())
+                            .title(submission.getTitle())
+                            .imageUrl(submission.getImageUrl())
+                            .voteCount(voteRepository.countBySubmissionId(submission.getId()))
+                            .build()
+            );
+        }
+
+        return results;
     }
 }
