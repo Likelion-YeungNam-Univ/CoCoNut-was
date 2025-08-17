@@ -19,7 +19,7 @@ public class ProjectColor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String color; // 색상
 
     @ManyToOne(fetch = FetchType.LAZY)
