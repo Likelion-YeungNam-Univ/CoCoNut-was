@@ -1,8 +1,11 @@
 package CoCoNut_was.domains.vote.controller;
 
+import CoCoNut_was.domains.submission.resdto.SubmissionListDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -104,6 +107,52 @@ public interface VoteApi {
             @PathVariable Long submission_id
     );
 
+
+    @Operation(summary = "투표결과 상세조회", description = "특정 공모전에 대한 모든 작품의 이미지, 제목, 투표수를 가져옵니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SubmissionListDto.class)),
+                            examples = @ExampleObject(
+                                    name = "조회 성공 예시",
+                                    value = """
+                            [
+                                {
+                                    "submissionId": 123,
+                                    "title": "초콜릿 카페 메뉴판",
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
+                                    "voteCount": 1
+                                },
+                                {
+                                    "submissionId": 124,
+                                    "title": "여름 시즌 특별 음료 포스터",
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
+                                    "voteCount": 3
+                                }
+                            ]
+                            """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "해당 공모전을 찾을 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """)
+                    }))
+    })
     ResponseEntity<?> voteResult(
             @PathVariable Long project_id
     );
