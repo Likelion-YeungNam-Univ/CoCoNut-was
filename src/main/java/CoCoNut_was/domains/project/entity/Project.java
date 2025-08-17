@@ -49,7 +49,7 @@ public class Project {
     @Column(nullable = false)
     private BusinessType businessType; // 공모전 업종
 
-    @Column(nullable = false)
+    @Column(nullable=false, columnDefinition="TEXT")
     private String description; // 공모전 상세 설명
 
     @Column(nullable = false)
