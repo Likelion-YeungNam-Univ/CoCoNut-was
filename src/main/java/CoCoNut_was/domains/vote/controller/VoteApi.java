@@ -1,6 +1,6 @@
 package CoCoNut_was.domains.vote.controller;
 
-import CoCoNut_was.domains.submission.resdto.SubmissionListDto;
+import CoCoNut_was.domains.vote.resdto.VoteResultDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -112,7 +112,7 @@ public interface VoteApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = SubmissionListDto.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = VoteResultDto.class)),
                             examples = @ExampleObject(
                                     name = "조회 성공 예시",
                                     value = """
@@ -120,13 +120,13 @@ public interface VoteApi {
                                 {
                                     "submissionId": 123,
                                     "title": "초콜릿 카페 메뉴판",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg",
                                     "voteCount": 1
                                 },
                                 {
                                     "submissionId": 124,
                                     "title": "여름 시즌 특별 음료 포스터",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png",
                                     "voteCount": 3
                                 }
                             ]
