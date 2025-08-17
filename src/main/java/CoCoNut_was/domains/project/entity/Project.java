@@ -89,6 +89,10 @@ public class Project {
         this.status = Status.IN_PROGRESS; // 진행중 상태로 시작
     }
 
+    public void close() { // 공모전을 마감 상태로 변경하는 메서드
+        this.status = Status.CLOSED;
+    }
+
     @Builder
     public Project(User user, String title, String merchantName, Category category,
                    BusinessType businessType, String description, int rewardAmount,
