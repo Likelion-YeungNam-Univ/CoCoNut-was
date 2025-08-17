@@ -73,6 +73,7 @@ public class SubmissionService {
     }
 
     // 공모전 작품 목록 조회
+    @Transactional(readOnly = true)
     public List<SubmissionListDto> getSubmissions(Long projectId) {
         // 1. 프로젝트 존재 확인
         Project project = projectRepository.findById(projectId).orElseThrow(
@@ -91,6 +92,8 @@ public class SubmissionService {
         return dtos;
     }
 
+    // 공모전 작품 상세 조회
+    @Transactional(readOnly = true)
     public SubmissionDetailDto getSubmissionDetails(Long submissionId, UserDetails userDetails) {
         // 1. 사용자 존재 확인 (같은 유저 아니어도 됨
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(

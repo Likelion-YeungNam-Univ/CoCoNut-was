@@ -66,6 +66,7 @@ public class VoteService {
         voteRepository.save(Vote.builder().user(user).submission(submission).build());
     }
 
+    @Transactional(readOnly = true)
     public VoteCountDto voteCount(Long submissionId) {
         // 작품 존재 확인
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(
@@ -81,6 +82,7 @@ public class VoteService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public List<VoteResultDto> voteResult(Long projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)

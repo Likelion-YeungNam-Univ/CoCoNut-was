@@ -29,6 +29,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     // 1. 회원가입
+    @Transactional
     public void signUp(CreateUserDto dto) {
 
         if(existsByEmail(dto.getEmail()))
@@ -59,6 +60,7 @@ public class UserService {
 //    }
 
     // 마이페이지 상세 조회
+    @Transactional(readOnly = true)
     public UserInfoDto me(UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
