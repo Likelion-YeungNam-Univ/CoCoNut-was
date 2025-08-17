@@ -19,7 +19,7 @@ public class ProjectStyle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 10)
+    @Column
     private String style; // 스타일
 
     @ManyToOne(fetch = FetchType.LAZY)

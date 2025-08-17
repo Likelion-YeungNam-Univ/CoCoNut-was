@@ -19,7 +19,7 @@ public class ProjectTarget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 10)
+    @Column
     private String target; // 타겟
 
     @ManyToOne(fetch = FetchType.LAZY)
