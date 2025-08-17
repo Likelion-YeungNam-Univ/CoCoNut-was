@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "SubmissionAiAssistance API", description = "AI를 이용한 작품설명 작성 지원 API")
+@Tag(name = "Submission AI Assistance API", description = "AI를 이용한 작품설명 작성 지원 API")
 public interface SubmissionAiAssistanceApi {
 
     @Operation(summary = "AI 작품 설명작성 지원", description = "사용자가 입력한 프롬프트를 기반으로 AI가 작품의 상세설명에 대해서 깔끔하게 작성해줍니다.")
