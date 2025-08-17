@@ -14,9 +14,11 @@ import CoCoNut_was.domains.project.entity.ProjectTarget;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
+import CoCoNut_was.gcs.ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,14 +31,25 @@ public class ProjectService {
     private final ProjectColorRepository projectColorRepository;
     private final ProjectStyleRepository projectStyleRepository;
     private final ProjectTargetRepository projectTargetRepository;
+    private final ImageUploadService imageUploadService;
 
     @Transactional
-    public Long createProject(ProjectRequestDto projectRequestDto, User user) { // 공모전 생성
-        Project project = projectRequestDto.toEntity(user);
+    public Long createProject(ProjectRequestDto projectRequestDto, User user, MultipartFile image) { // 공모전 생성
+        String imageUrl = null;
+        try {
+            if (image != null && !image.isEmpty())
+                imageUrl = imageUploadService.uploadImage(image);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
+        }
+
+        // 2. 업로드된 이미지 URL을 포함하여 Project 엔티티를 생성합니다.
+        Project project = projectRequestDto.toEntity(user, imageUrl);
         Project saveProject = projectRepository.save(project);
 
+        // 3. 색상, 스타일, 타겟 등 세부 정보를 저장합니다.
         saveProjectDetails(projectRequestDto.getColors(), projectRequestDto.getStyles(),
-                            projectRequestDto.getTargets(), saveProject);
+                projectRequestDto.getTargets(), saveProject);
 
         return saveProject.getId();
     }

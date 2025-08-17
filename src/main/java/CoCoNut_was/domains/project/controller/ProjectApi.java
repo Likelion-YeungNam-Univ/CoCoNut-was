@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Project API", description = "공모전 관련 API")
 public interface ProjectApi {
@@ -52,8 +54,10 @@ public interface ProjectApi {
     ResponseEntity<?> createProject(
             @Parameter(description = "공모전 생성 정보", required = true,
                     schema = @Schema(implementation = ProjectRequestDto.class))
-            @Valid @RequestBody ProjectRequestDto dto,
-            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
+            @Valid @RequestPart("info") ProjectRequestDto dto,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails,
+            @Parameter(description = "작품 대표 사진")
+            @RequestPart(value = "image", required = false) MultipartFile image
     );
 
     @Operation(summary = "공모전 목록 조회", description = "모든 공모전 목록을 조회합니다.")

@@ -35,10 +35,10 @@ public class Project {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 사용자와 N:1
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String title; // 공모전 제목
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String merchantName; // 가게명
 
     @Enumerated(EnumType.STRING)
@@ -55,7 +55,7 @@ public class Project {
     @Column(nullable = false)
     private int rewardAmount; // 공모전 상금
 
-    @Column(nullable = false)
+    @Column
     private String summary; // 공모전 한 줄 소개
 
     @Column(nullable = false)
@@ -67,6 +67,9 @@ public class Project {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status; // 공모전 상태
+
+    @Column
+    private String imageUrl; // 이미지 경로
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectColor> projectColors = new ArrayList<>();
@@ -89,7 +92,7 @@ public class Project {
     @Builder
     public Project(User user, String title, String merchantName, Category category,
                    BusinessType businessType, String description, int rewardAmount,
-                   String summary, LocalDate deadline) {
+                   String summary, LocalDate deadline, String imageUrl) {
         this.user = user;
         this.title = title;
         this.merchantName = merchantName;
@@ -99,5 +102,6 @@ public class Project {
         this.rewardAmount = rewardAmount;
         this.summary = summary;
         this.deadline = deadline;
+        this.imageUrl = imageUrl;
     }
 }

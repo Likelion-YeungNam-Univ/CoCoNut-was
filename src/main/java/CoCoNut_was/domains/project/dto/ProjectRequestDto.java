@@ -51,6 +51,10 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
     @NotBlank(message = "공모전 한 줄 소개는 필수 입력입니다.")
     private String summary;
 
+    @Schema(description = "공모전 이미지 경로", example = "https://storage.googleapis.com/example_bucket/image.png")
+    private String imageUrl; // NotBlank 제거, 이미지는 선택사항일 수 있음
+
+
     // 중복 선택 항목
     @Schema(description = "색상", example = "[\n" +
             "        \"#FFFFFF\",\n" +
@@ -73,7 +77,7 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
             "    ]")
     private List<String> targets;
 
-    public Project toEntity(User user) {
+    public Project toEntity(User user, String imageUrl) {
         return Project.builder()
                 .user(user) // 공모전 생성 유저
                 .title(this.title)
@@ -84,6 +88,7 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
                 .rewardAmount(this.rewardAmount)
                 .summary(this.summary)
                 .deadline(this.deadline)
+                .imageUrl(imageUrl)
                 .build();
     }
 }
