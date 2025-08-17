@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -39,9 +39,9 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
     @NotBlank(message = "공모전 설명은 필수 입력입니다.")
     private String description;
 
-    @Schema(description = "공모 기간(일)", example = "30")
-    @Min(value = 1, message = "공모 기간은 최소 1일 이상이어야 합니다.")
-    private int durationDays;
+    @Schema(description = "공모 마감날짜", example = "2025-08-08")
+    @NotNull(message = "공모 마감날짜는 필수 입력입니다.")
+    private LocalDate deadline;
 
     @Schema(description = "공모전 상금", example = "500000")
     @Min(value = 0, message = "상금은 0원 이상이어야 합니다.")
@@ -74,8 +74,6 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
     private List<String> targets;
 
     public Project toEntity(User user) {
-        LocalDateTime deadline = LocalDateTime.now().plusDays(this.durationDays);
-
         return Project.builder()
                 .user(user) // 공모전 생성 유저
                 .title(this.title)
@@ -85,7 +83,7 @@ public class ProjectRequestDto { // 공모전 생성 DTO (요청)
                 .description(this.description)
                 .rewardAmount(this.rewardAmount)
                 .summary(this.summary)
-                .deadline(deadline)
+                .deadline(this.deadline)
                 .build();
     }
 }

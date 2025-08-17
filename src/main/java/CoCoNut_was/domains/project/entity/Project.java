@@ -19,7 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +59,10 @@ public class Project {
     private String summary; // 공모전 한 줄 소개
 
     @Column(nullable = false)
-    private LocalDateTime createdAt; // 공모전 생성일자
+    private LocalDate createdAt; // 공모전 생성일자
 
     @Column(nullable = false)
-    private LocalDateTime deadline; // 공모전 마감일자
+    private LocalDate deadline; // 공모전 마감일자
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -82,14 +82,14 @@ public class Project {
 
     @PrePersist
     public void onCreate() { // 생성일자 자동 생성
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDate.now();
         this.status = Status.IN_PROGRESS; // 진행중 상태로 시작
     }
 
     @Builder
     public Project(User user, String title, String merchantName, Category category,
                    BusinessType businessType, String description, int rewardAmount,
-                   String summary, LocalDateTime deadline) {
+                   String summary, LocalDate deadline) {
         this.user = user;
         this.title = title;
         this.merchantName = merchantName;
