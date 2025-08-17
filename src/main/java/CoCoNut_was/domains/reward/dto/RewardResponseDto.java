@@ -13,6 +13,7 @@ public class RewardResponseDto {
     private final Long submissionId;
     private final int rewardAmount;
 
+    
     public static RewardResponseDto fromEntity(Reward reward) {
         return RewardResponseDto.builder()
                 .rewardId(reward.getId())
