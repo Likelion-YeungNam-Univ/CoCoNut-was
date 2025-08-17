@@ -29,6 +29,7 @@ public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
     private final int rewardAmount;
     private final String summary;
     private final Status status;
+    private final String imageUrl;
     private final List<String> colors;
     private final List<String> styles;
     private final List<String> targets;
@@ -48,6 +49,7 @@ public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
                 .rewardAmount(project.getRewardAmount())
                 .summary(project.getSummary())
                 .status(project.getStatus())
+                .imageUrl(project.getImageUrl())
                 .colors(project.getProjectColors().stream()
                         .map(ProjectColor::getColor)
                         .collect(Collectors.toList()))
