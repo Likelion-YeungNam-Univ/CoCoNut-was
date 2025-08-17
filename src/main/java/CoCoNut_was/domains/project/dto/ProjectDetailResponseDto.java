@@ -10,6 +10,7 @@ import CoCoNut_was.domains.project.entity.ProjectTarget;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,8 @@ public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
     private final Category category;
     private final BusinessType businessType;
     private final String description;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime deadline;
+    private final LocalDate createdAt;
+    private final LocalDate deadline;
     private final int rewardAmount;
     private final String summary;
     private final Status status;
