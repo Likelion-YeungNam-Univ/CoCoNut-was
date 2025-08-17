@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/votes")
-public class VoteController {
+public class VoteController implements VoteApi {
     private final VoteService voteService;
 
 
