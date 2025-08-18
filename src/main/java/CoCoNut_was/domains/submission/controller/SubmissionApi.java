@@ -34,10 +34,10 @@ public interface SubmissionApi {
                                         "title": "작품제목은 필수 입력입니다."
                                     }
                                     """),
-                            @ExampleObject(name = "KEY 누락(소스코드 문제)", value = """
+                            @ExampleObject(name = "작품정보 JSON 또는 이미지 누락", value = """
                                     {
                                         "status": 400,
-                                        "message": "제출물 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."
+                                        "message": "작품 정보 JSON과 Image 파일 모두 제공되지 않았습니다. 누락된 부분이 있는지 확인해주세요."
                                     }
                                     """),
                             @ExampleObject(name = "중복 지원 방지", value = """

@@ -21,8 +21,7 @@ public enum ErrorCode {
     // 작품 관련
     SUBMISSION_NOT_FOUND(404, "해당 작품은 존재하지 않습니다."),
     SUBMISSION_USER_NOT_MATCHED(403, "작품의 유저정보와 로그인 정보가 일치하지 않습니다."),
-    REQUIRED_SUBMISSION_INFO(400, "작품 형태에 대해 누락이 있습니다. 반드시 KEY에 info를 포함하고, " +
-            "VALUE에 JSON값을, Content-Type를 application/json으로 설정해주세요."),
+    REQUIRED_SUBMISSION_INFO(400, "작품 정보 JSON과 Image 파일 모두 제공되지 않았습니다. 누락된 부분이 있는지 확인해주세요."),
     NOT_POSSIBLE_MORE_SUBMISSION(400, "이미 지원하신 공모전에 다시 지원할 수 없습니다."),
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다."),
 
