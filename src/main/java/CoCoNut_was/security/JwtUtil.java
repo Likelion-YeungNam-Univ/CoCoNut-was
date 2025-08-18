@@ -26,12 +26,12 @@ public class JwtUtil {
     private final long refreshValid = 1000L * 60 * 60 * 24 * 7; // 7일
 
     // 1. Access 토큰 발급
-    public String createAccessToken(Long id, String email) {
-        return generateToken(id, email, accessValid);
+    public String createAccessToken(Long id, String email, String role) {
+        return generateToken(id, email, accessValid, role);
     }
     // 2. Refresh 토큰 발급
-    public String createRefreshToken(Long id, String email) {
-        return generateToken(id, email, refreshValid);
+    public String createRefreshToken(Long id, String email, String role) {
+        return generateToken(id, email, refreshValid, role);
     }
 
 //    private String generateToken(String email, long validTime) {
@@ -43,10 +43,11 @@ public class JwtUtil {
 //                .compact();
 //    }
 
-    private String generateToken(Long id, String email, long validTime) {
+    private String generateToken(Long id, String email, long validTime, String role) {
         return Jwts.builder()
                 .subject(id.toString())
                 .claim("email", email)
+                .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + validTime))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)

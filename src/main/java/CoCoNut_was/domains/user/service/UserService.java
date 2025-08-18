@@ -99,8 +99,8 @@ public class UserService {
         }
 
         // 4. 토큰 발급
-        String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail());
-        String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail());
+        String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole().toString());
+        String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole().toString());
 
         // 5. Refresh 토큰 헤더 붙이기
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
