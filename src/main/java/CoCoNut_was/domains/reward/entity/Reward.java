@@ -16,6 +16,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -26,6 +28,9 @@ public class Reward {
 
     @Column(nullable = false)
     private int rewardAmount; // 보상 금액
+
+    @Column(nullable = false)
+    private LocalDate rewardedAt; // 보상 지급일
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_jd", nullable = false)
@@ -45,5 +50,6 @@ public class Reward {
         this.project = project;
         this.submission = submission;
         this.rewardAmount = rewardAmount;
+        this.rewardedAt = LocalDate.now();
     }
 }
