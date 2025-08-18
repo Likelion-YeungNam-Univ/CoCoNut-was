@@ -122,6 +122,7 @@ public interface UserApi {
                                         "accessToken" : "<accessToken>",
                                         "userId" : "<userId>",
                                         "email" : "<email>"
+                                        "role": "ROLE_USER | ROLE_BUSINESS"
                                     }
                                     """)
                     })),
