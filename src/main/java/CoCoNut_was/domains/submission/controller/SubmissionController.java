@@ -29,8 +29,8 @@ public class SubmissionController implements SubmissionApi {
     @PostMapping(value = "/projects/{project_id}/submissions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> submit(
             @PathVariable Long project_id,
-            @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
-            @RequestPart(value = "image", required = false) MultipartFile image,
+            @Valid @RequestPart(value = "info") SubmitDto dto,
+            @RequestPart(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     ){
             submissionService.submit(project_id, dto, image, userDetails);
