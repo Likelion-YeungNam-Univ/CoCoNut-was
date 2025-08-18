@@ -4,6 +4,8 @@ import CoCoNut_was.domains.reward.entity.Reward;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 public class RewardResponseDto {
@@ -12,8 +14,8 @@ public class RewardResponseDto {
     private final Long projectId;
     private final Long submissionId;
     private final int rewardAmount;
+    private final LocalDate rewardedAt;
 
-    
     public static RewardResponseDto fromEntity(Reward reward) {
         return RewardResponseDto.builder()
                 .rewardId(reward.getId())
@@ -21,6 +23,7 @@ public class RewardResponseDto {
                 .projectId(reward.getProject().getId())
                 .submissionId(reward.getSubmission().getId())
                 .rewardAmount(reward.getRewardAmount())
+                .rewardedAt(reward.getRewardedAt())
                 .build();
     }
 }
