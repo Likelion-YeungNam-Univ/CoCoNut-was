@@ -123,6 +123,7 @@ public class UserService {
                 .accessToken(accessToken)
                 .userId(user.getId())
                 .email(user.getEmail())
+                .role(user.getRole().toString())
                 .build();
     }
 
