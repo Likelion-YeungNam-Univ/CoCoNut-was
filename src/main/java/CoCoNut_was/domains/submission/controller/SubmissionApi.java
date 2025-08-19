@@ -85,7 +85,7 @@ public interface SubmissionApi {
     );
 
 
-    @Operation(summary = "작품 목록 조회", description = "특정 공모전에 대한 모든 작품을 조회합니다.")
+    @Operation(summary = "한 공모전에 대한 작품 목록 조회", description = "특정 공모전에 대한 모든 작품을 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공",
                     content = @Content(mediaType = "application/json",
@@ -136,6 +136,55 @@ public interface SubmissionApi {
             @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id
     );
+
+    @Operation(summary = "참여자의 모든 작품 조회", description = "로그인된 참여자의 모든 작품을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SubmissionListDto.class)),
+                            examples = @ExampleObject(
+                                    name = "조회 성공 예시",
+                                    value = """
+                            [
+                                {
+                                    "submissionId": 123,
+                                    "projectId": 12,
+                                    "userId": 1,
+                                    "title": "초콜릿 카페 메뉴판",
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
+                                },
+                                {
+                                    "submissionId": 124,
+                                    "projectId": 12,
+                                    "userId": 2,
+                                    "title": "여름 시즌 특별 음료 포스터",
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
+                                }
+                            ]
+                            """
+                            )
+                    )
+            ),
+            @ApiResponse(responseCode = "400", description = "소상공인은 작품 제출 목록이 존재할 수 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 400,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 401,
+                                        "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> getMySubmissions(@AuthenticationPrincipal UserDetails userDetails);
 
     @Operation(summary = "작품 상세 조회", description = "특정 작품에 대한 상세 정보를 가져옵니다.")
     @ApiResponses({
