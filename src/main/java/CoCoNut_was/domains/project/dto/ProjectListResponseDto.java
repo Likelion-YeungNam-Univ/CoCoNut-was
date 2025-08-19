@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
+    private final Long userId;
     private final Long projectId;
     private final String writerNickname;
     private final String title;
@@ -27,6 +28,7 @@ public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
 
     public static ProjectListResponseDto fromEntity(Project project) {
         return ProjectListResponseDto.builder()
+                .userId(project.getUser().getId())
                 .projectId(project.getId())
                 .writerNickname(project.getUser().getNickname())
                 .title(project.getTitle())

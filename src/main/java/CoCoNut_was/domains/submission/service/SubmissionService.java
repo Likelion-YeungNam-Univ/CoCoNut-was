@@ -52,7 +52,7 @@ public class SubmissionService {
         );
 
         // 4. 프로젝트 중복 참여 검사(접속 전 자격 검증을 했다면 일어나지 않을 예외, 방지용으로 추가)
-        if(submissionRepository.existsByUser(user))
+        if(submissionRepository.existsByUserAndProject(user, project))
             throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
 
         // 5. 이미지 업로드
@@ -155,7 +155,7 @@ public class SubmissionService {
         );
 
         // 4. 이미 해당 공모전에 지원한경우
-        if(submissionRepository.existsByUser(user))
+        if(submissionRepository.existsByUserAndProject(user, project))
             throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
 
 

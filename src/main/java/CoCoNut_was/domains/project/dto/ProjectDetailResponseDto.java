@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
+    private final Long userId;
     private final Long projectId;
     private final String writerNickname;
     private final String title;
@@ -37,6 +38,7 @@ public class ProjectDetailResponseDto { // 공모전 상세 조회 DTO (응답)
     
     public static ProjectDetailResponseDto fromEntity(Project project) {
         return ProjectDetailResponseDto.builder()
+                .userId(project.getUser().getId())
                 .projectId(project.getId())
                 .writerNickname(project.getUser().getNickname())
                 .title(project.getTitle())
