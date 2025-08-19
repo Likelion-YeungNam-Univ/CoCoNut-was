@@ -1,6 +1,6 @@
 # 🥥 CoCoNut-BE
 
-# 🧑‍💻 팀원 및 팀 소개
+# 🧑‍💻 팀원 소개
 | 최정 | 김동민 | 임태현 | 조민서 | 신혜진 | 이수민 |
 |:------:|:------:|:------:|:------:|:------:|:------:|
 | <img src="https://avatars.githubusercontent.com/u/160298290?v=4" alt="최정" width="150"> | <img src="https://avatars.githubusercontent.com/u/80417179?v=4" alt="김동민" width="150"> | <img src="https://avatars.githubusercontent.com/u/165642906?v=4" alt="임태현" width="150"> | <img src="https://avatars.githubusercontent.com/u/165632548?v=4" alt="조민서" width="150"> |<img src="https://avatars.githubusercontent.com/u/139312570?v=4" alt="신혜진" width="150"> |<img src="https://avatars.githubusercontent.com/u/160111840?v=4" alt="이수민" width="150"> |
@@ -48,3 +48,7 @@
   - 모든 feature, fix 브랜치는 develop으로 병합
 
 - **main**: 항상 배포 가능한 안정된 코드 유지 브랜치
+
+---
+# 🗄️ ERD
+<img width="1494" height="923" alt="Image" src="https://github.com/user-attachments/assets/67baa306-7415-4ecd-a545-29bf8f55eb68" />
