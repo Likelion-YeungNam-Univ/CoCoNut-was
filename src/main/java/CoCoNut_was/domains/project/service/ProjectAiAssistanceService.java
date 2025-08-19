@@ -46,7 +46,7 @@ public class ProjectAiAssistanceService {
                 "  \"summary\": \"(한 문장 슬로건)\"\n" +
                 "}\n\n" +
                 "### 필드별 상세 작성 지침 (Detailed Instructions for Each Field)\n" +
-                "* **description**: 사용자의 아이디어를 바탕으로, 이 공모전의 **궁극적인 목표, 비전, 타겟 참가자, 그리고 핵심 심사 기준**이 명확히 드러나도록 풍부하고 설득력 있는 설명으로 재구성해주세요. 단순한 정보 나열이 아닌, 읽는 이의 참여 욕구를 자극하는 스토리가 담긴 소개글이어야 합니다.\n" +
+                "* **description**: 사용자의 아이디어를 바탕으로, 이 공모전의 **궁극적인 목표, 비전, 타겟 참가자, 그리고 핵심 심사 기준**이 명확히 드러나도록 풍부하고 설득력 있는 설명으로 재구성해주세요. 단순한 정보 나열이 아닌, 읽는 이의 참여 욕구를 자극하는 스토리가 담긴 소개글이어야 합니다. 그리고 반드시 줄바꿈을 포함하여 가독성있게 글을 정리해서 보내주세요.\n" +
                 "* **rewardAmount**: 공모전의 주제, 기간, 예상 난이도를 고려하여, **해당 과업의 시장 가치에 부합하는 현실적인 총상금액**을 숫자로만 제시해주세요. **공모전의 규모와 난이도에 따라 금액을 신중하게 조절해야 합니다.** (예시: 간단한 슬로건/로고 공모전은 20만원~60만원, 앱 개발 공모전은 100만원~200만원 사이에서 책정)\n" +
                 "현재 한국의 물가를 생각해서 유동적으로 잘 조절해주세요. 소상공인은 저렴한 가격에 인력을 쓰는 느낌으로 해야만 합니다.\n" +
                 "* **deadline**: '오늘 날짜'인 " + LocalDate.now() + "를 기준으로, 공모전의 성격과 규모에 가장 적합한 접수 기간(통상 4주에서 16주 사이)을 현실적으로 판단하여 마감일을 'yyyy-MM-dd' 형식으로 계산해주세요.\n" +
@@ -64,7 +64,7 @@ public class ProjectAiAssistanceService {
         messages.add(new OpenAiReqDto.Message("user", userPrompt));
 
         // 3. 요청 객체 생성
-        OpenAiReqDto req = new OpenAiReqDto("gpt-5-mini", messages);
+        OpenAiReqDto req = new OpenAiReqDto("gpt-4.1-mini", messages);
 
         // 4. HTTP 헤더 구성
         HttpHeaders headers = new HttpHeaders();
