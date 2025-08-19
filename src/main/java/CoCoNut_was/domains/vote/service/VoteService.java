@@ -95,6 +95,7 @@ public class VoteService {
             results.add(VoteResultDto.builder()
                             .submissionId(submission.getId())
                             .projectId(submission.getProject().getId())
+                            .voteStartTime(project.getDeadline().plusDays(1).toString())
                             .voteDeadline(project.getDeadline().plusDays(7).toString())
                             .title(submission.getTitle())
                             .imageUrl(submission.getImageUrl())
