@@ -165,11 +165,11 @@ public interface SubmissionApi {
                             )
                     )
             ),
-            @ApiResponse(responseCode = "400", description = "소상공인은 작품 제출 목록이 존재할 수 없음",
+            @ApiResponse(responseCode = "403", description = "소상공인은 작품 제출 목록이 존재할 수 없음",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "status": 400,
+                                        "status": 403,
                                         "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """)
@@ -274,15 +274,9 @@ public interface SubmissionApi {
     @Operation(summary = "작품 제출 자격검증", description = "사용자가 이미 공모전에 작품을 제출했거나, 공모전 주인이 자신의 공모전에 참여해버리는 오류를 막기 위한 API입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "자격 있음"),
-            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+            @ApiResponse(responseCode = "400", description = "중복 지원 거부",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "소상공인 계정이 공모전에 참여하려는 경우", value = """
-                                    {
-                                        "status": 400,
-                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
-                                    }
-                                    """),
-                            @ExampleObject(name = "중복 지원 방지", value = """
+                            @ExampleObject(value = """
                                     {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
@@ -295,6 +289,15 @@ public interface SubmissionApi {
                                     {
                                         "status" : 401,
                                         "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "403", description = "소상공인 계정이 공모전에 참여하려는 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 403,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """),
                     })),
