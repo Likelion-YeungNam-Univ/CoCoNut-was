@@ -13,7 +13,7 @@ public enum ErrorCode {
     NICKNAME_ALREADY_EXIST(409, "해당 닉네임은 이미 존재합니다."),
     INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류입니다."),
-    WRITE_ROLE_NOT_MATCHED(400, "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."),
+    ROLE_NOT_MATCHED(403, "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."),
 
     // 공모전 관련
     PROJECT_NOT_FOUND(404, "해당 공모전을 찾을 수 없습니다."),
