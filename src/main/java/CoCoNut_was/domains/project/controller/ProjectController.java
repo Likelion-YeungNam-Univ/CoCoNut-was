@@ -2,11 +2,8 @@ package CoCoNut_was.domains.project.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectRequestDto;
 import CoCoNut_was.domains.project.service.ProjectService;
-import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.service.UserService;
-import CoCoNut_was.exception.CustomException;
-import CoCoNut_was.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,8 +36,7 @@ public class ProjectController implements ProjectApi {
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
         User currentUser = userService.findUserByEmail(userDetails.getUsername());
-        if(currentUser.getRole() != Role.ROLE_BUSINESS)
-            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
+
         Long projectId = projectService.createProject(dto, currentUser, image);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectId);
@@ -64,8 +59,12 @@ public class ProjectController implements ProjectApi {
     // 공모전 삭제
     @Override
     @DeleteMapping("{project_id}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long project_id) {
-        projectService.deleteProjectById(project_id);
+    public ResponseEntity<?> deleteProject(
+            @PathVariable Long project_id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        User currentUser = userService.findUserByEmail(userDetails.getUsername());
+        projectService.deleteProjectById(project_id, currentUser);
         return ResponseEntity.ok().build();
     }
 }
