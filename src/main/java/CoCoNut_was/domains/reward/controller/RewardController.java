@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.reward.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
+import CoCoNut_was.domains.reward.dto.RewardResponseDto;
 import CoCoNut_was.domains.reward.service.RewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,24 +18,30 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/rewards")
-public class RewardController {
+public class RewardController implements RewardApi{
     private final RewardService rewardService;
 
+    // 수상작 선정
+    @Override
     @PostMapping("/award/project/{projectId}/submission/{submissionId}")
     public ResponseEntity<?> awardWinner(
             @PathVariable Long projectId,
             @PathVariable Long submissionId) {
-        rewardService.awardWinner(projectId, submissionId);
+        RewardResponseDto rewardResponseDto = rewardService.awardWinner(projectId, submissionId);
 
-        return ResponseEntity.ok("수상작 선정 및 공모전 마감이 완료되었습니다.");
+        return ResponseEntity.ok(rewardResponseDto);
     }
 
+    // 사용자의 작품이 선정된 공모전 목록 조회
+    @Override
     @GetMapping("/me/awards")
     public ResponseEntity<List<ProjectListResponseDto>> getMyAwards(@AuthenticationPrincipal UserDetails userDetails) {
         List<ProjectListResponseDto> awardedProjects = rewardService.getMyAwardWinningProjects(userDetails);
         return ResponseEntity.ok(awardedProjects);
     }
 
+    // 사용자의 작품이 선정된 횟수 조회
+    @Override
     @GetMapping("/me/awards/count")
     public ResponseEntity<Long> getMyAwardsCount(@AuthenticationPrincipal UserDetails userDetails) {
         long awardsCount = rewardService.getMyAwardsCount(userDetails);
