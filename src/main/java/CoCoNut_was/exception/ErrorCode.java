@@ -23,13 +23,13 @@ public enum ErrorCode {
     SUBMISSION_NOT_FOUND(404, "해당 작품은 존재하지 않습니다."),
     SUBMISSION_USER_NOT_MATCHED(403, "작품의 유저정보와 로그인 정보가 일치하지 않습니다."),
     REQUIRED_SUBMISSION_INFO(400, "작품 정보 JSON과 Image 파일 모두 제공되지 않았습니다. 누락된 부분이 있는지 확인해주세요."),
-    NOT_POSSIBLE_MORE_SUBMISSION(400, "이미 지원하신 공모전에 다시 지원할 수 없습니다."),
+    NOT_POSSIBLE_MORE_SUBMISSION(409, "이미 지원하신 공모전에 다시 지원할 수 없습니다."),
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다."),
     DEADLINE_EXPIRED(400, "제출기한이 이미 지났습니다."),
 
 
     // 투표 관련
-    INVALID_DUPLICATE_VOTE(400, "한 공모전에 대한 작품에 이미 투표하셨습니다."),
+    INVALID_DUPLICATE_VOTE(409, "한 공모전에 대한 작품에 이미 투표하셨습니다."),
     INVALID_OWN_PROJECT_VOTE(400, "공모전을 올린 소상공인은 해당 작품들에 대해 투표할 수 없습니다."),
     INVALID_SELF_VOTE(400, "참여자는 자신이 제출한 작품에 투표할 수 없습니다."),
 
