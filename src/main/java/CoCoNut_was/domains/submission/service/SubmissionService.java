@@ -154,6 +154,10 @@ public class SubmissionService {
         if(!submission.getUser().getId().equals(user.getId()))
             throw new CustomException(ErrorCode.SUBMISSION_USER_NOT_MATCHED);
 
+        // 4. 프로젝트 제출기한 내 제출 시도인지
+        if(submission.getProject().getDeadline().isBefore(LocalDate.now()))
+            throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
+
 
         if(dto.getTitle() != null && !dto.getTitle().isBlank())
             submission.setTitle(dto.getTitle());
