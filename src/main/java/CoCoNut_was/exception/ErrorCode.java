@@ -24,6 +24,7 @@ public enum ErrorCode {
     REQUIRED_SUBMISSION_INFO(400, "작품 정보 JSON과 Image 파일 모두 제공되지 않았습니다. 누락된 부분이 있는지 확인해주세요."),
     NOT_POSSIBLE_MORE_SUBMISSION(400, "이미 지원하신 공모전에 다시 지원할 수 없습니다."),
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다."),
+    DEADLINE_EXPIRED(400, "제출기한이 이미 지났습니다."),
 
 
     // 투표 관련
