@@ -37,13 +37,19 @@ public class SubmissionController implements SubmissionApi {
             return ResponseEntity.ok().build();
         }
 
-    // 2. 작품 목록 조회(한 공모전에 대한 모든 제출물 조회)
+    // 2. 한 공모전에 대한 모든 제출물 조회
     @GetMapping("/projects/{project_id}/submissions")
     public ResponseEntity<?> getSubmissions(@PathVariable Long project_id){
         return ResponseEntity.ok().body(submissionService.getSubmissions(project_id));
     }
 
-    // 3. 작품 단일 상세조회
+    // 3. 참여자가 낸 모든 작품들 조회
+    @GetMapping("/submissions")
+    public ResponseEntity<?> getMySubmissions(@AuthenticationPrincipal UserDetails userDetails){
+        return null;
+    }
+
+    // 4. 작품 단일 상세조회
     @GetMapping("/submissions/{submission_id}")
     public ResponseEntity<?> getSubmissionById(
             @PathVariable Long submission_id,
@@ -52,7 +58,7 @@ public class SubmissionController implements SubmissionApi {
         return ResponseEntity.ok().body(submissionService.getSubmissionDetails(submission_id, userDetails));
     }
 
-    // 4. 작품 수정
+    // 5. 작품 수정
     @PutMapping("/submissions/{submission_id}")
     public ResponseEntity<?> updateSubmission(
             @PathVariable Long submission_id,
@@ -64,7 +70,7 @@ public class SubmissionController implements SubmissionApi {
     }
 
 
-    // 5. 작품 제출 자격확인
+    // 6. 작품 제출 자격확인
     @GetMapping("/projects/{project_id}/submissions/valid")
     public ResponseEntity<?> checkSubmitValidation(
             @PathVariable Long project_id,
