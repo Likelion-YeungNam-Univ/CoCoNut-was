@@ -8,13 +8,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VoteResultDto {
     private Long submissionId;
+    private Long projectId;
+    private String voteDeadline;
     private String title;
     private String imageUrl;
     private Long voteCount;
 
     @Builder
-    public VoteResultDto(Long submissionId, String title, String imageUrl, Long voteCount) {
+    public VoteResultDto(Long submissionId, Long projectId, String voteDeadline ,String title, String imageUrl, Long voteCount) {
         this.submissionId = submissionId;
+        this.projectId = projectId;
+        this.voteDeadline = voteDeadline;
         this.title = title;
         this.imageUrl = imageUrl;
         this.voteCount = voteCount;
