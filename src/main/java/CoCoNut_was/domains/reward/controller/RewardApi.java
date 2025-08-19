@@ -48,23 +48,42 @@ public interface RewardApi {
     );
 
 
-    @Operation(summary = "사용자의 작품이 선정된 공모전 리스트", description = "사용자가 선정된 공모전을 최신순으로 나열합니다.")
+    @Operation(summary = "사용자의 작품이 선정된 공모전 리스트", description = "사용자가 선정된 공모전을 최신순으로 나열")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "선정된 공모전 목록 조회 성공",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CoCoNut_was.domains.project.dto.ProjectListResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "해당 유저가 존재하지않을 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "유저가 존재하지 않는 경우", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    }))
+
     })
     ResponseEntity<List<ProjectListResponseDto>> getMyAwards(
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
     );
 
 
-    @Operation(summary = "사용자의 작품이 선정된 횟수", description = "사용자가 선정된 공모전을 최신순으로 나열합니다.")
+    @Operation(summary = "사용자의 작품이 선정된 횟수", description = "사용자가 선정된 횟수를 조회.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "선정된 횟수 조회 성공",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = "0")
                     })),
+            @ApiResponse(responseCode = "404", description = "해당 유저가 존재하지않을 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "유저가 존재하지 않는 경우", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """)
+                    }))
     })
     ResponseEntity<Long> getMyAwardsCount(
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
