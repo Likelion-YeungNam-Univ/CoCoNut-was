@@ -94,6 +94,8 @@ public class VoteService {
         for (Submission submission : submissions) {
             results.add(VoteResultDto.builder()
                             .submissionId(submission.getId())
+                            .projectId(submission.getProject().getId())
+                            .voteDeadline(project.getDeadline().plusDays(7).toString())
                             .title(submission.getTitle())
                             .imageUrl(submission.getImageUrl())
                             .voteCount(voteRepository.countBySubmissionId(submission.getId()))
