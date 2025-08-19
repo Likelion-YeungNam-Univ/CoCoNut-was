@@ -185,6 +185,10 @@ public class SubmissionService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
+        // 4. 프로젝트 제출기한 내 제출 시도인지
+        if(project.getDeadline().isBefore(LocalDate.now()))
+            throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
+
         // 4. 이미 해당 공모전에 지원한경우
         if(submissionRepository.existsByUserAndProject(user, project))
             throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);

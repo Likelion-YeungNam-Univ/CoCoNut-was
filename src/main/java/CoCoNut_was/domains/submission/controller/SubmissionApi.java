@@ -294,10 +294,16 @@ public interface SubmissionApi {
             @ApiResponse(responseCode = "200", description = "자격 있음"),
             @ApiResponse(responseCode = "400", description = "중복 지원 거부",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
+                            @ExampleObject(name = "중복 지원 거부", value = """
                                     {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "공모전 마감기한 지남", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "제출기한이 이미 지났습니다."
                                     }
                                     """)
                     })),
