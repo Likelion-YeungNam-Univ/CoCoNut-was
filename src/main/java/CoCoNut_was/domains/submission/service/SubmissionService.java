@@ -44,7 +44,7 @@ public class SubmissionService {
 
         // 2. 사용자 역할 검증
         if(user.getRole() != Role.ROLE_USER)
-            throw new CustomException(ErrorCode.WRITE_ROLE_NOT_MATCHED);
+            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
 
         // 3. 프로젝트 존재 확인
         Project project = projectRepository.findById(projectId).orElseThrow(
@@ -93,11 +93,15 @@ public class SubmissionService {
     }
 
     // 참여자가 제출한 작품 목록 조회
+    @Transactional(readOnly = true)
     public List<SubmissionListDto> getMySubmissions(UserDetails userDetails) {
         // 1. 사용자 확인
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
+
+        if(user.getRole() != Role.ROLE_USER)
+            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
 
         // 2. 작품 불러오기
         List<Submission> submissions = submissionRepository.findByUserId(user.getId());
@@ -165,7 +169,7 @@ public class SubmissionService {
 
         // 2. 사용자 역할 검증
         if(user.getRole() != Role.ROLE_USER)
-            throw new CustomException(ErrorCode.WRITE_ROLE_NOT_MATCHED);
+            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
 
 
         // 3. 프로젝트 존재 검사

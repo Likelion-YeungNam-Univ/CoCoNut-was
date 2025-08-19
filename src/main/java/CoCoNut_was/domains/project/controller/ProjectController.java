@@ -41,7 +41,7 @@ public class ProjectController implements ProjectApi {
 
         User currentUser = userService.findUserByEmail(userDetails.getUsername());
         if(currentUser.getRole() != Role.ROLE_BUSINESS)
-            throw new CustomException(ErrorCode.WRITE_ROLE_NOT_MATCHED);
+            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
         Long projectId = projectService.createProject(dto, currentUser, image);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectId);
