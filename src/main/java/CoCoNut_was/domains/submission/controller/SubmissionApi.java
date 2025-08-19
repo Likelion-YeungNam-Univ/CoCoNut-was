@@ -45,6 +45,12 @@ public interface SubmissionApi {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
+                                    """),
+                            @ExampleObject(name = "제출 기한 마감", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "제출기한이 이미 지났습니다."
+                                    }
                                     """)
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
