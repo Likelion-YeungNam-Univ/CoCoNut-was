@@ -132,7 +132,7 @@ public interface SubmissionApi {
 //                                    """)
 //                    }))
     })
-    ResponseEntity<?> getSubmissions(
+    ResponseEntity<?> getProjectSubmissions(
             @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id
     );

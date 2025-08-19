@@ -37,7 +37,7 @@ public class SubmissionController implements SubmissionApi {
             return ResponseEntity.ok().build();
         }
 
-    // 2. 한 공모전에 대한 모든 제출물 조회
+    // 2. 한 공모전에 대한 모든 작품들 조회
     @GetMapping("/projects/{project_id}/submissions")
     public ResponseEntity<?> getProjectSubmissions(@PathVariable Long project_id){
         return ResponseEntity.ok().body(submissionService.getProjectSubmissions(project_id));

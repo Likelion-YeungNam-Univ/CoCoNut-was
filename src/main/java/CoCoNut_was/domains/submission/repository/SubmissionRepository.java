@@ -14,4 +14,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     List<Submission> findByProjectId(Long project_id);
 
     boolean existsByUserAndProject(User user, Project project);
+
+    List<Submission> findByUserId(Long id);
 }
