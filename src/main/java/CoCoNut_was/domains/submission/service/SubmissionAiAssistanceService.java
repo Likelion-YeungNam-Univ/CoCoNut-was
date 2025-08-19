@@ -66,7 +66,7 @@ public class SubmissionAiAssistanceService {
         messages.add(new OpenAiReqDto.Message("user", userPrompt));
 
         // 3. 요청 객체 생성
-        OpenAiReqDto req = new OpenAiReqDto("gpt-5-mini", messages);
+        OpenAiReqDto req = new OpenAiReqDto("gpt-4.1-mini", messages);
 
         // 4. HTTP 헤더 구성
         HttpHeaders headers = new HttpHeaders();
