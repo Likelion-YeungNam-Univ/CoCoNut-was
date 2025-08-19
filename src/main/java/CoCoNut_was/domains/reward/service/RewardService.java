@@ -29,7 +29,7 @@ public class RewardService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void awardWinner(Long projectId, Long submissionId) { // 소상공인이 보상을 지급하고, 공모전 마감 처리
+    public RewardResponseDto awardWinner(Long projectId, Long submissionId) { // 소상공인이 보상을 지급하고, 공모전 마감 처리
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
@@ -46,7 +46,9 @@ public class RewardService {
                 .rewardAmount(project.getRewardAmount())
                 .build();
 
-        rewardRepository.save(reward);
+        Reward savedReward = rewardRepository.save(reward);
+
+        return RewardResponseDto.fromEntity(savedReward);
     }
 
     @Transactional(readOnly = true)
