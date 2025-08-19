@@ -242,6 +242,15 @@ public interface SubmissionApi {
     @Operation(summary = "작품 수정", description = "작품 수정 시도")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(responseCode = "400", description = "공모전 마감일 이후 수정시도에 대한 오류",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 400,
+                                        "message": "제출기한이 이미 지났습니다."
+                                    }
+                                    """)
+                    })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
