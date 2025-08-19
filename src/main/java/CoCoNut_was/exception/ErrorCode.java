@@ -29,7 +29,7 @@ public enum ErrorCode {
 
 
     // 투표 관련
-    INVALID_DUPLICATE_VOTE(409, "한 공모전에 대한 작품에 이미 투표하셨습니다."),
+    INVALID_DUPLICATE_VOTE(409, "해당 공모전에 대한 작품에 이미 투표하셨습니다."),
     INVALID_OWN_PROJECT_VOTE(400, "공모전을 올린 소상공인은 해당 작품들에 대해 투표할 수 없습니다."),
     INVALID_SELF_VOTE(400, "참여자는 자신이 제출한 작품에 투표할 수 없습니다."),
 
