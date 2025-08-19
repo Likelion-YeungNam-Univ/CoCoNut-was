@@ -74,7 +74,7 @@ public class SubmissionService {
 
     // 공모전 작품 목록 조회
     @Transactional(readOnly = true)
-    public List<SubmissionListDto> getSubmissions(Long projectId) {
+    public List<SubmissionListDto> getProjectSubmissions(Long projectId) {
         // 1. 프로젝트 존재 확인
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
