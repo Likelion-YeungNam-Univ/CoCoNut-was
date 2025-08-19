@@ -40,12 +40,6 @@ public interface SubmissionApi {
                                         "message": "작품 정보 JSON과 Image 파일 모두 제공되지 않았습니다. 누락된 부분이 있는지 확인해주세요."
                                     }
                                     """),
-                            @ExampleObject(name = "중복 지원 방지", value = """
-                                    {
-                                        "status": 400,
-                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
-                                    }
-                                    """),
                             @ExampleObject(name = "제출 기한 마감", value = """
                                     {
                                         "status": 400,
@@ -77,6 +71,15 @@ public interface SubmissionApi {
                                     {
                                         "status": 404,
                                         "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "409", description = "중복 지원 방지",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 409,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
                                     """)
                     }))
@@ -292,15 +295,9 @@ public interface SubmissionApi {
     @Operation(summary = "작품 제출 자격검증", description = "사용자가 이미 공모전에 작품을 제출했거나, 공모전 주인이 자신의 공모전에 참여해버리는 오류를 막기 위한 API입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "자격 있음"),
-            @ApiResponse(responseCode = "400", description = "중복 지원 거부",
+            @ApiResponse(responseCode = "400", description = "공모전 마감기한 지남",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "중복 지원 거부", value = """
-                                    {
-                                        "status": 400,
-                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
-                                    }
-                                    """),
-                            @ExampleObject(name = "공모전 마감기한 지남", value = """
+                            @ExampleObject(value = """
                                     {
                                         "status": 400,
                                         "message": "제출기한이 이미 지났습니다."
@@ -331,6 +328,15 @@ public interface SubmissionApi {
                                     {
                                         "status": 404,
                                         "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "409", description = "중복 지원 방지",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 409,
+                                        "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
                                     """)
                     }))
