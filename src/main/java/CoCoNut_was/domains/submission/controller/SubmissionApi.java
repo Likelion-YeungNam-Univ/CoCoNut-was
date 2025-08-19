@@ -45,12 +45,6 @@ public interface SubmissionApi {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
-                                    """),
-                            @ExampleObject(name = "소상공인 계정이 공모전에 참여하려는 경우", value = """
-                                    {
-                                        "status": 400,
-                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
-                                    }
                                     """)
                     })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
@@ -59,6 +53,15 @@ public interface SubmissionApi {
                                     {
                                         "status" : 401,
                                         "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "403", description = "소상공인 계정이 공모전에 참여하려는 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 403,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """),
                     })),
