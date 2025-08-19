@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +46,15 @@ public interface ProjectApi {
                                     {
                                         "status" : 401,
                                         "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "403", description = "사용자 권한 없음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 403,
+                                        "message" : "해당 유저는 해당 요청에 대한 권한이 없습니다."
                                     }
                                     """),
                     }))
@@ -114,6 +122,7 @@ public interface ProjectApi {
     })
     ResponseEntity<?> deleteProject(
             @Parameter(description = "삭제할 공모전의 ID", required = true, example = "1")
-            @PathVariable Long project_id
+            @PathVariable Long project_id,
+            @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
     );
 }

@@ -11,7 +11,9 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.project.entity.ProjectColor;
 import CoCoNut_was.domains.project.entity.ProjectStyle;
 import CoCoNut_was.domains.project.entity.ProjectTarget;
+import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
+import CoCoNut_was.domains.user.repository.UserRepository;
 import CoCoNut_was.exception.CustomException;
 import CoCoNut_was.exception.ErrorCode;
 import CoCoNut_was.gcs.ImageUploadService;
@@ -32,9 +34,16 @@ public class ProjectService {
     private final ProjectStyleRepository projectStyleRepository;
     private final ProjectTargetRepository projectTargetRepository;
     private final ImageUploadService imageUploadService;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long createProject(ProjectRequestDto projectRequestDto, User user, MultipartFile image) { // 공모전 생성
+        // 사용자 역할 검증
+        if (user.getRole() != Role.ROLE_BUSINESS) {
+            throw new CustomException(ErrorCode.ROLE_NOT_MATCHED);
+        }
+
+        // 이미지 업로드
         String imageUrl = null;
         try {
             if (image != null && !image.isEmpty())
@@ -43,11 +52,11 @@ public class ProjectService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
         }
 
-        // 2. 업로드된 이미지 URL을 포함하여 Project 엔티티를 생성합니다.
+        // 업로드된 이미지 URL을 포함하여 Project 엔티티를 생성
         Project project = projectRequestDto.toEntity(user, imageUrl);
         Project saveProject = projectRepository.save(project);
 
-        // 3. 색상, 스타일, 타겟 등 세부 정보를 저장합니다.
+        // 색상, 스타일, 타겟 등 세부 정보를 저장
         saveProjectDetails(projectRequestDto.getColors(), projectRequestDto.getStyles(),
                 projectRequestDto.getTargets(), saveProject);
 
@@ -67,10 +76,16 @@ public class ProjectService {
         return ProjectDetailResponseDto.fromEntity(project);
     }
 
-    public void deleteProjectById(Long projectId) { // 공모전 삭제
+    public void deleteProjectById(Long projectId, User currentUser) { // 공모전 삭제
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
+
+        // 공모전 작성자와 현재 로그인한 유저가 같은지 확인
+        if (!project.getUser().getId().equals(currentUser.getId())) {
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
         projectRepository.delete(project);
     }
 
