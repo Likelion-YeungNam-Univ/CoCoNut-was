@@ -51,11 +51,15 @@ public class SubmissionService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        // 4. 프로젝트 중복 참여 검사(접속 전 자격 검증을 했다면 일어나지 않을 예외, 방지용으로 추가)
+        // 4. 프로젝트 제출기한 내 제출 시도인지
+        if(project.getDeadline().isBefore(LocalDate.now()))
+            throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
+
+        // 5. 프로젝트 중복 참여 검사(접속 전 자격 검증을 했다면 일어나지 않을 예외, 방지용으로 추가)
         if(submissionRepository.existsByUserAndProject(user, project))
             throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
 
-        // 5. 이미지 업로드
+        // 6. 이미지 업로드
         String imageUrl = null;
         try{
             if(image != null && !image.isEmpty())
@@ -64,10 +68,10 @@ public class SubmissionService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
         }
 
-        // 6. Submission 엔티티 생성
+        // 7. Submission 엔티티 생성
         Submission submission = dto.toEntity(project, user, imageUrl);
 
-        // 7. 저장
+        // 8. 저장
         submissionRepository.save(submission);
 
     }
@@ -150,6 +154,10 @@ public class SubmissionService {
         if(!submission.getUser().getId().equals(user.getId()))
             throw new CustomException(ErrorCode.SUBMISSION_USER_NOT_MATCHED);
 
+        // 4. 프로젝트 제출기한 내 제출 시도인지
+        if(submission.getProject().getDeadline().isBefore(LocalDate.now()))
+            throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
+
 
         if(dto.getTitle() != null && !dto.getTitle().isBlank())
             submission.setTitle(dto.getTitle());
@@ -176,6 +184,10 @@ public class SubmissionService {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
+
+        // 4. 프로젝트 제출기한 내 제출 시도인지
+        if(project.getDeadline().isBefore(LocalDate.now()))
+            throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
 
         // 4. 이미 해당 공모전에 지원한경우
         if(submissionRepository.existsByUserAndProject(user, project))

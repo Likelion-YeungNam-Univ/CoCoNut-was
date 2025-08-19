@@ -46,10 +46,10 @@ public interface SubmissionApi {
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
                                     }
                                     """),
-                            @ExampleObject(name = "소상공인 계정이 공모전에 참여하려는 경우", value = """
+                            @ExampleObject(name = "제출 기한 마감", value = """
                                     {
                                         "status": 400,
-                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
+                                        "message": "제출기한이 이미 지났습니다."
                                     }
                                     """)
                     })),
@@ -59,6 +59,15 @@ public interface SubmissionApi {
                                     {
                                         "status" : 401,
                                         "message" : "토큰이 없거나 만료되었습니다."
+                                    }
+                                    """),
+                    })),
+            @ApiResponse(responseCode = "403", description = "소상공인 계정이 공모전에 참여하려는 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 403,
+                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """),
                     })),
@@ -233,6 +242,15 @@ public interface SubmissionApi {
     @Operation(summary = "작품 수정", description = "작품 수정 시도")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(responseCode = "400", description = "공모전 마감일 이후 수정시도에 대한 오류",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 400,
+                                        "message": "제출기한이 이미 지났습니다."
+                                    }
+                                    """)
+                    })),
             @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
@@ -276,10 +294,16 @@ public interface SubmissionApi {
             @ApiResponse(responseCode = "200", description = "자격 있음"),
             @ApiResponse(responseCode = "400", description = "중복 지원 거부",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
+                            @ExampleObject(name = "중복 지원 거부", value = """
                                     {
                                         "status": 400,
                                         "message": "이미 지원하신 공모전에 다시 지원할 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "공모전 마감기한 지남", value = """
+                                    {
+                                        "status": 400,
+                                        "message": "제출기한이 이미 지났습니다."
                                     }
                                     """)
                     })),
