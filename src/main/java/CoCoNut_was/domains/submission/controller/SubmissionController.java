@@ -62,10 +62,11 @@ public class SubmissionController implements SubmissionApi {
     @PutMapping("/submissions/{submission_id}")
     public ResponseEntity<?> updateSubmission(
             @PathVariable Long submission_id,
-            @RequestBody SubmitDto dto,
+            @RequestPart(value = "info") SubmitDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        submissionService.updateSubmission(submission_id, dto, userDetails);
+        submissionService.updateSubmission(submission_id, dto, image, userDetails);
         return ResponseEntity.ok().build();
     }
 

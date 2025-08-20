@@ -139,7 +139,7 @@ public class SubmissionService {
 
     // 공모전 작품 수정
     @Transactional
-    public void updateSubmission(Long submissionId, SubmitDto dto, UserDetails userDetails) {
+    public void updateSubmission(Long submissionId, SubmitDto dto, MultipartFile image, UserDetails userDetails) {
         // 1. 사용자 확인
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
@@ -158,7 +158,18 @@ public class SubmissionService {
         if(submission.getProject().getDeadline().isBefore(LocalDate.now()))
             throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
 
+        // 5. 이미지 업로드 및 필드 저장
+        String imageUrl = null;
+        try{
+            if(image != null && !image.isEmpty()){
+                imageUrl = imageUploadService.uploadImage(image);
+                submission.setImageUrl(imageUrl);
+            }
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
+        }
 
+        // 6. 나머지 정보 저장
         if(dto.getTitle() != null && !dto.getTitle().isBlank())
             submission.setTitle(dto.getTitle());
         if(dto.getDescription() != null && !dto.getDescription().isBlank())
@@ -189,7 +200,7 @@ public class SubmissionService {
         if(project.getDeadline().isBefore(LocalDate.now()))
             throw new CustomException(ErrorCode.DEADLINE_EXPIRED);
 
-        // 4. 이미 해당 공모전에 지원한경우
+        // 5. 이미 해당 공모전에 지원한경우
         if(submissionRepository.existsByUserAndProject(user, project))
             throw new CustomException(ErrorCode.NOT_POSSIBLE_MORE_SUBMISSION);
 

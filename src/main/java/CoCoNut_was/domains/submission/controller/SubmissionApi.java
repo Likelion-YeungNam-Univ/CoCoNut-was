@@ -90,9 +90,9 @@ public interface SubmissionApi {
             @Parameter(description = "작품 정보 (JSON 형식)",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = SubmitDto.class)))
-            @Valid @RequestPart(value = "info", required = true) SubmitDto dto,
+            @Valid @RequestPart(value = "info") SubmitDto dto,
             @Parameter(description = "작품 대표 사진")
-            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     );
 
@@ -286,7 +286,9 @@ public interface SubmissionApi {
             @Parameter(description = "작품 고유 ID")
             @PathVariable Long submission_id,
             @Parameter(description = "작품 수정 정보")
-            @RequestBody SubmitDto dto,
+            @RequestPart(value = "info") SubmitDto dto,
+            @Parameter(description = "수정할 작품 대표 사진")
+            @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     );
 
