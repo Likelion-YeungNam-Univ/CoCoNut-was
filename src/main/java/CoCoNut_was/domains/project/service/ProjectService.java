@@ -83,7 +83,7 @@ public class ProjectService {
 
         // 공모전 작성자와 현재 로그인한 유저가 같은지 확인
         if (!project.getUser().getId().equals(currentUser.getId())) {
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+            throw new CustomException(ErrorCode.PROJECT_USER_NOT_MATCHED);
         }
 
         projectRepository.delete(project);

@@ -14,7 +14,7 @@ public enum ErrorCode {
     INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류입니다."),
     ROLE_NOT_MATCHED(403, "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."),
-    FORBIDDEN_USER(403, "해당 유저는 해당 요청에 대한 권한이 없습니다."),
+    PROJECT_USER_NOT_MATCHED(403, "공모전의 유저정보와 로그인 정보가 일치하지 않습니다."),
 
     // 공모전 관련
     PROJECT_NOT_FOUND(404, "해당 공모전을 찾을 수 없습니다."),
