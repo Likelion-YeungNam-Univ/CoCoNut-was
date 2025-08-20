@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,13 +58,14 @@ public class SubmissionController implements SubmissionApi {
     }
 
     // 5. 작품 수정
-    @PutMapping("/submissions/{submission_id}")
+    @PutMapping(value = "/submissions/{submission_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateSubmission(
             @PathVariable Long submission_id,
-            @RequestBody SubmitDto dto,
+            @RequestPart(value = "info") SubmitDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        submissionService.updateSubmission(submission_id, dto, userDetails);
+        submissionService.updateSubmission(submission_id, dto, image, userDetails);
         return ResponseEntity.ok().build();
     }
 
