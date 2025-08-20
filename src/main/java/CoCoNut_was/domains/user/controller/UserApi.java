@@ -121,7 +121,7 @@ public interface UserApi {
                                     {
                                         "accessToken" : "<accessToken>",
                                         "userId" : "<userId>",
-                                        "email" : "<email>"
+                                        "email" : "<email>",
                                         "role": "ROLE_USER | ROLE_BUSINESS"
                                     }
                                     """)
