@@ -65,6 +65,15 @@ public interface VoteApi {
                                     }
                                     """)
                     })),
+            @ApiResponse(responseCode = "409", description = "중복 투표 방지",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status" : 409,
+                                        "message" : "해당 공모전에 대한 작품에 이미 투표하셨습니다."
+                                    }
+                                    """),
+                    }))
     })
     ResponseEntity<?> vote(
             @PathVariable Long submission_id,
