@@ -285,7 +285,9 @@ public interface SubmissionApi {
     ResponseEntity<?> updateSubmission(
             @Parameter(description = "작품 고유 ID")
             @PathVariable Long submission_id,
-            @Parameter(description = "작품 수정 정보")
+            @Parameter(description = "작품 수정 정보 (JSON 형식)",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = SubmitDto.class)))
             @RequestPart(value = "info") SubmitDto dto,
             @Parameter(description = "수정할 작품 대표 사진")
             @RequestPart(value = "image", required = false) MultipartFile image,
