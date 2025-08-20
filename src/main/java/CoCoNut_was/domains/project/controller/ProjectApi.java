@@ -26,17 +26,11 @@ public interface ProjectApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = "1")
                     })),
-            @ApiResponse(responseCode = "400", description = "입력 누락 및 형식 비일치",
+            @ApiResponse(responseCode = "400", description = "필드 누락 및 형식 비일치",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(name = "필드 누락", value = """
+                            @ExampleObject(value = """
                                     {
                                         "title" : "제목은 필수 입력입니다."
-                                    }
-                                    """),
-                            @ExampleObject(name = "참가자 계정이 공모전 글을 작성하려고 하는 경우", value = """
-                                    {
-                                        "status": 400,
-                                        "message": "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
                                     }
                                     """)
                     })),
@@ -51,12 +45,18 @@ public interface ProjectApi {
                     })),
             @ApiResponse(responseCode = "403", description = "사용자 권한 없음",
                     content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
+                            @ExampleObject(name = "공모전 작성자와 로그인 정보가 다름", value = """
                                     {
                                         "status" : 403,
-                                        "message" : "해당 유저는 해당 요청에 대한 권한이 없습니다."
+                                        "message" : "공모전의 유저정보와 로그인 정보가 일치하지 않습니다."
                                     }
                                     """),
+                            @ExampleObject(name = "참가자 계정이 공모전 글을 작성하려고 하는 경우", value = """
+                                    {
+                                        "status" : 403,
+                                        "message" : "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."
+                                    }
+                                    """)
                     }))
     })
     ResponseEntity<?> createProject(
