@@ -35,7 +35,7 @@ public class Project {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 사용자와 N:1
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String title; // 공모전 제목
 
     @Column(nullable = false)
