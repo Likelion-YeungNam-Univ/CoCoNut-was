@@ -1,9 +1,9 @@
 package CoCoNut_was.domains.project.service;
 
-import CoCoNut_was.domains.project.Repository.ProjectColorRepository;
-import CoCoNut_was.domains.project.Repository.ProjectRepository;
-import CoCoNut_was.domains.project.Repository.ProjectStyleRepository;
-import CoCoNut_was.domains.project.Repository.ProjectTargetRepository;
+import CoCoNut_was.domains.project.repository.ProjectColorRepository;
+import CoCoNut_was.domains.project.repository.ProjectRepository;
+import CoCoNut_was.domains.project.repository.ProjectStyleRepository;
+import CoCoNut_was.domains.project.repository.ProjectTargetRepository;
 import CoCoNut_was.domains.project.dto.ProjectDetailResponseDto;
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.dto.ProjectRequestDto;
