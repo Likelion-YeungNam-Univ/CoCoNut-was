@@ -68,27 +68,7 @@ public class ProjectService {
     }
 
     public List<ProjectListResponseDto> findAllProjects() { // 공모전 목록 조회
-        List<Project> projects = projectRepository.findAllWithUser();
-
-        return projects.stream()
-                .map(project -> {
-                    long count = submissionRepository.countByProjectId(project.getId());
-                    return ProjectListResponseDto.builder()
-                            .projectId(project.getId())
-                            .writerNickname(project.getUser().getNickname())
-                            .title(project.getTitle())
-                            .merchantName(project.getMerchantName())
-                            .category(project.getCategory())
-                            .businessType(project.getBusinessType())
-                            .createdAt(project.getCreatedAt())
-                            .deadline(project.getDeadline())
-                            .rewardAmount(project.getRewardAmount())
-                            .summary(project.getSummary())
-                            .status(project.getStatus())
-                            .submissionCount((int) count)
-                            .build();
-                })
-                .collect(Collectors.toList());
+        return projectRepository.findAllWithSubmissionCount();
     }
 
     public ProjectDetailResponseDto findProjectById(Long projectId) { // 공모전 상세 조회
