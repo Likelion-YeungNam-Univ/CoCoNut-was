@@ -27,6 +27,8 @@ public enum ErrorCode {
     IMAGE_UPLOAD_FAILED(500, "제출한 이미지 업로드에 예기치 않은 문제가 발생하였습니다."),
     DEADLINE_EXPIRED(400, "제출기한이 이미 지났습니다."),
 
+    // 보상 관련
+    WINNER_ALREADY_EXISTS(409, "이미 우승자가 선정된 공모전입니다."),
 
     // 투표 관련
     INVALID_DUPLICATE_VOTE(409, "해당 공모전에 대한 작품에 이미 투표하셨습니다."),

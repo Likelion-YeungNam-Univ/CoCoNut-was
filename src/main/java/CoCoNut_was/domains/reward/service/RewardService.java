@@ -33,6 +33,9 @@ public class RewardService {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
+        if (rewardRepository.existsByProject(project)) {
+            throw new CustomException(ErrorCode.WINNER_ALREADY_EXISTS);
+        }
         Submission winningSubmission = submissionRepository.findById(submissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
         );
