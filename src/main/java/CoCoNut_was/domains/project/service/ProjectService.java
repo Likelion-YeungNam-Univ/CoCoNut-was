@@ -11,6 +11,7 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.project.entity.ProjectColor;
 import CoCoNut_was.domains.project.entity.ProjectStyle;
 import CoCoNut_was.domains.project.entity.ProjectTarget;
+import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
@@ -35,6 +36,7 @@ public class ProjectService {
     private final ProjectTargetRepository projectTargetRepository;
     private final ImageUploadService imageUploadService;
     private final UserRepository userRepository;
+    private final SubmissionRepository submissionRepository;
 
     @Transactional
     public Long createProject(ProjectRequestDto projectRequestDto, User user, MultipartFile image) { // 공모전 생성
@@ -64,8 +66,26 @@ public class ProjectService {
     }
 
     public List<ProjectListResponseDto> findAllProjects() { // 공모전 목록 조회
-        return projectRepository.findAllWithUser().stream()
-                .map(ProjectListResponseDto::fromEntity)
+        List<Project> projects = projectRepository.findAllWithUser();
+
+        return projects.stream()
+                .map(project -> {
+                    long count = submissionRepository.countByProjectId(project.getId());
+                    return ProjectListResponseDto.builder()
+                            .projectId(project.getId())
+                            .writerNickname(project.getUser().getNickname())
+                            .title(project.getTitle())
+                            .merchantName(project.getMerchantName())
+                            .category(project.getCategory())
+                            .businessType(project.getBusinessType())
+                            .createdAt(project.getCreatedAt())
+                            .deadline(project.getDeadline())
+                            .rewardAmount(project.getRewardAmount())
+                            .summary(project.getSummary())
+                            .status(project.getStatus())
+                            .submissionCount((int) count)
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
