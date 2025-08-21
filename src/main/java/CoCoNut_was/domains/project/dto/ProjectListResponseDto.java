@@ -24,6 +24,7 @@ public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
     private final int rewardAmount;
     private final String summary;
     private final Status status;
+    private final int submissionCount;
 
 
     public static ProjectListResponseDto fromEntity(Project project) {
@@ -40,6 +41,7 @@ public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
                 .rewardAmount(project.getRewardAmount())
                 .summary(project.getSummary())
                 .status(project.getStatus())
+                .submissionCount(project.getSubmissions().size())
                 .build();
     }
 }
