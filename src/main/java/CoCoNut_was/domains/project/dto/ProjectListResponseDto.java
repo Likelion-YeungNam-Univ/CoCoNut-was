@@ -26,6 +26,21 @@ public class ProjectListResponseDto { // 공모전 리스트 조회 DTO (응답)
     private final Status status;
     private final int submissionCount;
 
+    public ProjectListResponseDto(Long userId, Long projectId, String writerNickname, String title, String merchantName, Category category, BusinessType businessType, LocalDate createdAt, LocalDate deadline, int rewardAmount, String summary, Status status, long submissionCount) {
+        this.userId = userId;
+        this.projectId = projectId;
+        this.writerNickname = writerNickname;
+        this.title = title;
+        this.merchantName = merchantName;
+        this.category = category;
+        this.businessType = businessType;
+        this.createdAt = createdAt;
+        this.deadline = deadline;
+        this.rewardAmount = rewardAmount;
+        this.summary = summary;
+        this.status = status;
+        this.submissionCount = (int) submissionCount;
+    }
 
     public static ProjectListResponseDto fromEntity(Project project) {
         return ProjectListResponseDto.builder()
