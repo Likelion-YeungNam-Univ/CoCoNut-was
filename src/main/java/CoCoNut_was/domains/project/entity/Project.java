@@ -64,6 +64,9 @@ public class Project {
     @Column(nullable = false)
     private LocalDate deadline; // 공모전 마감일자
 
+    @Column
+    private LocalDate votingStartDate; // 투표 시작일자
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status; // 공모전 상태
@@ -87,6 +90,11 @@ public class Project {
     public void onCreate() { // 생성일자 자동 생성
         this.createdAt = LocalDate.now();
         this.status = Status.IN_PROGRESS; // 진행중 상태로 시작
+    }
+
+    public void startVoting() { // 투표 시작 날짜를 기록하고 투표중으로 변경하는 메서드
+        this.status = Status.VOTING;
+        this.votingStartDate = LocalDate.now();
     }
 
     public void close() { // 공모전을 마감 상태로 변경하는 메서드
