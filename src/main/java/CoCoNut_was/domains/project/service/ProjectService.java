@@ -11,6 +11,7 @@ import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.project.entity.ProjectColor;
 import CoCoNut_was.domains.project.entity.ProjectStyle;
 import CoCoNut_was.domains.project.entity.ProjectTarget;
+import CoCoNut_was.domains.project.entity.Status;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,6 +132,25 @@ public class ProjectService {
                     .map(target -> new ProjectTarget(target, project))
                     .collect(Collectors.toList());
             projectTargetRepository.saveAll(projectTargets);
+        }
+    }
+
+    @Transactional
+    public void startVotingForExpiredProjects() {
+        List<Project> projects = projectRepository.findAllByDeadlineBeforeAndStatus(LocalDate.now(), Status.IN_PROGRESS);
+        for (Project project : projects) {
+            project.startVoting();
+        }
+    }
+
+    @Transactional
+    public void closeExpiredVotingProjects() {
+        // 오늘로부터 7일 이전 날짜를 계산
+        LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
+        // 투표중 상태가 된 지 7일이 지난 공모전들을 조회
+        List<Project> projects = projectRepository.findAllByStatusAndVotingStartDateBefore(Status.VOTING, sevenDaysAgo);
+        for (Project project : projects) {
+            project.close();
         }
     }
 }
