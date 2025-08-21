@@ -1,6 +1,6 @@
 package CoCoNut_was.domains.vote.service;
 
-import CoCoNut_was.domains.project.Repository.ProjectRepository;
+import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

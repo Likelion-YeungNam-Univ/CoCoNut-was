@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.Repository;
+package CoCoNut_was.domains.project.repository;
 
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.entity.Project;

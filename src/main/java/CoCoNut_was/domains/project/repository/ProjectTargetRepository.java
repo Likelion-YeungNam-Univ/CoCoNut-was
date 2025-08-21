@@ -1,4 +1,4 @@
-package CoCoNut_was.domains.project.Repository;
+package CoCoNut_was.domains.project.repository;
 
 import CoCoNut_was.domains.project.entity.ProjectTarget;
 import org.springframework.data.jpa.repository.JpaRepository;

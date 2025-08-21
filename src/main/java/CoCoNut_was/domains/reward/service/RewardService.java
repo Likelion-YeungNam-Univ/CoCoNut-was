@@ -1,6 +1,6 @@
 package CoCoNut_was.domains.reward.service;
 
-import CoCoNut_was.domains.project.Repository.ProjectRepository;
+import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;

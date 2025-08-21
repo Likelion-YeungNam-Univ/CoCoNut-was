@@ -1,6 +1,6 @@
 package CoCoNut_was.domains.submission.service;
 
-import CoCoNut_was.domains.project.Repository.ProjectRepository;
+import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
