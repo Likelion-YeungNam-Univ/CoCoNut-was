@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -86,22 +87,18 @@ public class VoteService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        List<Submission> submissions = submissionRepository.findByProjectId(project.getId());
-        List<VoteResultDto> results = new ArrayList<>();
+        List<Submission> submissions = submissionRepository.findByProjectIdWithUser(project.getId());
 
-        for (Submission submission : submissions) {
-            results.add(VoteResultDto.builder()
-                            .submissionId(submission.getId())
-                            .projectId(submission.getProject().getId())
-                            .voteStartTime(project.getDeadline().plusDays(1).toString())
-                            .voteDeadline(project.getDeadline().plusDays(7).toString())
-                            .title(submission.getTitle())
-                            .imageUrl(submission.getImageUrl())
-                            .voteCount(voteRepository.countBySubmissionId(submission.getId()))
-                            .build()
-            );
-        }
-
-        return results;
+        return submissions.stream()
+                .map(submission -> VoteResultDto.builder()
+                        .submissionId(submission.getId())
+                        .projectId(submission.getProject().getId())
+                        .voteStartTime(project.getDeadline().plusDays(1).toString())
+                        .voteDeadline(project.getDeadline().plusDays(7).toString())
+                        .title(submission.getTitle())
+                        .imageUrl(submission.getImageUrl())
+                        .voteCount((long) submission.getVotes().size())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
