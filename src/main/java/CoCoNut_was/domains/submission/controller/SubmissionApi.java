@@ -112,6 +112,7 @@ public interface SubmissionApi {
                                     "userId": 1,
                                     "title": "초콜릿 카페 메뉴판",
                                     "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg",
+                                    "writerNickname" : "레전드 사건발생",
                                     "winner" : true
                                 },
                                 {
@@ -120,6 +121,7 @@ public interface SubmissionApi {
                                     "userId": 2,
                                     "title": "여름 시즌 특별 음료 포스터",
                                     "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png",
+                                    "writerNickname" : "아기사자 지망생",
                                     "winner" : false
                                 }
                             ]
