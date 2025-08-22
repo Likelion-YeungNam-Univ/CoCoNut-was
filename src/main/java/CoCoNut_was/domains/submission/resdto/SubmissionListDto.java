@@ -21,13 +21,16 @@ public class SubmissionListDto {
 
     private boolean isWinner;
 
-    @Builder public SubmissionListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, boolean isWinner) {
+    private String writerNickname;
+
+    @Builder public SubmissionListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, boolean isWinner, String writerNickname) {
         this.submissionId = submissionId;
         this.projectId = projectId;
         this.userId = userId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.isWinner = isWinner;
+        this.writerNickname = writerNickname;
     }
 
     public static SubmissionListDto fromEntity(Submission submission, boolean isWinner) {
@@ -38,6 +41,7 @@ public class SubmissionListDto {
                 .title(submission.getTitle())
                 .imageUrl(submission.getImageUrl())
                 .isWinner(isWinner)
+                .writerNickname(submission.getUser().getNickname())
                 .build();
     }
 }
