@@ -2,11 +2,13 @@ package CoCoNut_was.domains.submission.service;
 
 import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.reward.repository.RewardRepository;
 import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.submission.repository.SubmissionRepository;
 import CoCoNut_was.domains.submission.reqdto.SubmitDto;
 import CoCoNut_was.domains.submission.resdto.SubmissionDetailDto;
 import CoCoNut_was.domains.submission.resdto.SubmissionListDto;
+import CoCoNut_was.domains.submission.resdto.SubmissionOwnListDto;
 import CoCoNut_was.domains.user.entity.Role;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.user.repository.UserRepository;
@@ -33,6 +35,7 @@ public class SubmissionService {
     private final ProjectRepository projectRepository;
     private final ImageUploadService imageUploadService;
     private final SubmissionRepository submissionRepository;
+    private final RewardRepository rewardRepository;
 
     // 공모전 작품 제출
     @Transactional
@@ -90,7 +93,10 @@ public class SubmissionService {
 
         // 3. dto로 모두 변환
         for(Submission submission : submissions) {
-            dtos.add(SubmissionListDto.fromEntity(submission));
+            dtos.add(SubmissionListDto.fromEntity(
+                    submission,
+                    rewardRepository.existsByUserAndProject(submission.getUser(), project)
+            ));
         }
 
         return dtos;
@@ -98,7 +104,7 @@ public class SubmissionService {
 
     // 참여자가 제출한 작품 목록 조회
     @Transactional(readOnly = true)
-    public List<SubmissionListDto> getMySubmissions(UserDetails userDetails) {
+    public List<SubmissionOwnListDto> getMySubmissions(UserDetails userDetails) {
         // 1. 사용자 확인
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
@@ -109,11 +115,14 @@ public class SubmissionService {
 
         // 2. 작품 불러오기
         List<Submission> submissions = submissionRepository.findByUserId(user.getId());
-        List<SubmissionListDto> dtos = new ArrayList<>();
+        List<SubmissionOwnListDto> dtos = new ArrayList<>();
 
         // 3. dto로 모두 변환
         for(Submission submission : submissions) {
-            dtos.add(SubmissionListDto.fromEntity(submission));
+            dtos.add(SubmissionOwnListDto.fromEntity(
+                    submission,
+                    rewardRepository.existsByUserAndProject(user, submission.getProject())
+            ));
         }
 
         return dtos;

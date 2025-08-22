@@ -1,5 +1,6 @@
 package CoCoNut_was.domains.submission.resdto;
 
+
 import CoCoNut_was.domains.submission.entity.Submission;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SubmissionListDto {
+public class SubmissionOwnListDto {
 
     private Long submissionId;
 
@@ -19,29 +20,29 @@ public class SubmissionListDto {
 
     private String imageUrl;
 
+    private Integer rewardAmount;
+
     private boolean isWinner;
 
-    private String writerNickname;
-
-    @Builder public SubmissionListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, boolean isWinner, String writerNickname) {
+    @Builder public SubmissionOwnListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, Integer rewardAmount, boolean isWinner) {
         this.submissionId = submissionId;
         this.projectId = projectId;
         this.userId = userId;
         this.title = title;
         this.imageUrl = imageUrl;
+        this.rewardAmount = rewardAmount;
         this.isWinner = isWinner;
-        this.writerNickname = writerNickname;
     }
 
-    public static SubmissionListDto fromEntity(Submission submission, boolean isWinner) {
-        return SubmissionListDto.builder()
+    public static SubmissionOwnListDto fromEntity(Submission submission, boolean isWinner) {
+        return SubmissionOwnListDto.builder()
                 .submissionId(submission.getId())
                 .projectId(submission.getProject().getId())
                 .userId(submission.getUser().getId())
                 .title(submission.getTitle())
                 .imageUrl(submission.getImageUrl())
+                .rewardAmount(submission.getProject().getRewardAmount())
                 .isWinner(isWinner)
-                .writerNickname(submission.getUser().getNickname())
                 .build();
     }
 }

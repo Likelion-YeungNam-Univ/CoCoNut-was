@@ -111,14 +111,18 @@ public interface SubmissionApi {
                                     "projectId": 12,
                                     "userId": 1,
                                     "title": "초콜릿 카페 메뉴판",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg",
+                                    "writerNickname" : "레전드 사건발생",
+                                    "winner" : true
                                 },
                                 {
                                     "submissionId": 124,
                                     "projectId": 12,
                                     "userId": 2,
                                     "title": "여름 시즌 특별 음료 포스터",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png",
+                                    "writerNickname" : "아기사자 지망생",
+                                    "winner" : false
                                 }
                             ]
                             """
@@ -163,14 +167,18 @@ public interface SubmissionApi {
                                     "projectId": 12,
                                     "userId": 1,
                                     "title": "초콜릿 카페 메뉴판",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/chocolate_menu.jpeg",
+                                    "rewardAmount" : 500000,
+                                    "winner" : true
                                 },
                                 {
                                     "submissionId": 124,
                                     "projectId": 12,
                                     "userId": 2,
                                     "title": "여름 시즌 특별 음료 포스터",
-                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png"
+                                    "imageUrl": "https://storage.googleapis.com/example_bucket/summer_ade_poster.png",
+                                    "rewardAmount" : 400000,
+                                    "winner" : false
                                 }
                             ]
                             """
