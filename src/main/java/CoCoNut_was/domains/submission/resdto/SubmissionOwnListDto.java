@@ -20,17 +20,17 @@ public class SubmissionOwnListDto {
 
     private String imageUrl;
 
-    private Integer reward;
+    private Integer rewardAmount;
 
     private boolean isWinner;
 
-    @Builder public SubmissionOwnListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, Integer reward, boolean isWinner) {
+    @Builder public SubmissionOwnListDto(Long submissionId, Long projectId, Long userId, String title, String imageUrl, Integer rewardAmount, boolean isWinner) {
         this.submissionId = submissionId;
         this.projectId = projectId;
         this.userId = userId;
         this.title = title;
         this.imageUrl = imageUrl;
-        this.reward = reward;
+        this.rewardAmount = rewardAmount;
         this.isWinner = isWinner;
     }
 
@@ -41,7 +41,7 @@ public class SubmissionOwnListDto {
                 .userId(submission.getUser().getId())
                 .title(submission.getTitle())
                 .imageUrl(submission.getImageUrl())
-                .reward(submission.getProject().getRewardAmount())
+                .rewardAmount(submission.getProject().getRewardAmount())
                 .isWinner(isWinner)
                 .build();
     }
