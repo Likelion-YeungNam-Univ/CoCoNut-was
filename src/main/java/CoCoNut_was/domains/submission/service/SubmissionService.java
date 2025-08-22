@@ -93,7 +93,10 @@ public class SubmissionService {
 
         // 3. dto로 모두 변환
         for(Submission submission : submissions) {
-            dtos.add(SubmissionListDto.fromEntity(submission));
+            dtos.add(SubmissionListDto.fromEntity(
+                    submission,
+                    rewardRepository.existsByUserAndProject(submission.getUser(), project)
+            ));
         }
 
         return dtos;
