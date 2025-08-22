@@ -16,4 +16,6 @@ public interface RewardRepository extends JpaRepository<Reward, Long> {
 
     // 사용자의 수상 횟수를 세는 메서드 추가
     long countByUser(User user);
+
+    boolean existsByUserAndProject(User user, Project project);
 }
