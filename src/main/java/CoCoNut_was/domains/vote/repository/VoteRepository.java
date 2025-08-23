@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.vote.repository;
 
 import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.vote.entity.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     boolean existsByUserAndSubmission_Project(User user, Project project);
 
     Long countBySubmissionId(Long submissionId);
+
+    boolean existsByUserAndSubmission(User user, Submission submission);
 }

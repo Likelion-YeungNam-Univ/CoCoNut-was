@@ -2,6 +2,7 @@ package CoCoNut_was.domains.vote.controller;
 
 import CoCoNut_was.domains.vote.resdto.VoteResultDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -83,13 +84,17 @@ public interface VoteApi {
 
     @Operation(summary = "투표조회", description = "프론트엔드에서 작품에 대한 투표수와 Project 번호까지 추적할 수 있게 만든 DB조회용 API입니다.(필요없으시면 삭제 요청 바랍니다)")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "투표 성공",
+            @ApiResponse(responseCode = "200", description = "투표 조회 성공",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "projectId": 3,
-                                        "submissionId": 2,
-                                        "voteCount": 1
+                                        "projectId": 5,
+                                        "submissionId": 8,
+                                        "voteCount": 1,
+                                        "voteUserId": 4,
+                                        "voteUserNickname": "자1바칩프라푸치노",
+                                        "voteUserEmail": "chlwjd08031@naver.com",
+                                        "voted": true
                                     }
                                     """)
                     })),
@@ -113,7 +118,10 @@ public interface VoteApi {
                     })),
     })
     ResponseEntity<?> voteCount(
-            @PathVariable Long submission_id
+            @Parameter(description = "작품 고유 ID")
+            @PathVariable Long submission_id,
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetails userdetails
     );
 
 
@@ -163,6 +171,7 @@ public interface VoteApi {
                     }))
     })
     ResponseEntity<?> voteResult(
+            @Parameter(description = "작품 고유 ID")
             @PathVariable Long project_id
     );
 

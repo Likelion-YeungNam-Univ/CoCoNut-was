@@ -29,12 +29,13 @@ public class VoteController implements VoteApi {
     }
 
 
-    // 2. 한 작품에 대한 투표 개수(DB확인에 적합한 것 같음)
+    // 2. 한 작품에 대한 투표 개수
     @GetMapping("/submissions/{submission_id}")
     public ResponseEntity<?> voteCount(
-            @PathVariable Long submission_id
+            @PathVariable Long submission_id,
+            @AuthenticationPrincipal UserDetails userDetails
     ){
-        return ResponseEntity.ok().body(voteService.voteCount(submission_id));
+        return ResponseEntity.ok().body(voteService.voteCount(submission_id, userDetails));
     }
 
 

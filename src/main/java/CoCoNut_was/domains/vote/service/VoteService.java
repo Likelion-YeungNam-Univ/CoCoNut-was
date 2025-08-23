@@ -65,10 +65,14 @@ public class VoteService {
     }
 
     @Transactional(readOnly = true)
-    public VoteCountDto voteCount(Long submissionId) {
+    public VoteCountDto voteCount(Long submissionId, UserDetails userDetails) {
         // 작품 존재 확인
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.SUBMISSION_NOT_FOUND)
+        );
+
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
         Long count = voteRepository.countBySubmissionId(submissionId);
@@ -77,6 +81,10 @@ public class VoteService {
                 .projectId(submission.getProject().getId())
                 .submissionId(submissionId)
                 .voteCount(count)
+                .voteUserId(user.getId()).
+                voteUserNickname(user.getNickname()).
+                voteUserEmail(user.getEmail())
+                .isVoted(voteRepository.existsByUserAndSubmission(user, submission))
                 .build();
     }
 
