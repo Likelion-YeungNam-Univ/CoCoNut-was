@@ -83,7 +83,7 @@ public interface VoteApi {
 
     @Operation(summary = "투표조회", description = "프론트엔드에서 작품에 대한 투표수와 Project 번호까지 추적할 수 있게 만든 DB조회용 API입니다.(필요없으시면 삭제 요청 바랍니다)")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "투표 성공",
+            @ApiResponse(responseCode = "200", description = "투표 조회 성공",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
