@@ -3,6 +3,7 @@ package CoCoNut_was.domains.reward.service;
 import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.reward.dto.ImageDto;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
 import CoCoNut_was.domains.reward.dto.WinnerInfoDto;
 import CoCoNut_was.domains.reward.entity.Reward;
@@ -100,6 +101,20 @@ public class RewardService {
                 .submissionImageUrl(reward.getSubmission().getImageUrl())
                 .projectId(reward.getProject().getId())
                 .projectOwnerId(reward.getProject().getUser().getId())
+                .build();
+    }
+
+    public ImageDto getProjectListWinner(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        Reward reward = rewardRepository.findByProject(project).orElseThrow(
+                () -> new CustomException(ErrorCode.WINNER_NOT_EXIST)
+        );
+
+        return ImageDto.builder()
+                .imageUrl(reward.getSubmission().getImageUrl())
                 .build();
     }
 }
