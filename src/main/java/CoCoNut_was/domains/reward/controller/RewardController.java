@@ -53,4 +53,9 @@ public class RewardController implements RewardApi{
     public ResponseEntity<?> getProjectWinner(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long project_id) {
         return ResponseEntity.ok().body(rewardService.getProjectWinner(userDetails, project_id));
     }
+
+    @GetMapping("/finish/project/{project_id}/image")
+    public ResponseEntity<?> getProjectListWinner(@PathVariable Long project_id){
+        return ResponseEntity.ok().body(rewardService.getProjectListWinner(project_id));
+    }
 }
