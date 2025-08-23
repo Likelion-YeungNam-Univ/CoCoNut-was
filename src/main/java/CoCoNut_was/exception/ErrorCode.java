@@ -11,7 +11,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(404, "해당 유저를 찾을 수 없습니다."),
     EMAIL_ALREADY_EXIST(409, "해당 이메일은 이미 존재합니다"),
     NICKNAME_ALREADY_EXIST(409, "해당 닉네임은 이미 존재합니다."),
-    INCORRECT_PASSWORD(401, "비밀번호가 일치하지 않습니다."),
+    INCORRECT_PASSWORD(400, "비밀번호가 일치하지 않습니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류입니다."),
     ROLE_NOT_MATCHED(403, "로그인된 계정이 해당 작업을 수행할 수 있는 역할이 아닙니다."),
     PROJECT_USER_NOT_MATCHED(403, "공모전의 유저정보와 로그인 정보가 일치하지 않습니다."),
