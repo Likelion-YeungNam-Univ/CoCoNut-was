@@ -146,13 +146,10 @@ public interface UserApi {
                                     {
                                         "email": "이메일 형식을 맞춰주세요."
                                     }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "401", description = "비밀번호 불일치",
-                    content = @Content(mediaType = "application/json", examples = {
+                                    """),
                             @ExampleObject(value = """
                                     {
-                                        "status" : 401,
+                                        "status" : 400,
                                         "message" : "비밀번호가 일치하지 않습니다."
                                     }
                                     """)
