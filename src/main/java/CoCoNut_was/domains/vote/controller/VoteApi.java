@@ -88,10 +88,13 @@ public interface VoteApi {
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """
                                     {
-                                        "projectId": 3,
-                                        "submissionId": 2,
+                                        "projectId": 5,
+                                        "submissionId": 8,
                                         "voteCount": 1,
-                                        "voted" : true
+                                        "voteUserId": 4,
+                                        "voteUserNickname": "자1바칩프라푸치노",
+                                        "voteUserEmail": "chlwjd08031@naver.com",
+                                        "voted": true
                                     }
                                     """)
                     })),
