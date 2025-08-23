@@ -90,7 +90,8 @@ public interface VoteApi {
                                     {
                                         "projectId": 3,
                                         "submissionId": 2,
-                                        "voteCount": 1
+                                        "voteCount": 1,
+                                        "voted" : true
                                     }
                                     """)
                     })),
