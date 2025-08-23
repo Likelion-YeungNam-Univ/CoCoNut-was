@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.submission.entity;
 
 import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.reward.entity.Reward;
 import CoCoNut_was.domains.user.entity.User;
 import CoCoNut_was.domains.vote.entity.Vote;
 import jakarta.persistence.CascadeType;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +58,9 @@ public class Submission {
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
+
+    @OneToOne(mappedBy = "submission", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Reward reward;
 
     @Builder public Submission(String title, String description, String relatedUrl, String imageUrl, LocalDate submittedAt, Project project, User user) {
         this.title = title;
