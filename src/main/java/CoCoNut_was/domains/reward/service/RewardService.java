@@ -101,6 +101,7 @@ public class RewardService {
                 .winnerNickname(reward.getUser().getNickname())
                 .rewardId(reward.getId())
                 .submissionId(reward.getSubmission().getId())
+                .submissionImageUrl(reward.getSubmission().getImageUrl())
                 .projectId(reward.getProject().getId())
                 .projectOwnerId(reward.getProject().getUser().getId())
                 .build();
