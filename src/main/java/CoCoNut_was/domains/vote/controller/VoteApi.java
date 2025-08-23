@@ -2,6 +2,7 @@ package CoCoNut_was.domains.vote.controller;
 
 import CoCoNut_was.domains.vote.resdto.VoteResultDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -113,7 +114,10 @@ public interface VoteApi {
                     })),
     })
     ResponseEntity<?> voteCount(
-            @PathVariable Long submission_id
+            @Parameter(description = "작품 고유 ID")
+            @PathVariable Long submission_id,
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetails userdetails
     );
 
 
@@ -163,6 +167,7 @@ public interface VoteApi {
                     }))
     })
     ResponseEntity<?> voteResult(
+            @Parameter(description = "작품 고유 ID")
             @PathVariable Long project_id
     );
 
