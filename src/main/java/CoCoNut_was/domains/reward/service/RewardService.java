@@ -86,11 +86,7 @@ public class RewardService {
                 () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
         );
 
-        // 3. 작품의 주인이 로그인 한게 맞는지 확인
-        if(!project.getUser().getId().equals(owner.getId()))
-            throw new CustomException(ErrorCode.PROJECT_USER_NOT_MATCHED);
-
-        // 4. 수상 정보 가져오기
+        // 3. 수상 정보 가져오기
         Reward reward = rewardRepository.findByProject(project).orElseThrow(
                 () -> new CustomException(ErrorCode.WINNER_NOT_EXIST)
         );

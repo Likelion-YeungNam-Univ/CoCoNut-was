@@ -92,21 +92,12 @@ public interface RewardApi {
 
 
 
-    @Operation(summary = "공모전의 우승자 정보 조회", description = "공모전의 우승자 정보를 공모전 주인이 연락하기 위한 용도로 쓰입니다.")
+    @Operation(summary = "공모전의 우승자 정보 조회", description = "공모전 우승자 정보 조회 API")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "공모전 우승자 조회 성공",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = WinnerInfoDto.class))),
-            @ApiResponse(responseCode = "403", description = "로그인 세션과 프로젝트 주인이 불일치",
-                    content = @Content(mediaType = "application/json", examples = {
-                            @ExampleObject(value = """
-                                    {
-                                        "status": 403,
-                                        "message": "공모전의 유저정보와 로그인 정보가 일치하지 않습니다."
-                                    }
-                                    """)
-                    })),
-            @ApiResponse(responseCode = "404", description = "해당 유저가 존재하지않을 경우",
+            @ApiResponse(responseCode = "404", description = "존재하지 않음",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(name = "유저가 존재하지 않는 경우", value = """
                                     {
@@ -117,7 +108,7 @@ public interface RewardApi {
                             @ExampleObject(name = "해당 공모전을 찾을 수 없습니다.", value = """
                                     {
                                         "status": 404,
-                                        "message": "해당 유저를 찾을 수 없습니다."
+                                        "message": "해당 공모전을 찾을 수 없습니다."
                                     }
                                     """),
                             @ExampleObject(name = "수상한 사람이 없는 경우", value = """
