@@ -81,9 +81,9 @@ public class VoteService {
                 .projectId(submission.getProject().getId())
                 .submissionId(submissionId)
                 .voteCount(count)
-                .voteUserId(user.getId()).
-                voteUserNickname(user.getNickname()).
-                voteUserEmail(user.getEmail())
+                .voteUserId(user.getId())
+                .voteUserNickname(user.getNickname())
+                .voteUserEmail(user.getEmail())
                 .isVoted(voteRepository.existsByUserAndSubmission(user, submission))
                 .build();
     }
