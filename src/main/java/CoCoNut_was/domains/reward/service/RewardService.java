@@ -4,6 +4,7 @@ import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
+import CoCoNut_was.domains.reward.dto.WinnerInfo;
 import CoCoNut_was.domains.reward.entity.Reward;
 import CoCoNut_was.domains.reward.repository.RewardRepository;
 import CoCoNut_was.domains.submission.entity.Submission;
@@ -72,5 +73,36 @@ public class RewardService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return rewardRepository.countByUser(user);
+    }
+
+    public WinnerInfo getProjectWinner(UserDetails userDetails, Long projectId) {
+        // 1. 로그인 세션 유효 확인
+        User owner = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        // 2. 작품이 존재하는지 확인
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.PROJECT_NOT_FOUND)
+        );
+
+        // 3. 작품의 주인이 로그인 한게 맞는지 확인
+        if(!project.getUser().getId().equals(owner.getId()))
+            throw new CustomException(ErrorCode.PROJECT_USER_NOT_MATCHED);
+
+        // 4. 수상 정보 가져오기
+        Reward reward = rewardRepository.findByProject(project).orElseThrow(
+                () -> new CustomException(ErrorCode.WINNER_NOT_EXIST)
+        );
+
+        return WinnerInfo.builder()
+                .winnerId(reward.getUser().getId())
+                .winnerEmail(reward.getUser().getEmail())
+                .winnerNickname(reward.getUser().getNickname())
+                .rewardId(reward.getId())
+                .submissionId(reward.getSubmission().getId())
+                .projectId(reward.getProject().getId())
+                .projectOwnerId(reward.getProject().getUser().getId())
+                .build();
     }
 }
