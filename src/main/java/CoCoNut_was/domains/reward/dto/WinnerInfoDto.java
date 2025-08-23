@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class WinnerInfo {
+public class WinnerInfoDto {
     private Long winnerId;
     private String winnerEmail;
     private String winnerNickname;
@@ -16,7 +16,7 @@ public class WinnerInfo {
     private Long projectId;
     private Long projectOwnerId;
 
-    @Builder public WinnerInfo(Long winnerId, String winnerEmail, String winnerNickname, Long rewardId, Long submissionId, String submissionImageUrl, Long projectId, Long projectOwnerId) {
+    @Builder public WinnerInfoDto(Long winnerId, String winnerEmail, String winnerNickname, Long rewardId, Long submissionId, String submissionImageUrl, Long projectId, Long projectOwnerId) {
         this.winnerId = winnerId;
         this.winnerEmail = winnerEmail;
         this.winnerNickname = winnerNickname;

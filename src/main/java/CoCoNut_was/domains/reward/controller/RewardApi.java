@@ -2,7 +2,7 @@ package CoCoNut_was.domains.reward.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
-import CoCoNut_was.domains.reward.dto.WinnerInfo;
+import CoCoNut_was.domains.reward.dto.WinnerInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -96,7 +96,7 @@ public interface RewardApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "공모전 우승자 조회 성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = WinnerInfo.class))),
+                            schema = @Schema(implementation = WinnerInfoDto.class))),
             @ApiResponse(responseCode = "403", description = "로그인 세션과 프로젝트 주인이 불일치",
                     content = @Content(mediaType = "application/json", examples = {
                             @ExampleObject(value = """

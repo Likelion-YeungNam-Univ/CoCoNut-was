@@ -4,7 +4,7 @@ import CoCoNut_was.domains.project.repository.ProjectRepository;
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.project.entity.Project;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
-import CoCoNut_was.domains.reward.dto.WinnerInfo;
+import CoCoNut_was.domains.reward.dto.WinnerInfoDto;
 import CoCoNut_was.domains.reward.entity.Reward;
 import CoCoNut_was.domains.reward.repository.RewardRepository;
 import CoCoNut_was.domains.submission.entity.Submission;
@@ -75,7 +75,7 @@ public class RewardService {
         return rewardRepository.countByUser(user);
     }
 
-    public WinnerInfo getProjectWinner(UserDetails userDetails, Long projectId) {
+    public WinnerInfoDto getProjectWinner(UserDetails userDetails, Long projectId) {
         // 1. 로그인 세션 유효 확인
         User owner = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
@@ -95,7 +95,7 @@ public class RewardService {
                 () -> new CustomException(ErrorCode.WINNER_NOT_EXIST)
         );
 
-        return WinnerInfo.builder()
+        return WinnerInfoDto.builder()
                 .winnerId(reward.getUser().getId())
                 .winnerEmail(reward.getUser().getEmail())
                 .winnerNickname(reward.getUser().getNickname())
