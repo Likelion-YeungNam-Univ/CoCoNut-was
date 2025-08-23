@@ -46,7 +46,7 @@ Bridgee는 경산 지역 소상공인과 학생들을 연결하여, 상생하는
 <br>
 
 # 📌 프로젝트 아키텍처
-<img width="622" height="791" alt="Image" src="https://github.com/user-attachments/assets/be9bcb83-71d3-4049-8d90-9f52ad90535a" />
+<img width="946" height="708" alt="Image" src="https://github.com/user-attachments/assets/b5757057-57bd-4335-88a5-86755b1425b0" />
 
 <br>
 
