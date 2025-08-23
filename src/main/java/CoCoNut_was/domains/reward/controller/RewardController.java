@@ -47,4 +47,10 @@ public class RewardController implements RewardApi{
         long awardsCount = rewardService.getMyAwardsCount(userDetails);
         return ResponseEntity.ok(awardsCount);
     }
+
+    // 공모전 수상자 정보 가져오기
+    @GetMapping("/winner/project/{project_id}")
+    public ResponseEntity<?> getProjectWinner(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long project_id) {
+        return ResponseEntity.ok().body(rewardService.getProjectWinner(userDetails, project_id));
+    }
 }
