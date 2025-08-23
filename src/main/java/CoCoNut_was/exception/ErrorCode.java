@@ -29,6 +29,7 @@ public enum ErrorCode {
 
     // 보상 관련
     WINNER_ALREADY_EXISTS(409, "이미 우승자가 선정된 공모전입니다."),
+    WINNER_NOT_EXIST(404, "이 공모전엔 수상자가 없습니다."),
 
     // 투표 관련
     INVALID_DUPLICATE_VOTE(409, "해당 공모전에 대한 작품에 이미 투표하셨습니다."),

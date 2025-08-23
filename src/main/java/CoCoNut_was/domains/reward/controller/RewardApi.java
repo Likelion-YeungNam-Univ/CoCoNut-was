@@ -2,6 +2,7 @@ package CoCoNut_was.domains.reward.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
+import CoCoNut_was.domains.reward.dto.WinnerInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -87,5 +88,50 @@ public interface RewardApi {
     })
     ResponseEntity<Long> getMyAwardsCount(
             @Parameter(hidden = true) @AuthenticationPrincipal UserDetails userDetails
+    );
+
+
+
+    @Operation(summary = "공모전의 우승자 정보 조회", description = "공모전의 우승자 정보를 공모전 주인이 연락하기 위한 용도로 쓰입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "공모전 우승자 조회 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = WinnerInfo.class))),
+            @ApiResponse(responseCode = "403", description = "로그인 세션과 프로젝트 주인이 불일치",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+                                    {
+                                        "status": 403,
+                                        "message": "공모전의 유저정보와 로그인 정보가 일치하지 않습니다."
+                                    }
+                                    """)
+                    })),
+            @ApiResponse(responseCode = "404", description = "해당 유저가 존재하지않을 경우",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "유저가 존재하지 않는 경우", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "해당 공모전을 찾을 수 없습니다.", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 유저를 찾을 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "수상한 사람이 없는 경우", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "이 공모전엔 수상자가 없습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> getProjectWinner(
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Parameter(description = "프로젝트 고유 ID")
+            @PathVariable Long project_id
     );
 }
