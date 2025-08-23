@@ -1,6 +1,7 @@
 package CoCoNut_was.domains.reward.controller;
 
 import CoCoNut_was.domains.project.dto.ProjectListResponseDto;
+import CoCoNut_was.domains.reward.dto.ImageDto;
 import CoCoNut_was.domains.reward.dto.RewardResponseDto;
 import CoCoNut_was.domains.reward.dto.WinnerInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -125,4 +126,27 @@ public interface RewardApi {
             @Parameter(description = "프로젝트 고유 ID")
             @PathVariable Long project_id
     );
+
+    @Operation(summary = "수상작 이미지 가져오기", description = "수상작의 이미지만 가져오는 API입니다. 수상작이 없다면 null을 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "이미지 링크 가져오기 성공 (null포함)",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ImageDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않음",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(name = "해당 공모전을 찾을 수 없습니다.", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "해당 공모전을 찾을 수 없습니다."
+                                    }
+                                    """),
+                            @ExampleObject(name = "수상한 사람이 없는 경우", value = """
+                                    {
+                                        "status": 404,
+                                        "message": "이 공모전엔 수상자가 없습니다."
+                                    }
+                                    """)
+                    }))
+    })
+    ResponseEntity<?> getProjectListWinner(@PathVariable Long project_id);
 }
