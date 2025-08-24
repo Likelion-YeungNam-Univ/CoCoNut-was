@@ -1,9 +1,9 @@
 package CoCoNut_was.domains.user.resdto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class TokenResDto {
     private String accessToken;
     private Long userId;

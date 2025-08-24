@@ -32,12 +32,6 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().build();
     }
 
-//    // 2. 회원조회 (관리자) 임시 폐기
-//    @GetMapping("/{user_id}")
-//    public ResponseEntity<?> getUser(@PathVariable Long user_id){
-//        return ResponseEntity.ok(userService.getUser(user_id));
-//    }
-
     // 2. 내 정보 조회(마이페이지)
     @GetMapping
     public ResponseEntity<?> me(@AuthenticationPrincipal UserDetails userDetails){

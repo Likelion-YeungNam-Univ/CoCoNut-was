@@ -2,9 +2,9 @@ package CoCoNut_was.domains.user.resdto;
 
 import CoCoNut_was.domains.user.entity.User;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UserInfoDto {
     private Long user_id;
     private String email;

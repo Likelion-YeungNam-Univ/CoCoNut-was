@@ -51,14 +51,6 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
-    // 유저 상세조회 임시 폐기
-//    public UserInfoDto getUser(Long id) {
-//        User user = userRepository.findById(id).orElseThrow(
-//                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-//        );
-//        return UserInfoDto.fromEntity(user);
-//    }
-
     // 마이페이지 상세 조회
     @Transactional(readOnly = true)
     public UserInfoDto me(UserDetails userDetails) {

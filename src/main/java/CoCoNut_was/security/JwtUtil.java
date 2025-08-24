@@ -6,7 +6,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,14 +33,6 @@ public class JwtUtil {
         return generateToken(id, email, refreshValid, role);
     }
 
-//    private String generateToken(String email, long validTime) {
-//        return Jwts.builder()
-//                .subject(email)
-//                .issuedAt(new Date(System.currentTimeMillis()))
-//                .expiration(new Date(System.currentTimeMillis() + validTime))
-//                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
-//                .compact();
-//    }
 
     private String generateToken(Long id, String email, long validTime, String role) {
         return Jwts.builder()
