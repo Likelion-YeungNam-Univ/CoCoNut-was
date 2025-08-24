@@ -2,17 +2,19 @@ name: Deploy on develop merge
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
     types: [closed]
   push:
     branches:
       - fix/cd
+      - main
 
 jobs:
   deploy:
     if: >
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
       || (github.event_name == 'push' && github.ref == 'refs/heads/fix/cd')
+      || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
