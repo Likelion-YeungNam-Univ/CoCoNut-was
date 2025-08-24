@@ -6,9 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Schema(description = "회원가입 요청 API")
 public class CreateUserDto {
     @Schema(description = "사용자 이메일", example = "likelion13@gmail.com")

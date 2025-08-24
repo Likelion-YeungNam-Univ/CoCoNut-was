@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -138,15 +137,6 @@ public interface SubmissionApi {
                                     }
                                     """)
                     })),
-//            @ApiResponse(responseCode = "401", description = "액세스 토큰 미입력/만료",
-//                    content = @Content(mediaType = "application/json", examples = {
-//                            @ExampleObject(value = """
-//                                    {
-//                                        "status" : 401,
-//                                        "message" : "토큰이 없거나 만료되었습니다."
-//                                    }
-//                                    """)
-//                    }))
     })
     ResponseEntity<?> getProjectSubmissions(
             @Parameter(description = "프로젝트 고유 ID")

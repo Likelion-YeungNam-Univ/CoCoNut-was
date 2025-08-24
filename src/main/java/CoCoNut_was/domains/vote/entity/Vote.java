@@ -32,9 +32,6 @@ public class Vote {
     @JoinColumn(name = "submission_id", nullable = false)
     private Submission submission;
 
-
-//    private LocalDateTime votedAt;
-
     @Builder public Vote(User user, Submission submission) {
         this.user = user;
         this.submission = submission;

@@ -5,11 +5,11 @@ import CoCoNut_was.domains.submission.entity.Submission;
 import CoCoNut_was.domains.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
 public class SubmitDto {
 
     @Schema(description = "공모전 작품 제목", example = "아기사자 디자인 브런치 카페 메뉴판")
@@ -21,12 +21,6 @@ public class SubmitDto {
 
     @Schema(description = "작품에 대한 외부링크", example = "https://깃허브주소.com")
     private String relatedUrl;
-
-    // 제출 일자는 그냥 LocalDate.now()를 쓰면 되지 않을까 라는 생각입니다.
-
-//    @NotBlank(message = "제출일자는 필수 입력입니다.")
-//    private String submittedAt;
-//    // "2002-08-03" 형식의 문자열이 입력되어야함
 
     public Submission toEntity(Project project, User user, String imageUrl){
         return Submission.builder()
