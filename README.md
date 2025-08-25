@@ -4,14 +4,14 @@
 # 📌 프로젝트 소개
 Bridgee는 경산 지역 소상공인과 학생들을 연결하여, 상생하는 외주 공모전 플랫폼입니다. 소상공인은 AI의 도움을 받아 손쉽게 프로젝트를 의뢰하고, 학생들은 자신의 재능을 발휘하여 작품을 제출하고 보상을 받을 수 있습니다.
 
-## 🔍 주요기능
-### 맞춤형 공모전 의뢰
+# 🔍 주요기능
+## 📝 맞춤형 공모전 의뢰
 <img width="1161" height="652" alt="Image" src="https://github.com/user-attachments/assets/98d881ba-5886-4835-ac9d-430bf565d348" />
 
-### 투표를 통한 평가
+## 🗳️ 투표를 통한 평가
 <img width="1104" height="619" alt="Image" src="https://github.com/user-attachments/assets/df8c9525-8240-44a7-b3ad-d910ce6c3294" />
 
-### 지역 기반 연결
+## 🏗️ 지역 기반 연결
 <img width="1106" height="619" alt="Image" src="https://github.com/user-attachments/assets/a657063f-20f3-4396-b5b4-5fb1a4afcdf0" />
 
 <br>
@@ -22,8 +22,6 @@ Bridgee는 경산 지역 소상공인과 학생들을 연결하여, 상생하는
 | <img src="https://avatars.githubusercontent.com/u/160298290?v=4" alt="최정" width="150"> | <img src="https://avatars.githubusercontent.com/u/80417179?v=4" alt="김동민" width="150"> | <img src="https://avatars.githubusercontent.com/u/165642906?v=4" alt="임태현" width="150"> | <img src="https://avatars.githubusercontent.com/u/165632548?v=4" alt="조민서" width="150"> |<img src="https://avatars.githubusercontent.com/u/139312570?v=4" alt="신혜진" width="150"> |<img src="https://avatars.githubusercontent.com/u/160111840?v=4" alt="이수민" width="150"> |
 | BE | BE | FE | FE | FE | P&D |
 | [GitHub](https://github.com/chlwjd0803) | [GitHub](https://github.com/eastminnn) | [GitHub](https://github.com/Limtaehyeon) | [GitHub](https://github.com/chominseo0723) |[GitHub](https://github.com/hyeji-neee) |[GitHub](https://github.com/SSXXMM22) |
-
-<br>
 
 # 📝 역할분담
 ### 최정
@@ -49,6 +47,10 @@ Bridgee는 경산 지역 소상공인과 학생들을 연결하여, 상생하는
 - Git init(리포지토리와 개발 환경 초기 세팅): 팀원들이 신속하게 개발을 시작하도록 Git 커밋 및 브랜치 컨벤션을 포함한 리포지토리 컨벤션을 구축했습니다. Gradle 기반의 개발 환경을 세팅하고, CI/CD 파이프라인을 GitHub Actions를 활용하여 자동화했습니다
 
 <br>
+
+# 🗄️ ERD
+<img width="1494" height="923" alt="Image" src="https://github.com/user-attachments/assets/67baa306-7415-4ecd-a545-29bf8f55eb68" />
+
 
 # 📌 프로젝트 아키텍처
 <img width="946" height="708" alt="Image" src="https://github.com/user-attachments/assets/b5757057-57bd-4335-88a5-86755b1425b0" />
@@ -154,5 +156,3 @@ CoCoNut-was
 - **main**: 항상 배포 가능한 안정된 코드 유지 브랜치
 
 ---
-# 🗄️ ERD
-<img width="1494" height="923" alt="Image" src="https://github.com/user-attachments/assets/67baa306-7415-4ecd-a545-29bf8f55eb68" />
