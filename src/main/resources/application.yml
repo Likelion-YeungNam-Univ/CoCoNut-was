@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: CoCoNut-was
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  cloud:
+    gcp:
+      project-id: coconut-was
+      storage:
+        bucket-name: coconut_bucket
+      credentials:
+        location: file:${GOOGLE_APPLICATION_CREDENTIALS}
+
+  servlet:
+    multipart:
+      max-file-size: 10MB       # 개별 파일의 최대 크기를 10MB로 설정
+      max-request-size: 10MB    # 한 번의 요청에 포함된 모든 파일의 총 크기를 10MB로 설정
+
+
+jwt:
+  secret-key: ${SECRET_KEY}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}

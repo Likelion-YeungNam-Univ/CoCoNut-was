@@ -1,0 +1,74 @@
+package CoCoNut_was.domains.submission.entity;
+
+import CoCoNut_was.domains.project.entity.Project;
+import CoCoNut_was.domains.reward.entity.Reward;
+import CoCoNut_was.domains.user.entity.User;
+import CoCoNut_was.domains.vote.entity.Vote;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+public class Submission {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    private String title;
+
+    @Column(columnDefinition="TEXT")
+    private String description;
+
+    @Column
+    private String relatedUrl;
+
+    @Column
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private LocalDate submittedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes = new ArrayList<>();
+
+    @OneToOne(mappedBy = "submission", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Reward reward;
+
+    @Builder public Submission(String title, String description, String relatedUrl, String imageUrl, LocalDate submittedAt, Project project, User user) {
+        this.title = title;
+        this.description = description;
+        this.relatedUrl = relatedUrl;
+        this.imageUrl = imageUrl;
+        this.submittedAt = submittedAt;
+        this.project = project;
+        this.user = user;
+    }
+}
