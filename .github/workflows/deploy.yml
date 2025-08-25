@@ -2,7 +2,7 @@ name: Deploy on develop merge
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
     types: [closed]
   push:
     branches:
