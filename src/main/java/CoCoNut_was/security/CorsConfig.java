@@ -19,7 +19,6 @@ public class CorsConfig {
         configuration.setAllowedOrigins(List.of("http://54.180.105.120"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
-        configuration.setAllowedHeaders(List.of("*")); // 모든 요청 헤더 허용
         configuration.setExposedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.SET_COOKIE)); // 응답에서 노출할 헤더
         configuration.setMaxAge(3600L); // Preflight 요청 캐시 시간 (초)
         configuration.setAllowCredentials(true); // 쿠키 포함 요청 허용
