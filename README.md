@@ -6,12 +6,13 @@ Bridgee는 경산 지역 소상공인과 학생들을 연결하여, 상생하는
 
 ## 🔍 주요기능
 ### 맞춤형 공모전 의뢰
-
-### 작품 제출 및 경쟁
+<img width="1161" height="652" alt="Image" src="https://github.com/user-attachments/assets/98d881ba-5886-4835-ac9d-430bf565d348" />
 
 ### 투표를 통한 평가
+<img width="1104" height="619" alt="Image" src="https://github.com/user-attachments/assets/df8c9525-8240-44a7-b3ad-d910ce6c3294" />
 
 ### 지역 기반 연결
+<img width="1106" height="619" alt="Image" src="https://github.com/user-attachments/assets/a657063f-20f3-4396-b5b4-5fb1a4afcdf0" />
 
 <br>
 
